@@ -11,4 +11,10 @@ package frc.robot;
  * Add your docs here.
  */
 public class Control_Panel {
+    public void spin(){
+
+    }
+    public void goToColor(String color){
+        
+    }
 }

@@ -11,4 +11,13 @@ package frc.robot;
  * Add your docs here.
  */
 public class Shooter {
+    public void target(){
+        
+    }
+    public void shootOnce(){
+
+    }
+    public void shootAll(){
+
+    }
 }

@@ -10,5 +10,8 @@ package frc.robot;
 /**
  * Add your docs here.
  */
-public class Color_Sensor {
+public class Collector {
+    public void collectBalls(){
+        
+    }
 }

@@ -11,4 +11,10 @@ package frc.robot;
  * Add your docs here.
  */
 public class Hang {
+    public void moveLift(double moveSpeed){
+
+    }
+    public void moveWinch(double moveSpeed){
+        
+    }
 }
