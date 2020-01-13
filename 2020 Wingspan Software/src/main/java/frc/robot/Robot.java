@@ -48,9 +48,13 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
     //Initializes the drivetrain
-    leftGroup = new SpeedControllerGroup(Constants.left1, Constants.left2, Constants.left3);
-    rightGroup = new SpeedControllerGroup(Constants.right1, Constants.right2, Constants.right3);
+    leftGroup = new SpeedControllerGroup(Constants.left1, Constants.left2);
+    rightGroup = new SpeedControllerGroup(Constants.right1, Constants.right2);
     mainDrive = new DifferentialDrive(leftGroup, rightGroup);
+    Constants.colorMatcher.addColorMatch(Constants.kBlueTarget);
+    Constants.colorMatcher.addColorMatch(Constants.kRedTarget);
+    Constants.colorMatcher.addColorMatch(Constants.kGreenTarget);
+    Constants.colorMatcher.addColorMatch(Constants.kYellowTarget);
   }
 
   /**
@@ -119,20 +123,29 @@ public class Robot extends TimedRobot {
     }
     //All controls on joystick 1 (The controller)
     //Control panel controls
-    //Replace strings with color values
     if(joystick1.getRawButton(1)){
-      cp.goToColor("Blue");
+      Constants.targetColor = Constants.kBlueTarget;
+      Constants.isGoingToColor = true;
     }
     else if(joystick1.getRawButton(2)){
-      cp.goToColor("Green");
+      Constants.targetColor = Constants.kGreenTarget;
+      Constants.isGoingToColor = true;
     }
     else if(joystick1.getRawButton(3)){
-      cp.goToColor("Red");
+      Constants.targetColor = Constants.kRedTarget;
+      Constants.isGoingToColor = true;
     }
     else if(joystick1.getRawButton(4)){
-      cp.goToColor("Yellow");
+      Constants.targetColor = Constants.kYellowTarget;
+      Constants.isGoingToColor = true;
     }
     if(joystick1.getRawButton(6)){
+      Constants.isSpinning=true;
+    }
+    if(Constants.isGoingToColor==true){
+      cp.goToColor();
+    }
+    if(Constants.isSpinning==true){
       cp.spin();
     }
     //Shooter Controls
