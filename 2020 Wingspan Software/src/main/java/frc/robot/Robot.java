@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -51,10 +50,10 @@ public class Robot extends TimedRobot {
     leftGroup = new SpeedControllerGroup(Constants.left1, Constants.left2);
     rightGroup = new SpeedControllerGroup(Constants.right1, Constants.right2);
     mainDrive = new DifferentialDrive(leftGroup, rightGroup);
-    Constants.colorMatcher.addColorMatch(Constants.kBlueTarget);
-    Constants.colorMatcher.addColorMatch(Constants.kRedTarget);
-    Constants.colorMatcher.addColorMatch(Constants.kGreenTarget);
-    Constants.colorMatcher.addColorMatch(Constants.kYellowTarget);
+    Constants.colorMatcher.addColorMatch(Constants.blueTarget);
+    Constants.colorMatcher.addColorMatch(Constants.redTarget);
+    Constants.colorMatcher.addColorMatch(Constants.greenTarget);
+    Constants.colorMatcher.addColorMatch(Constants.yellowTarget);
   }
 
   /**
@@ -122,31 +121,36 @@ public class Robot extends TimedRobot {
       collectorClass.collectBalls();
     }
     //All controls on joystick 1 (The controller)
-    //Control panel controls
-    if(joystick1.getRawButton(1)){
-      Constants.targetColor = Constants.kBlueTarget;
-      Constants.isGoingToColor = true;
+    //Control panel controls (switches between on and off so pressing the button again stops the motor)
+    if(joystick1.getRawButtonPressed(1)){
+      Constants.targetColor = Constants.blueTarget;
+      Constants.isGoingToColor = !Constants.isGoingToColor;
     }
-    else if(joystick1.getRawButton(2)){
-      Constants.targetColor = Constants.kGreenTarget;
-      Constants.isGoingToColor = true;
+    else if(joystick1.getRawButtonPressed(2)){
+      Constants.targetColor = Constants.greenTarget;
+      Constants.isGoingToColor = !Constants.isGoingToColor;
     }
-    else if(joystick1.getRawButton(3)){
-      Constants.targetColor = Constants.kRedTarget;
-      Constants.isGoingToColor = true;
+    else if(joystick1.getRawButtonPressed(3)){
+      Constants.targetColor = Constants.redTarget;
+      Constants.isGoingToColor = !Constants.isGoingToColor;
     }
-    else if(joystick1.getRawButton(4)){
-      Constants.targetColor = Constants.kYellowTarget;
-      Constants.isGoingToColor = true;
+    else if(joystick1.getRawButtonPressed(4)){
+      Constants.targetColor = Constants.yellowTarget;
+      Constants.isGoingToColor = !Constants.isGoingToColor;
     }
-    if(joystick1.getRawButton(6)){
-      Constants.isSpinning=true;
+    if(joystick1.getRawButtonPressed(6)){
+      Constants.isSpinning=!Constants.isSpinning;
     }
+    //Checks if either of the methods that use the control panel motor are active, and if not stops the motor
     if(Constants.isGoingToColor==true){
       cp.goToColor();
     }
-    if(Constants.isSpinning==true){
+    else if(Constants.isSpinning==true){
       cp.spin();
+    }
+    else{
+      Constants.spinnyMotor.set(0);
+      cp.numChanges=0;
     }
     //Shooter Controls
     if(joystick1.getRawButton(7)){

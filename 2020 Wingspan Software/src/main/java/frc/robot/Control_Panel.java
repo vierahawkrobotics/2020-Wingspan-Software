@@ -16,29 +16,51 @@ import edu.wpi.first.wpilibj.util.Color;
  */
 
 public class Control_Panel {
-    public int numChanges=0;
-    private Color lastColor;
-    public void spin(){
+    //Declares number of changes and last color (initialized to blue b/c I like blue)
+    public int numChanges = 0;
+    private Color lastColor = Constants.blueTarget;
+    //Spins the wheel for 3-5 full revolutions
+    public void spin() {
+        //Sets the motor to full speed
         Constants.spinnyMotor.set(1);
-        ColorMatchResult match=Constants.colorMatcher.matchClosestColor(Constants.colorSensor.getColor());
-        if(numChanges <= 30){
-            if(match.color!=lastColor){
-                lastColor=match.color;
+        //Sets the colorMatchResult to the closest target color
+        ColorMatchResult match = Constants.colorMatcher.matchClosestColor(Constants.colorSensor.getColor());
+        //Checks if number of changes is greater than 25 (8 per cycle, 24 is three cycles +1 for safety)
+        if (numChanges <= 25) {
+            //Checks if color has changed to the next color in the sequence (reduces false positives)
+            if (lastColor == Constants.blueTarget && match.color == Constants.yellowTarget) {
+                lastColor = match.color;
                 numChanges++;
-                System.out.println(numChanges);
-                System.out.println(lastColor);
+            } 
+            else if (lastColor == Constants.yellowTarget && match.color == Constants.greenTarget) {
+                lastColor = match.color;
+                numChanges++;
+            } 
+            else if (lastColor == Constants.greenTarget && match.color == Constants.redTarget) {
+                lastColor = match.color;
+                numChanges++;
+            } 
+            else if (lastColor == Constants.redTarget && match.color == Constants.blueTarget) {
+                lastColor = match.color;
+                numChanges++;
             }
-        }
-        else{
+        } 
+        else {
+            //Turns off motor, resets numchanges, disables method
             Constants.spinnyMotor.set(0);
             Constants.isSpinning = false;
-            numChanges=0;
+            numChanges = 0;
         }
     }
-    public void goToColor(){
+    //Moves motor until the sensor detects the target color
+    public void goToColor() {
+        //Sets the color wheel motor to spin
         Constants.spinnyMotor.set(1);
-        ColorMatchResult match=Constants.colorMatcher.matchClosestColor(Constants.colorSensor.getColor());
-        if(match.color == Constants.targetColor){
+        //Sets the colorMatchResult to the closest target color
+        ColorMatchResult match = Constants.colorMatcher.matchClosestColor(Constants.colorSensor.getColor());
+        //Checks if the color detected is the correct color
+        if (match.color == Constants.targetColor) {
+            //Stops motor and disables method
             Constants.spinnyMotor.set(0);
             Constants.isGoingToColor = false;
         }
