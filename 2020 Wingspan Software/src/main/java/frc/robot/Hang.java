@@ -11,10 +11,15 @@ package frc.robot;
  * Add your docs here.
  */
 public class Hang {
-    public void moveLift(double moveSpeed){
-
-    }
+    private boolean armReleased=false;
+    private boolean hooked=false;
     public void moveWinch(double moveSpeed){
         
+    }
+    public void moveHangWheels(double moveSpeed){
+        
+    }
+    public void releaseArm(){
+
     }
 }

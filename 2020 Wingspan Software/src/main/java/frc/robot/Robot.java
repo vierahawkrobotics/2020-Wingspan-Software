@@ -143,10 +143,10 @@ public class Robot extends TimedRobot {
     }
     //Checks if either of the methods that use the control panel motor are active, and if not stops the motor
     if(Constants.isGoingToColor==true){
-      cp.goToColor();
+      cp.spinToColor();
     }
     else if(Constants.isSpinning==true){
-      cp.spin();
+      cp.spinWheel();
     }
     else{
       Constants.spinnyMotor.set(0);
@@ -160,9 +160,7 @@ public class Robot extends TimedRobot {
       shooterClass.shootAll();
     }
     //Hanging controls
-    double liftSpeed = joystick1.getRawAxis(1);
     double winchSpeed = joystick1.getRawAxis(3);
-    hangClass.moveLift(liftSpeed);
     hangClass.moveWinch(winchSpeed);
   }
   /**

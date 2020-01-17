@@ -11,6 +11,9 @@ package frc.robot;
  * Add your docs here.
  */
 public class Shooter {
+    private double skew;
+    private double distance;
+    private double motorSpeed;
     public void target(){
         
     }
@@ -19,5 +22,11 @@ public class Shooter {
     }
     public void shootAll(){
 
+    }
+    public void stopMotors(){
+
+    }
+    public void startMotors(){
+        
     }
 }

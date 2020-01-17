@@ -19,8 +19,15 @@ public class Control_Panel {
     //Declares number of changes and last color (initialized to blue b/c I like blue)
     public int numChanges = 0;
     private Color lastColor = Constants.blueTarget;
+    boolean isExtended=false;
+    public void deployWheel(){
+
+    }
+    public void storeWheel(){
+
+    }
     //Spins the wheel for 3-5 full revolutions
-    public void spin() {
+    public void spinWheel() {
         //Sets the motor to full speed
         Constants.spinnyMotor.set(1);
         //Sets the colorMatchResult to the closest target color
@@ -53,7 +60,7 @@ public class Control_Panel {
         }
     }
     //Moves motor until the sensor detects the target color
-    public void goToColor() {
+    public void spinToColor() {
         //Sets the color wheel motor to spin
         Constants.spinnyMotor.set(1);
         //Sets the colorMatchResult to the closest target color
