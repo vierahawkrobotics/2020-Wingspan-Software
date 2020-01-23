@@ -29,7 +29,7 @@ public class Control_Panel {
     //Spins the wheel for 3-5 full revolutions
     public void spinWheel() {
         //Sets the motor to full speed
-        Constants.spinnyMotor.set(1);
+        Constants.spinnyMotor.set(Constants.spinnerSpeed);
         //Sets the colorMatchResult to the closest target color
         ColorMatchResult match = Constants.colorMatcher.matchClosestColor(Constants.colorSensor.getColor());
         //Checks if number of changes is greater than 25 (8 per cycle, 24 is three cycles +1 for safety)
@@ -62,7 +62,7 @@ public class Control_Panel {
     //Moves motor until the sensor detects the target color
     public void spinToColor() {
         //Sets the color wheel motor to spin
-        Constants.spinnyMotor.set(1);
+        Constants.spinnyMotor.set(Constants.spinnerSpeed);
         //Sets the colorMatchResult to the closest target color
         ColorMatchResult match = Constants.colorMatcher.matchClosestColor(Constants.colorSensor.getColor());
         //Checks if the color detected is the correct color

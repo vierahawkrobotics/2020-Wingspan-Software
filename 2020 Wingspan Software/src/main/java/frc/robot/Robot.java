@@ -112,13 +112,21 @@ public class Robot extends TimedRobot {
     //All controls on joystick 0 (The joystick)
     //Drive code
     double forwardSpeed=joystick0.getRawAxis(1);
-    forwardSpeed*=.75;
+    if(!joystick0.getRawButton(1)){
+      forwardSpeed*=Constants.driveSpeed;
+    }
     double rotateSpeed=joystick0.getRawAxis(2);
-    rotateSpeed*=.75;
+    rotateSpeed*=Constants.turnSpeed;
     mainDrive.arcadeDrive(forwardSpeed, rotateSpeed);
     //Collection code
     if (joystick0.getRawButton(5)) {
+      Constants.ballsCollecting = !Constants.ballsCollecting;
+    }
+    if(Constants.ballsCollecting){
       collectorClass.collectBalls();
+    }
+    else{
+      Constants.collectorMotor.set(0);
     }
     //All controls on joystick 1 (The controller)
     //Control panel controls (switches between on and off so pressing the button again stops the motor)
@@ -154,14 +162,25 @@ public class Robot extends TimedRobot {
     }
     //Shooter Controls
     if(joystick1.getRawButton(7)){
-      shooterClass.shootOnce();
+      Constants.shootingOnce = !Constants.shootingOnce;
     }
     else if(joystick1.getRawButton(8)){
+      Constants.shootingAll = !Constants.shootingAll;
+    }
+    if(Constants.shootingOnce){
+      shooterClass.shootOnce();
+    }
+    else if(Constants.shootingAll){
       shooterClass.shootAll();
     }
+    else{
+      shooterClass.stopMotors();
+    }
     //Hanging controls
-    double winchSpeed = joystick1.getRawAxis(3);
+    double winchSpeed = joystick1.getRawAxis(3)*Constants.winchSpeed;
     hangClass.moveWinch(winchSpeed);
+    double hangWheelSpeed = joystick1.getRawAxis(0)*Constants.hangWheelSpeed;
+    hangClass.moveHangWheels(hangWheelSpeed);
   }
   /**
    * This function is called periodically during test mode.

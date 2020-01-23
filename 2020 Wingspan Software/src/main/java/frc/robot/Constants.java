@@ -24,6 +24,7 @@ public class Constants {
     public static Talon right1 = new Talon(2);
     public static Talon right2 = new Talon(3);
     public static Talon spinnyMotor = new Talon(4);
+    public static Talon collectorMotor= new Talon(5);
     //Declares I2C port and color sensor
     private static final I2C.Port i2cPort = I2C.Port.kOnboard;
     public static ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
@@ -36,5 +37,25 @@ public class Constants {
     //State variables
     public static boolean isSpinning = false;
     public static boolean isGoingToColor = false;
+    public static boolean wheelDeploying = false;
+    public static boolean wheelRetracting = false;
+    public static boolean armReleasing = false;
+    public static boolean ballsCollecting = false;
+    public static boolean isTargeting = false;
+    public static boolean shootingOnce = false;
+    public static boolean shootingAll = false;
+    public static boolean startingShooter = false;
+    public static boolean stoppingShooter = false;
     public static Color targetColor;
+    //Power Variables
+    public static double driveSpeed = .75;
+    public static double turnSpeed = .5;
+    public static double fastSpeed = 1/driveSpeed;
+    public static double shooterSpeed = .75;
+    public static double winchSpeed = .75;
+    public static double hangWheelSpeed = .75;
+    public static double spinnerSpeed = .75;
+    public static double deploySpeed = .75;
+    public static double spinnerArmSpeed = .75;
+    public static double collectorSpeed = .75;
 }
