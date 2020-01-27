@@ -11,6 +11,7 @@ package frc.robot;
  * Add your docs here.
  */
 public class Collector {
+    public int numBalls;
     private int maxNumBalls=5;
     public void collectBalls(){
         

@@ -6,6 +6,8 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.revrobotics.ControlType;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -54,6 +56,10 @@ public class Robot extends TimedRobot {
     Constants.colorMatcher.addColorMatch(Constants.redTarget);
     Constants.colorMatcher.addColorMatch(Constants.greenTarget);
     Constants.colorMatcher.addColorMatch(Constants.yellowTarget);
+    Constants.leftEncoder.reset();
+    Constants.leftEncoder.setDistancePerPulse(1.0/2048.0);
+    Constants.rightEncoder.reset();
+    Constants.rightEncoder.setDistancePerPulse(1.0/2048.0);
   }
 
   /**
@@ -161,10 +167,10 @@ public class Robot extends TimedRobot {
       cp.numChanges=0;
     }
     //Shooter Controls
-    if(joystick1.getRawButton(7)){
+    if(joystick1.getRawButtonPressed(7)){
       Constants.shootingOnce = !Constants.shootingOnce;
     }
-    else if(joystick1.getRawButton(8)){
+    else if(joystick1.getRawButtonPressed(8)){
       Constants.shootingAll = !Constants.shootingAll;
     }
     if(Constants.shootingOnce){
@@ -181,6 +187,9 @@ public class Robot extends TimedRobot {
     hangClass.moveWinch(winchSpeed);
     double hangWheelSpeed = joystick1.getRawAxis(0)*Constants.hangWheelSpeed;
     hangClass.moveHangWheels(hangWheelSpeed);
+    System.out.println(Constants.shooterMotor.getEncoder().getVelocity());
+    System.out.println(Constants.leftEncoder.getDistance());
+    System.out.println(Constants.rightEncoder.getDistance());
   }
   /**
    * This function is called periodically during test mode.
@@ -188,4 +197,4 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
   }
-}
+} 
