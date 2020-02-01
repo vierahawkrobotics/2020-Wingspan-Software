@@ -37,11 +37,10 @@ public class Constants {
     public static Talon collectorMotor= new Talon(5);
     public static CANSparkMax shooterMotor = new CANSparkMax(1,MotorType.kBrushless);
     //Drivetrain instantiation
-    public static DifferentialDrive mainDrive;
-    public static SpeedControllerGroup leftGroup;
-    public static SpeedControllerGroup rightGroup;
-    
-  //Joystick instantiation (Joystick 0 is joystick, joystick 1 is controller)
+    public static SpeedControllerGroup leftGroup = new SpeedControllerGroup(left1, left2);
+    public static SpeedControllerGroup rightGroup = new SpeedControllerGroup(right1, right2);;
+    public static DifferentialDrive mainDrive = new DifferentialDrive(leftGroup, rightGroup);
+    //Joystick instantiation (Joystick 0 is joystick, joystick 1 is controller)
     public static Joystick joystick0 = new Joystick(0);
     public static Joystick joystick1 = new Joystick(1);
     //Declares I2C port and color sensor
@@ -56,7 +55,7 @@ public class Constants {
     public static Color redTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
     public static Color yellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
     //init navx
-    public static AHRS ahrs;
+    public static AHRS ahrs = new AHRS(SPI.Port.kMXP); ;
     //State variables
     public static boolean isSpinning = false;
     public static boolean isGoingToColor = false;
@@ -83,24 +82,6 @@ public class Constants {
     public static double collectorSpeed = .75;
     
     public Constants() {
-        try {
-            /* Communicate w/navX-MXP via the MXP SPI Bus.                                     */
-            /* Alternatively:  I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB     */
-            /* See http://navx-mxp.kauailabs.com/guidance/selecting-an-interface/ for details. */
-            ahrs = new AHRS(SPI.Port.kMXP); 
-        } 
-        catch (RuntimeException ex ) {
-            //@TODO fix driver station error reporting
-            //DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
-        }
-        leftGroup = new SpeedControllerGroup(Constants.left1, Constants.left2);
-        rightGroup = new SpeedControllerGroup(Constants.right1, Constants.right2);
-        mainDrive = new DifferentialDrive(leftGroup, rightGroup);
-        rightEncoder.setDistancePerPulse(1.0/2048.0);
-        leftEncoder.setDistancePerPulse(1.0/2048.0);
-        colorMatcher.addColorMatch(Constants.blueTarget);
-        colorMatcher.addColorMatch(Constants.redTarget);
-        colorMatcher.addColorMatch(Constants.greenTarget);
-        colorMatcher.addColorMatch(Constants.yellowTarget);
+        
     }
 }

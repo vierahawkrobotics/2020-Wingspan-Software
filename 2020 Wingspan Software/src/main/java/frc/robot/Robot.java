@@ -40,10 +40,17 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    //init encoders
+    Constants.rightEncoder.setDistancePerPulse(1.0/2048.0);
+    Constants.leftEncoder.setDistancePerPulse(1.0/2048.0);
+    //init colorsensor
+    Constants.colorMatcher.addColorMatch(Constants.blueTarget);
+    Constants.colorMatcher.addColorMatch(Constants.redTarget);
+    Constants.colorMatcher.addColorMatch(Constants.greenTarget);
+    Constants.colorMatcher.addColorMatch(Constants.yellowTarget);
     //Resets all the encoders
     Constants.leftEncoder.reset();
     Constants.rightEncoder.reset();
-    
   }
 
   /**
