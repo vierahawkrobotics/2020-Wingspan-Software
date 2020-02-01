@@ -9,9 +9,6 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.revrobotics.ControlType;
 
-import com.kauailabs.navx.frc.AHRS;
-
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -42,8 +39,6 @@ public class Robot extends TimedRobot {
   private Collector collectorClass = new Collector();
   private Control_Panel cp = new Control_Panel();
   private Shooter shooterClass = new Shooter();
-  //navx
-  AHRS ahrs;
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -65,17 +60,6 @@ public class Robot extends TimedRobot {
     Constants.leftEncoder.setDistancePerPulse(1.0/2048.0);
     Constants.rightEncoder.reset();
     Constants.rightEncoder.setDistancePerPulse(1.0/2048.0);
-
-    //init navx
-    try {
-        /* Communicate w/navX-MXP via the MXP SPI Bus.                                     */
-        /* Alternatively:  I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB     */
-        /* See http://navx-mxp.kauailabs.com/guidance/selecting-an-interface/ for details. */
-        ahrs = new AHRS(SPI.Port.kMXP); 
-    } catch (RuntimeException ex ) {
-        //@TODO fix driver station error reporting
-        //DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
-    }
   }
 
   /**
@@ -206,6 +190,9 @@ public class Robot extends TimedRobot {
     System.out.println(Constants.shooterMotor.getEncoder().getVelocity());
     System.out.println(Constants.leftEncoder.getDistance());
     System.out.println(Constants.rightEncoder.getDistance());
+    //Dashboard Interface
+    SmartDashboard.putNumber("Total Yaw", NavX.getTotalYaw());
+    SmartDashboard.putNumber("Current Yaw Rate", NavX.getYawRate());
   }
   /**
    * This function is called periodically during test mode.

@@ -7,11 +7,14 @@
 
 package frc.robot;
 
+import com.kauailabs.navx.frc.AHRS;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Talon;
@@ -41,6 +44,8 @@ public class Constants {
     public static Color greenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
     public static Color redTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
     public static Color yellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
+    //init navx
+    public static AHRS ahrs;
     //State variables
     public static boolean isSpinning = false;
     public static boolean isGoingToColor = false;
@@ -65,4 +70,17 @@ public class Constants {
     public static double deploySpeed = .75;
     public static double spinnerArmSpeed = .75;
     public static double collectorSpeed = .75;
+    
+    public Constants() {
+        try {
+            /* Communicate w/navX-MXP via the MXP SPI Bus.                                     */
+            /* Alternatively:  I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB     */
+            /* See http://navx-mxp.kauailabs.com/guidance/selecting-an-interface/ for details. */
+            ahrs = new AHRS(SPI.Port.kMXP); 
+        } 
+        catch (RuntimeException ex ) {
+            //@TODO fix driver station error reporting
+            //DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
+        }
+    }
 }
