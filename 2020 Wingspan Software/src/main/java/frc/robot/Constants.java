@@ -20,6 +20,9 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 
 /**
  * Add your docs here.
@@ -33,6 +36,14 @@ public class Constants {
     public static Talon spinnyMotor = new Talon(4);
     public static Talon collectorMotor= new Talon(5);
     public static CANSparkMax shooterMotor = new CANSparkMax(1,MotorType.kBrushless);
+    //Drivetrain instantiation
+    public static DifferentialDrive mainDrive;
+    public static SpeedControllerGroup leftGroup;
+    public static SpeedControllerGroup rightGroup;
+    
+  //Joystick instantiation (Joystick 0 is joystick, joystick 1 is controller)
+    public static Joystick joystick0 = new Joystick(0);
+    public static Joystick joystick1 = new Joystick(1);
     //Declares I2C port and color sensor
     private static final I2C.Port i2cPort = I2C.Port.kOnboard;
     public static ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
@@ -82,5 +93,14 @@ public class Constants {
             //@TODO fix driver station error reporting
             //DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
         }
+        leftGroup = new SpeedControllerGroup(Constants.left1, Constants.left2);
+        rightGroup = new SpeedControllerGroup(Constants.right1, Constants.right2);
+        mainDrive = new DifferentialDrive(leftGroup, rightGroup);
+        rightEncoder.setDistancePerPulse(1.0/2048.0);
+        leftEncoder.setDistancePerPulse(1.0/2048.0);
+        colorMatcher.addColorMatch(Constants.blueTarget);
+        colorMatcher.addColorMatch(Constants.redTarget);
+        colorMatcher.addColorMatch(Constants.greenTarget);
+        colorMatcher.addColorMatch(Constants.yellowTarget);
     }
 }
