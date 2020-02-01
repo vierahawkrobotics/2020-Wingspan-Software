@@ -29,16 +29,16 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
  */
 public class Constants {
     //Declares motor variables
-    public static Talon left1 = new Talon(0);
-    public static Talon left2 = new Talon(2);
-    public static Talon right1 = new Talon(1);
-    public static Talon right2 = new Talon(3);
-    public static Talon spinnyMotor = new Talon(4);
+    public static Talon leftDriveMotor1 = new Talon(0);
+    public static Talon leftDriveMotor2 = new Talon(2);
+    public static Talon rightDriveMotor1 = new Talon(1);
+    public static Talon rightDriveMotor2 = new Talon(3);
+    public static Talon controlPannelMotor = new Talon(4);
     public static Talon collectorMotor= new Talon(5);
     public static CANSparkMax shooterMotor = new CANSparkMax(1,MotorType.kBrushless);
     //Drivetrain instantiation
-    public static SpeedControllerGroup leftGroup = new SpeedControllerGroup(left1, left2);
-    public static SpeedControllerGroup rightGroup = new SpeedControllerGroup(right1, right2);;
+    public static SpeedControllerGroup leftGroup = new SpeedControllerGroup(leftDriveMotor1, leftDriveMotor2);
+    public static SpeedControllerGroup rightGroup = new SpeedControllerGroup(rightDriveMotor1, rightDriveMotor2);;
     public static DifferentialDrive mainDrive = new DifferentialDrive(leftGroup, rightGroup);
     //Joystick instantiation (Joystick 0 is joystick, joystick 1 is controller)
     public static Joystick joystick0 = new Joystick(0);

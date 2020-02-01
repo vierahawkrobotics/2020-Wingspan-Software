@@ -155,7 +155,7 @@ public class Robot extends TimedRobot {
       cp.spinWheel();
     }
     else{
-      Constants.spinnyMotor.set(0);
+      Constants.controlPannelMotor.set(0);
       cp.numChanges=0;
     }
     //Shooter Controls
