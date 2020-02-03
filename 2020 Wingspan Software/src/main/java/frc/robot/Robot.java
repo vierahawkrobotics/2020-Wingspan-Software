@@ -110,17 +110,30 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    Constants.getButtons();
     //All controls on joystick 0 (The joystick)
     //Drive code
     double forwardSpeed=Constants.joystick0.getRawAxis(1);
-    if(!Constants.joystick0.getRawButton(1)){
+    if(!Constants.turboButton){
       forwardSpeed*=Constants.driveSpeed;
+    }
+    else{
+      forwardSpeed*=-1;
     }
     double rotateSpeed=Constants.joystick0.getRawAxis(2);
     rotateSpeed*=Constants.turnSpeed;
     Constants.mainDrive.arcadeDrive(forwardSpeed, rotateSpeed);
     //Collection code
-    if (Constants.joystick0.getRawButtonPressed(5)) {
+    if(Constants.moveCollectorButton){
+      if(targetRevs==0){
+        targetRevs=.28;
+      }
+      else{
+        targetRevs=0;
+      }
+    }
+    collectorClass.moveCollector(targetRevs);
+    if (Constants.collectButton) {
       Constants.ballsCollecting = !Constants.ballsCollecting;
     }
     if(Constants.ballsCollecting){
@@ -131,23 +144,23 @@ public class Robot extends TimedRobot {
     }
     //All controls on joystick 1 (The controller)
     //Control panel controls (switches between on and off so pressing the button again stops the motor)
-    if(Constants.joystick1.getRawButtonPressed(1)){
+    if(Constants.blueButton){
       Constants.targetColor = Constants.blueTarget;
       Constants.isGoingToColor = !Constants.isGoingToColor;
     }
-    else if(Constants.joystick1.getRawButtonPressed(2)){
+    else if(Constants.greenButton){
       Constants.targetColor = Constants.greenTarget;
       Constants.isGoingToColor = !Constants.isGoingToColor;
     }
-    else if(Constants.joystick1.getRawButtonPressed(3)){
+    else if(Constants.redButton){
       Constants.targetColor = Constants.redTarget;
       Constants.isGoingToColor = !Constants.isGoingToColor;
     }
-    else if(Constants.joystick1.getRawButtonPressed(4)){
+    else if(Constants.yellowButton){
       Constants.targetColor = Constants.yellowTarget;
       Constants.isGoingToColor = !Constants.isGoingToColor;
     }
-    if(Constants.joystick1.getRawButtonPressed(6)){
+    if(Constants.spinButton){
       Constants.isSpinning=!Constants.isSpinning;
     }
     //Checks if either of the methods that use the control panel motor are active, and if not stops the motor
@@ -158,14 +171,14 @@ public class Robot extends TimedRobot {
       cp.spinWheel();
     }
     else{
-      Constants.controlPannelMotor.set(0);
+      Constants.controlPanelMotor.set(0);
       cp.numChanges=0;
     }
     //Shooter Controls
-    if(Constants.joystick1.getRawButtonPressed(7)){
+    if(Constants.shootOnceButton){
       Constants.shootingOnce = !Constants.shootingOnce;
     }
-    else if(Constants.joystick1.getRawButtonPressed(8)){
+    else if(Constants.shootAllButton){
       Constants.shootingAll = !Constants.shootingAll;
     }
     if(Constants.shootingOnce){
@@ -178,17 +191,6 @@ public class Robot extends TimedRobot {
       shooterClass.stopMotors();
     }
     //Hanging controls
-    if(Constants.joystick0.getRawButtonPressed(6)){
-      if(targetRevs==0){
-        targetRevs=.28;
-      }
-      else{
-        targetRevs=0;
-      }
-    }
-    System.out.println(targetRevs);
-    //Constants.collectorLift.set(joystick1.getRawAxis(1)*.7);
-    collectorClass.moveCollector(targetRevs);
     System.out.println("Velocity"+Constants.shooterMotor.getEncoder().getVelocity());
     System.out.println("leftDist"+Constants.leftEncoder.getDistance());
     System.out.println("rightDist"+Constants.rightEncoder.getDistance());
