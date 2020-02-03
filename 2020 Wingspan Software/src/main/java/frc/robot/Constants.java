@@ -38,7 +38,7 @@ public class Constants {
     public static Talon leftDriveMotor2 = new Talon(2);
     public static Talon rightDriveMotor1 = new Talon(1);
     public static Talon rightDriveMotor2 = new Talon(3);
-    public static Talon controlPannelMotor = new Talon(8);
+    public static Talon controlPanelMotor = new Talon(8);
     public static Talon collectorLift = new Talon(5);
     public static Talon collectorMotor= new Talon(4);
     public static CANSparkMax shooterMotor = new CANSparkMax(1,MotorType.kBrushless);
@@ -52,8 +52,9 @@ public class Constants {
     //Declares I2C port and color sensor
     private static final I2C.Port i2cPort = I2C.Port.kOnboard;
     public static ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
-    public static Encoder leftEncoder= new Encoder(0,1,false, EncodingType.k4X);
-    public static Encoder rightEncoder= new Encoder(2,3,true, EncodingType.k4X);
+    //Declares encoders
+    public static Encoder leftEncoder= new Encoder(0,1,true, EncodingType.k4X);
+    public static Encoder rightEncoder= new Encoder(2,3,false, EncodingType.k4X);
     public static Encoder collectorEncoder = new Encoder(4,5, false, EncodingType.k4X);
     //Declares colormatch and target  colors
     public static ColorMatch colorMatcher = new ColorMatch();
@@ -87,8 +88,32 @@ public class Constants {
     public static double deploySpeed = .75;
     public static double spinnerArmSpeed = .75;
     public static double collectorSpeed = .4;
+    //Button variables
+    public static boolean turboButton;
+    public static boolean collectButton;
+    public static boolean blueButton;
+    public static boolean greenButton;
+    public static boolean redButton;
+    public static boolean yellowButton;
+    public static boolean spinButton;
+    public static boolean shootOnceButton;
+    public static boolean shootAllButton;
+    public static boolean moveCollectorButton;
   
     public Constants() {
         
+    }
+  
+    public static void getButtons(){
+        turboButton = joystick0.getRawButton(1);
+        collectButton = joystick0.getRawButtonPressed(5);
+        blueButton = joystick1.getRawButtonPressed(1);
+        greenButton = joystick1.getRawButtonPressed(2);
+        redButton = joystick1.getRawButtonPressed(3);
+        yellowButton = joystick1.getRawButtonPressed(4);
+        spinButton = joystick1.getRawButtonPressed(6);
+        shootOnceButton = joystick1.getRawButtonPressed(7);
+        shootAllButton = joystick1.getRawButtonPressed(8);
+        moveCollectorButton = joystick0.getRawButtonPressed(6);
     }
 }
