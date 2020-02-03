@@ -6,7 +6,10 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
-
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,28 +32,33 @@ public class Robot extends TimedRobot {
   private Collector collectorClass = new Collector();
   private Control_Panel cp = new Control_Panel();
   private Shooter shooterClass = new Shooter();
-  private Constants constants = new Constants();
+  private PIDController collectorPID=new PIDController(.003,.3,0);
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
    */
+  double targetRevs=0;
   @Override
   public void robotInit() {
     //wpi lib stuff idk what it does
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    //init encoders
-    Constants.rightEncoder.setDistancePerPulse(1.0/2048.0);
-    Constants.leftEncoder.setDistancePerPulse(1.0/2048.0);
+
+    //Initializes the drivetrain
+    Constants.collectorMotor.setInverted(true);
     //init colorsensor
     Constants.colorMatcher.addColorMatch(Constants.blueTarget);
     Constants.colorMatcher.addColorMatch(Constants.redTarget);
     Constants.colorMatcher.addColorMatch(Constants.greenTarget);
     Constants.colorMatcher.addColorMatch(Constants.yellowTarget);
-    //Resets all the encoders
+    //init encoders
     Constants.leftEncoder.reset();
+    Constants.leftEncoder.setDistancePerPulse(1.0/2048.0);
     Constants.rightEncoder.reset();
+    Constants.rightEncoder.setDistancePerPulse(1.0/2048.0);
+    Constants.collectorEncoder.reset();
+    Constants.collectorEncoder.setDistancePerPulse(1.0/2048.0);
   }
 
   /**
@@ -109,15 +117,15 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     //All controls on joystick 0 (The joystick)
     //Drive code
-    double forwardSpeed=Constants.joystick0.getRawAxis(1);
-    if(!Constants.joystick0.getRawButton(1)){
+    double forwardSpeed=joystick0.getRawAxis(1);
+    if(!joystick0.getRawButton(1)){
       forwardSpeed*=Constants.driveSpeed;
     }
-    double rotateSpeed=Constants.joystick0.getRawAxis(2);
+    double rotateSpeed=joystick0.getRawAxis(2);
     rotateSpeed*=Constants.turnSpeed;
-    Constants.mainDrive.arcadeDrive(forwardSpeed, rotateSpeed);
+    mainDrive.arcadeDrive(forwardSpeed, rotateSpeed);
     //Collection code
-    if (Constants.joystick0.getRawButton(5)) {
+    if (joystick0.getRawButtonPressed(5)) {
       Constants.ballsCollecting = !Constants.ballsCollecting;
     }
     if(Constants.ballsCollecting){
@@ -175,13 +183,25 @@ public class Robot extends TimedRobot {
       shooterClass.stopMotors();
     }
     //Hanging controls
+    if(Constants.joystick0.getRawButtonPressed(6)){
+      if(targetRevs==0){
+        targetRevs=.28;
+      }
+      else{
+        targetRevs=0;
+      }
+    }
+    System.out.println(targetRevs);
+    //Constants.collectorLift.set(joystick1.getRawAxis(1)*.7);
+    collectorClass.moveCollector(targetRevs);
+    System.out.println("Velocity"+Constants.shooterMotor.getEncoder().getVelocity());
+    System.out.println("leftDist"+Constants.leftEncoder.getDistance());
+    System.out.println("rightDist"+Constants.rightEncoder.getDistance());
+    System.out.println("collectorDist"+Constants.collectorEncoder.getDistance());
     double winchSpeed = Constants.joystick1.getRawAxis(3)*Constants.winchSpeed;
     hangClass.moveWinch(winchSpeed);
     double hangWheelSpeed = Constants.joystick1.getRawAxis(0)*Constants.hangWheelSpeed;
     hangClass.moveHangWheels(hangWheelSpeed);
-    System.out.println(Constants.shooterMotor.getEncoder().getVelocity());
-    System.out.println(Constants.leftEncoder.getDistance());
-    System.out.println(Constants.rightEncoder.getDistance());
     //Dashboard Interface
     SmartDashboard.putNumber("Total Yaw", NavX.getTotalYaw());
     SmartDashboard.putNumber("Current Yaw Rate", NavX.getYawRate());
