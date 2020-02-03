@@ -28,6 +28,7 @@ public class Robot extends TimedRobot {
   private Collector collectorClass = new Collector();
   private Control_Panel cp = new Control_Panel();
   private Shooter shooterClass = new Shooter();
+  private Telemetry telemetryClass = new Telemetry();
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -191,17 +192,15 @@ public class Robot extends TimedRobot {
       shooterClass.stopMotors();
     }
     //Hanging controls
-    System.out.println("Velocity"+Constants.shooterMotor.getEncoder().getVelocity());
-    System.out.println("leftDist"+Constants.leftEncoder.getDistance());
-    System.out.println("rightDist"+Constants.rightEncoder.getDistance());
-    System.out.println("collectorDist"+Constants.collectorEncoder.getDistance());
+    //print the encoder values
+    telemetryClass.debugEncoders("Encoder Values",targetRevs,collectorClass);
+    //hanging winch stuff
     double winchSpeed = Constants.joystick1.getRawAxis(3)*Constants.winchSpeed;
     hangClass.moveWinch(winchSpeed);
     double hangWheelSpeed = Constants.joystick1.getRawAxis(0)*Constants.hangWheelSpeed;
     hangClass.moveHangWheels(hangWheelSpeed);
-    //Dashboard Interface
-    SmartDashboard.putNumber("Total Yaw", NavX.getTotalYaw());
-    SmartDashboard.putNumber("Current Yaw Rate", NavX.getYawRate());
+    //send the dashboard data
+    telemetryClass.sendDashboardData();
   }
   /**
    * This function is called periodically during test mode.
