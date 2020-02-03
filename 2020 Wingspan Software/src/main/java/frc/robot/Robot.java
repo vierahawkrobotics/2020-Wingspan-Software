@@ -6,10 +6,6 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -32,7 +28,6 @@ public class Robot extends TimedRobot {
   private Collector collectorClass = new Collector();
   private Control_Panel cp = new Control_Panel();
   private Shooter shooterClass = new Shooter();
-  private PIDController collectorPID=new PIDController(.003,.3,0);
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
@@ -117,15 +112,15 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     //All controls on joystick 0 (The joystick)
     //Drive code
-    double forwardSpeed=joystick0.getRawAxis(1);
-    if(!joystick0.getRawButton(1)){
+    double forwardSpeed=Constants.joystick0.getRawAxis(1);
+    if(!Constants.joystick0.getRawButton(1)){
       forwardSpeed*=Constants.driveSpeed;
     }
-    double rotateSpeed=joystick0.getRawAxis(2);
+    double rotateSpeed=Constants.joystick0.getRawAxis(2);
     rotateSpeed*=Constants.turnSpeed;
-    mainDrive.arcadeDrive(forwardSpeed, rotateSpeed);
+    Constants.mainDrive.arcadeDrive(forwardSpeed, rotateSpeed);
     //Collection code
-    if (joystick0.getRawButtonPressed(5)) {
+    if (Constants.joystick0.getRawButtonPressed(5)) {
       Constants.ballsCollecting = !Constants.ballsCollecting;
     }
     if(Constants.ballsCollecting){
