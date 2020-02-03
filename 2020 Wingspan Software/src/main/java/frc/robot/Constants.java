@@ -7,30 +7,48 @@
 
 package frc.robot;
 
+
+import com.kauailabs.navx.frc.AHRS;
+
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+
+
+import edu.wpi.first.wpilibj.SPI;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 
 /**
  * Add your docs here.
  */
 public class Constants {
     //Declares motor variables
-    public static Talon left1 = new Talon(0);
-    public static Talon left2 = new Talon(2);
-    public static Talon right1 = new Talon(1);
-    public static Talon right2 = new Talon(3);
-    public static Talon spinnyMotor = new Talon(8);
-    public static Talon collectorMotor= new Talon(4);
+    public static Talon leftDriveMotor1 = new Talon(0);
+    public static Talon leftDriveMotor2 = new Talon(2);
+    public static Talon rightDriveMotor1 = new Talon(1);
+    public static Talon rightDriveMotor2 = new Talon(3);
+    public static Talon controlPannelMotor = new Talon(8);
     public static Talon collectorLift = new Talon(5);
+    public static Talon collectorMotor= new Talon(4);
     public static CANSparkMax shooterMotor = new CANSparkMax(1,MotorType.kBrushless);
+    //Drivetrain instantiation
+    public static SpeedControllerGroup leftGroup = new SpeedControllerGroup(leftDriveMotor1, leftDriveMotor2);
+    public static SpeedControllerGroup rightGroup = new SpeedControllerGroup(rightDriveMotor1, rightDriveMotor2);;
+    public static DifferentialDrive mainDrive = new DifferentialDrive(leftGroup, rightGroup);
+    //Joystick instantiation (Joystick 0 is joystick, joystick 1 is controller)
+    public static Joystick joystick0 = new Joystick(0);
+    public static Joystick joystick1 = new Joystick(1);
     //Declares I2C port and color sensor
     private static final I2C.Port i2cPort = I2C.Port.kOnboard;
     public static ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
@@ -43,6 +61,8 @@ public class Constants {
     public static Color greenTarget = ColorMatch.makeColor(0.197, 0.561, 0.240);
     public static Color redTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
     public static Color yellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
+    //init navx
+    public static AHRS ahrs = new AHRS(SPI.Port.kMXP); ;
     //State variables
     public static boolean isSpinning = false;
     public static boolean isGoingToColor = false;
@@ -67,4 +87,8 @@ public class Constants {
     public static double deploySpeed = .75;
     public static double spinnerArmSpeed = .75;
     public static double collectorSpeed = .4;
+  
+    public Constants() {
+        
+    }
 }
