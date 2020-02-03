@@ -6,10 +6,10 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
-
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -37,16 +37,19 @@ public class Robot extends TimedRobot {
   private Collector collectorClass = new Collector();
   private Control_Panel cp = new Control_Panel();
   private Shooter shooterClass = new Shooter();
+  private PIDController collectorPID=new PIDController(.003,.3,0);
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
    */
+  double targetRevs=0;
   @Override
   public void robotInit() {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
     //Initializes the drivetrain
+    Constants.collectorMotor.setInverted(true);
     leftGroup = new SpeedControllerGroup(Constants.left1, Constants.left2);
     rightGroup = new SpeedControllerGroup(Constants.right1, Constants.right2);
     mainDrive = new DifferentialDrive(leftGroup, rightGroup);
@@ -54,6 +57,14 @@ public class Robot extends TimedRobot {
     Constants.colorMatcher.addColorMatch(Constants.redTarget);
     Constants.colorMatcher.addColorMatch(Constants.greenTarget);
     Constants.colorMatcher.addColorMatch(Constants.yellowTarget);
+    Constants.leftEncoder.reset();
+    Constants.leftEncoder.setDistancePerPulse(1.0/2048.0);
+    Constants.rightEncoder.reset();
+    Constants.rightEncoder.setDistancePerPulse(1.0/2048.0);
+    Constants.collectorEncoder.reset();
+    Constants.collectorEncoder.setDistancePerPulse(1.0/2048.0);
+    collectorPID.setSetpoint(0);
+    collectorPID.setTolerance(.025);
   }
 
   /**
@@ -112,13 +123,21 @@ public class Robot extends TimedRobot {
     //All controls on joystick 0 (The joystick)
     //Drive code
     double forwardSpeed=joystick0.getRawAxis(1);
-    forwardSpeed*=.75;
+    if(!joystick0.getRawButton(1)){
+      forwardSpeed*=Constants.driveSpeed;
+    }
     double rotateSpeed=joystick0.getRawAxis(2);
-    rotateSpeed*=.75;
+    rotateSpeed*=Constants.turnSpeed;
     mainDrive.arcadeDrive(forwardSpeed, rotateSpeed);
     //Collection code
-    if (joystick0.getRawButton(5)) {
+    if (joystick0.getRawButtonPressed(5)) {
+      Constants.ballsCollecting = !Constants.ballsCollecting;
+    }
+    if(Constants.ballsCollecting){
       collectorClass.collectBalls();
+    }
+    else{
+      Constants.collectorMotor.set(0);
     }
     //All controls on joystick 1 (The controller)
     //Control panel controls (switches between on and off so pressing the button again stops the motor)
@@ -153,15 +172,53 @@ public class Robot extends TimedRobot {
       cp.numChanges=0;
     }
     //Shooter Controls
-    if(joystick1.getRawButton(7)){
+    if(joystick1.getRawButtonPressed(7)){
+      Constants.shootingOnce = !Constants.shootingOnce;
+    }
+    else if(joystick1.getRawButtonPressed(8)){
+      Constants.shootingAll = !Constants.shootingAll;
+    }
+    if(Constants.shootingOnce){
       shooterClass.shootOnce();
     }
-    else if(joystick1.getRawButton(8)){
+    else if(Constants.shootingAll){
       shooterClass.shootAll();
     }
+    else{
+      shooterClass.stopMotors();
+    }
     //Hanging controls
-    double winchSpeed = joystick1.getRawAxis(3);
+    double winchSpeed = joystick1.getRawAxis(3)*Constants.winchSpeed;
     hangClass.moveWinch(winchSpeed);
+    double hangWheelSpeed = joystick1.getRawAxis(0)*Constants.hangWheelSpeed;
+    hangClass.moveHangWheels(hangWheelSpeed);
+    if(joystick0.getRawButtonPressed(6)){
+      if(collectorPID.getSetpoint()==0){
+        collectorPID.reset();
+        collectorPID.setP(.003);
+        collectorPID.setI(.3);
+        collectorPID.setD(0);
+        collectorPID.setSetpoint(.26);
+        targetRevs=.28;
+      }
+      else{
+        collectorPID.reset();
+        collectorPID.setP(.00003);
+        collectorPID.setI(.3);
+        collectorPID.setD(0);
+        collectorPID.setSetpoint(0);
+        targetRevs=0;
+      }
+    }
+    System.out.println(collectorPID.calculate(Constants.collectorEncoder.getDistance()));
+    System.out.println(targetRevs);
+    //Constants.collectorLift.set(joystick1.getRawAxis(1)*.7);
+    collectorClass.moveCollector(targetRevs);
+    //*/
+    System.out.println("Velocity"+Constants.shooterMotor.getEncoder().getVelocity());
+    System.out.println("leftDist"+Constants.leftEncoder.getDistance());
+    System.out.println("rightDist"+Constants.rightEncoder.getDistance());
+    System.out.println("collectorDist"+Constants.collectorEncoder.getDistance());
   }
   /**
    * This function is called periodically during test mode.
@@ -169,4 +226,4 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
   }
-}
+} 

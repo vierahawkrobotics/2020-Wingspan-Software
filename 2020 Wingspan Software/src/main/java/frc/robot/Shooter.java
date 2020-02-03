@@ -18,15 +18,15 @@ public class Shooter {
         
     }
     public void shootOnce(){
-
+        startMotors();
     }
     public void shootAll(){
-
+        
     }
     public void stopMotors(){
-
+        Constants.shooterMotor.set(0);
     }
     public void startMotors(){
-        
+        Constants.shooterMotor.set(Constants.shooterSpeed);
     }
 }
