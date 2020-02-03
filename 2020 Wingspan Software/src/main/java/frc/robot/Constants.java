@@ -99,6 +99,11 @@ public class Constants {
     public static boolean shootOnceButton;
     public static boolean shootAllButton;
     public static boolean moveCollectorButton;
+  
+    public Constants() {
+        
+    }
+  
     public static void getButtons(){
         turboButton = joystick0.getRawButton(1);
         collectButton = joystick0.getRawButtonPressed(5);
