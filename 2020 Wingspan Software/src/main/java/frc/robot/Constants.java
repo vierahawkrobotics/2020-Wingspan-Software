@@ -6,20 +6,12 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
-
-
 import com.kauailabs.navx.frc.AHRS;
-
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-
-
 import edu.wpi.first.wpilibj.SPI;
-
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Talon;
@@ -35,8 +27,8 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 public class Constants {
     //Declares motor variables
     public static Talon leftDriveMotor1 = new Talon(0);
-    public static Talon leftDriveMotor2 = new Talon(2);
-    public static Talon rightDriveMotor1 = new Talon(1);
+    public static Talon leftDriveMotor2 = new Talon(1);
+    public static Talon rightDriveMotor1 = new Talon(2);
     public static Talon rightDriveMotor2 = new Talon(3);
     public static Talon controlPanelMotor = new Talon(8);
     public static Talon collectorLift = new Talon(5);
@@ -77,6 +69,7 @@ public class Constants {
     public static boolean startingShooter = false;
     public static boolean stoppingShooter = false;
     public static Color targetColor;
+    public static double targetRevsCollectorArm = 0;
     //Power Variables
     public static double driveSpeed = -.75;
     public static double turnSpeed = .5;
@@ -88,32 +81,7 @@ public class Constants {
     public static double deploySpeed = .75;
     public static double spinnerArmSpeed = .75;
     public static double collectorSpeed = .4;
-    //Button variables
-    public static boolean turboButton;
-    public static boolean collectButton;
-    public static boolean blueButton;
-    public static boolean greenButton;
-    public static boolean redButton;
-    public static boolean yellowButton;
-    public static boolean spinButton;
-    public static boolean shootOnceButton;
-    public static boolean shootAllButton;
-    public static boolean moveCollectorButton;
-  
     public Constants() {
         
-    }
-  
-    public static void getButtons(){
-        turboButton = joystick0.getRawButton(1);
-        collectButton = joystick0.getRawButtonPressed(5);
-        blueButton = joystick1.getRawButtonPressed(1);
-        greenButton = joystick1.getRawButtonPressed(2);
-        redButton = joystick1.getRawButtonPressed(3);
-        yellowButton = joystick1.getRawButtonPressed(4);
-        spinButton = joystick1.getRawButtonPressed(6);
-        shootOnceButton = joystick1.getRawButtonPressed(7);
-        shootAllButton = joystick1.getRawButtonPressed(8);
-        moveCollectorButton = joystick0.getRawButtonPressed(6);
     }
 }

@@ -17,6 +17,8 @@ public class Collector {
     Constants.collectorMotor.set(Constants.collectorSpeed);
   }
   public void moveCollector(double target) {
+    //Constants.collectorLift.set(Constants.joystick1.getRawAxis(1)*-.7);
+    ///*
     if (target - .025 < Constants.collectorEncoder.getDistance()
         && Constants.collectorEncoder.getDistance() < target + .025) {
       Constants.collectorLift.set(0);
@@ -27,5 +29,6 @@ public class Collector {
     else {
       Constants.collectorLift.set(-.6);
     }
+    //*/
   }
 }

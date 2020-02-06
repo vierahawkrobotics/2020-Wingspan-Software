@@ -2,7 +2,6 @@ package frc.robot;
 
 import java.time.format.DateTimeFormatter;  
 import java.time.LocalDateTime; 
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Telemetry {
@@ -22,7 +21,7 @@ public class Telemetry {
         System.out.println("=======================================");
     }
 
-    public void debugEncoders(String msg, double targetRevs, Collector collectorClass) {
+    public void debugEncoders(String msg, Collector collectorClass) {
         //print a timestamp
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
         LocalDateTime now = LocalDateTime.now();  
@@ -30,7 +29,7 @@ public class Telemetry {
         //print the message
         System.out.println("Message: " + msg);
         //print the debug information
-        System.out.println(targetRevs);
+        System.out.println(Constants.targetRevsCollectorArm);
         //Constants.collectorLift.set(joystick1.getRawAxis(1)*.7);
         System.out.println("Velocity"+Constants.shooterMotor.getEncoder().getVelocity());
         System.out.println("leftDist"+Constants.leftEncoder.getDistance());
@@ -45,6 +44,4 @@ public class Telemetry {
         SmartDashboard.putNumber("Total Yaw", NavX.getTotalYaw());
         SmartDashboard.putNumber("Current Yaw Rate", NavX.getYawRate());
     }
-
-
 }

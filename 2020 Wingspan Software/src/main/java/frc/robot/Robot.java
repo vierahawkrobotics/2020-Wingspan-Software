@@ -6,6 +6,7 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,26 +23,24 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  
   //Class instantiation
   private Hang hangClass = new Hang();
   private Collector collectorClass = new Collector();
   private Control_Panel cp = new Control_Panel();
   private Shooter shooterClass = new Shooter();
   private Telemetry telemetryClass = new Telemetry();
+  private Autonomous autoClass = new Autonomous();
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
    */
-  double targetRevs=0;
   @Override
   public void robotInit() {
     //wpi lib stuff idk what it does
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-
-    //Initializes the drivetrain
+    //Initializes the collector motor
     Constants.collectorMotor.setInverted(true);
     //init colorsensor
     Constants.colorMatcher.addColorMatch(Constants.blueTarget);
@@ -97,11 +96,11 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     switch (m_autoSelected) {
     case kCustomAuto:
-      // Put custom auto code here
+      //Put custom auto code here
       break;
     case kDefaultAuto:
     default:
-      // Put default auto code here
+      //Put default auto code here
       break;
     }
   }
@@ -111,11 +110,11 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    Constants.getButtons();
+    Controls.getButtons();
     //All controls on joystick 0 (The joystick)
     //Drive code
     double forwardSpeed=Constants.joystick0.getRawAxis(1);
-    if(!Constants.turboButton){
+    if(!Controls.turboButton){
       forwardSpeed*=Constants.driveSpeed;
     }
     else{
@@ -124,17 +123,24 @@ public class Robot extends TimedRobot {
     double rotateSpeed=Constants.joystick0.getRawAxis(2);
     rotateSpeed*=Constants.turnSpeed;
     Constants.mainDrive.arcadeDrive(forwardSpeed, rotateSpeed);
+    //Releases Hanging Arm
+    if(Controls.releaseArmButton){
+      Constants.armReleasing = !Constants.armReleasing;
+    }
+    if(Constants.armReleasing){
+      hangClass.releaseArm();
+    }
     //Collection code
-    if(Constants.moveCollectorButton){
-      if(targetRevs==0){
-        targetRevs=.28;
+    if(Controls.moveCollectorButton){
+      if(Constants.targetRevsCollectorArm == 0){
+        Constants.targetRevsCollectorArm = .28;
       }
       else{
-        targetRevs=0;
+        Constants.targetRevsCollectorArm = 0;
       }
     }
-    collectorClass.moveCollector(targetRevs);
-    if (Constants.collectButton) {
+    collectorClass.moveCollector(Constants.targetRevsCollectorArm);
+    if (Controls.collectButton) {
       Constants.ballsCollecting = !Constants.ballsCollecting;
     }
     if(Constants.ballsCollecting){
@@ -145,23 +151,23 @@ public class Robot extends TimedRobot {
     }
     //All controls on joystick 1 (The controller)
     //Control panel controls (switches between on and off so pressing the button again stops the motor)
-    if(Constants.blueButton){
+    if(Controls.blueButton){
       Constants.targetColor = Constants.blueTarget;
       Constants.isGoingToColor = !Constants.isGoingToColor;
     }
-    else if(Constants.greenButton){
+    else if(Controls.greenButton){
       Constants.targetColor = Constants.greenTarget;
       Constants.isGoingToColor = !Constants.isGoingToColor;
     }
-    else if(Constants.redButton){
+    else if(Controls.redButton){
       Constants.targetColor = Constants.redTarget;
       Constants.isGoingToColor = !Constants.isGoingToColor;
     }
-    else if(Constants.yellowButton){
+    else if(Controls.yellowButton){
       Constants.targetColor = Constants.yellowTarget;
       Constants.isGoingToColor = !Constants.isGoingToColor;
     }
-    if(Constants.spinButton){
+    if(Controls.spinButton){
       Constants.isSpinning=!Constants.isSpinning;
     }
     //Checks if either of the methods that use the control panel motor are active, and if not stops the motor
@@ -176,10 +182,10 @@ public class Robot extends TimedRobot {
       cp.numChanges=0;
     }
     //Shooter Controls
-    if(Constants.shootOnceButton){
+    if(Controls.shootOnceButton){
       Constants.shootingOnce = !Constants.shootingOnce;
     }
-    else if(Constants.shootAllButton){
+    else if(Controls.shootAllButton){
       Constants.shootingAll = !Constants.shootingAll;
     }
     if(Constants.shootingOnce){
@@ -191,14 +197,14 @@ public class Robot extends TimedRobot {
     else{
       shooterClass.stopMotors();
     }
-    //Hanging controls
-    //print the encoder values
-    telemetryClass.debugEncoders("Encoder Values",targetRevs,collectorClass);
     //hanging winch stuff
     double winchSpeed = Constants.joystick1.getRawAxis(3)*Constants.winchSpeed;
     hangClass.moveWinch(winchSpeed);
+    //Hanging wheels
     double hangWheelSpeed = Constants.joystick1.getRawAxis(0)*Constants.hangWheelSpeed;
     hangClass.moveHangWheels(hangWheelSpeed);
+    //print the encoder values
+    telemetryClass.debugEncoders("Encoder Values",collectorClass);
     //send the dashboard data
     telemetryClass.sendDashboardData();
   }
