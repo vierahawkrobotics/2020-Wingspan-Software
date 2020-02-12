@@ -20,6 +20,6 @@ public class Hang {
         
     }
     public void releaseArm(){
-
+        
     }
 }

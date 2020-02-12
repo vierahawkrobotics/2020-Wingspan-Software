@@ -6,11 +6,7 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
-
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
@@ -21,39 +17,50 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends TimedRobot {
+  //wpi lib stuff idk what it does
   private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
+  private static final String leftAuto = "Left Auto";
+  private static final String middleAuto = "Middle Auto";
+  private static final String rightAuto = "Right Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  //Drivetrain instantiation
-  private DifferentialDrive mainDrive;
-  private SpeedControllerGroup leftGroup;
-  private SpeedControllerGroup rightGroup;
-  //Joystick instantiation (Joystick 0 is joystick, joystick 1 is controller)
-  private Joystick joystick0 = new Joystick(0);
-  private Joystick joystick1 = new Joystick(1);
   //Class instantiation
   private Hang hangClass = new Hang();
   private Collector collectorClass = new Collector();
   private Control_Panel cp = new Control_Panel();
   private Shooter shooterClass = new Shooter();
-  /**
+  private Telemetry telemetryClass = new Telemetry();
+  private Autonomous autoClass = new Autonomous();
+  private int autoStage = 0;
+  private double secondsDelay = 0;
+  /*
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
    */
   @Override
   public void robotInit() {
+    //wpi lib stuff idk what it does
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
+    m_chooser.addOption("Left Auto", leftAuto);
+    m_chooser.addOption("Middle Auto", middleAuto);
+    m_chooser.addOption("Right Auto", rightAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    //Initializes the drivetrain
-    leftGroup = new SpeedControllerGroup(Constants.left1, Constants.left2);
-    rightGroup = new SpeedControllerGroup(Constants.right1, Constants.right2);
-    mainDrive = new DifferentialDrive(leftGroup, rightGroup);
+    SmartDashboard.getNumber("Autonomous delay", 0);
+    //Initializes the collector motor
+    Constants.collectorMotor.setInverted(true);
+    //init colorsensor
     Constants.colorMatcher.addColorMatch(Constants.blueTarget);
     Constants.colorMatcher.addColorMatch(Constants.redTarget);
     Constants.colorMatcher.addColorMatch(Constants.greenTarget);
     Constants.colorMatcher.addColorMatch(Constants.yellowTarget);
+    //init encoders
+    Constants.leftEncoder.reset();
+    Constants.leftEncoder.setDistancePerPulse(1.0/2048.0);
+    Constants.rightEncoder.reset();
+    Constants.rightEncoder.setDistancePerPulse(1.0/2048.0);
+    Constants.collectorEncoder.reset();
+    Constants.collectorEncoder.setDistancePerPulse(1.0/2048.0);
+    Constants.ahrs.reset();
   }
 
   /**
@@ -83,6 +90,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    //more wpi lib confusing stuff
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
@@ -93,52 +101,190 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-    case kCustomAuto:
-      // Put custom auto code here
-      break;
-    case kDefaultAuto:
-    default:
-      // Put default auto code here
-      break;
+    if(autoStage == 0){
+      secondsDelay = SmartDashboard.getNumber("Autonomous delay", 0);
+      autoStage++;
     }
+    if(m_autoSelected.equals(kDefaultAuto)){
+      
+    }
+    else if (m_autoSelected.equals(leftAuto)){
+      System.out.println(autoStage);
+      if (autoStage == 1) {
+        if(secondsDelay>0){
+          secondsDelay-=.02;
+        }
+        else{
+          autoStage++;
+        }
+      }
+      else if (autoStage==2) {
+        autoClass.setTurretTargetAngle(161.6);
+        autoStage++;
+      }
+      else if (autoStage==3) {
+        if(autoClass.moveTurretToAngle()){
+          autoStage++;
+        }
+      }
+      else if (autoStage==4) {
+        Constants.shootingAll=true;
+        shooterClass.shootAll();
+        if(Constants.shootingAll==false){
+          autoStage++;
+        }
+      }
+      else if (autoStage == 5) {
+        autoClass.setTargetAngle(-14.38);
+        autoStage++;
+      }
+      else if (autoStage == 6) {
+        if(autoClass.moveToTargetAngle()){
+          autoStage++;
+        }
+      }
+      else if (autoStage == 7) {
+        autoClass.setTargetDistance(84.85);
+        autoStage++;
+      }
+      else if (autoStage == 8) {
+        collectorClass.moveCollector(.28);
+        if(autoClass.driveDistance()){
+          autoStage++;
+        }
+      }
+      else if (autoStage == 9) {
+        autoClass.setTargetAngle(0);
+        autoStage++;
+      }
+      else if (autoStage == 10) {
+        if(autoClass.moveToTargetAngle()){
+          autoStage++;
+        }
+      }
+      else if (autoStage == 11) {
+        autoClass.setTargetDistance(110.75);
+      }
+      else if (autoStage == 12) {
+        collectorClass.collectBalls();
+        if(autoClass.driveDistance()){
+          autoStage++;
+        }
+      }
+      else if (autoStage == 13) {
+        Constants.collectorMotor.set(0);
+        autoClass.setTurretTargetAngle(165.86);
+        autoStage++;
+      }
+      else if (autoStage == 14) {
+        if(autoClass.moveTurretToAngle()){
+          autoStage++;
+          Constants.shootingAll = true;
+        }
+      }
+      else if (autoStage == 15) {
+        shooterClass.shootAll();
+        if(Constants.shootingAll == false){
+          autoStage++;
+          shooterClass.stopMotors();
+        }
+      }
+    }
+    else if (m_autoSelected.equals(middleAuto)){
+      if(autoStage == 1){
+        if(secondsDelay>0){
+          secondsDelay-=.02;
+        }
+        else{
+          autoStage++;
+        }
+      }
+      else if(autoStage == 2){
+        Constants.shootingAll = true;
+        shooterClass.shootAll();
+        if(!Constants.shootingAll){
+          autoStage++;
+        }
+      }
+      else if(autoStage == 3){
+        autoClass.setTargetDistance(18);
+        autoStage++;
+      }
+      else if(autoStage == 4){
+        if(autoClass.driveDistance()){
+          autoStage++;
+        }
+      }
+    }
+    else if (m_autoSelected.equals(rightAuto)){
+      autoClass.setTargetAngle(90);
+      autoClass.moveToTargetAngle();
+    }
+    System.out.println(NavX.getTotalYaw());
   }
-
   /**
    * This function is called periodically during operator control.
    */
   @Override
   public void teleopPeriodic() {
+    Controls.getButtons();
     //All controls on joystick 0 (The joystick)
     //Drive code
-    double forwardSpeed=joystick0.getRawAxis(1);
-    forwardSpeed*=.75;
-    double rotateSpeed=joystick0.getRawAxis(2);
-    rotateSpeed*=.75;
-    mainDrive.arcadeDrive(forwardSpeed, rotateSpeed);
+    double forwardSpeed=Constants.joystick0.getRawAxis(1);
+    if(!Controls.turboButton){
+      forwardSpeed*=Constants.driveSpeed;
+    }
+    else{
+      forwardSpeed*=-1;
+    }
+    double rotateSpeed=Constants.joystick0.getRawAxis(2);
+    rotateSpeed*=Constants.turnSpeed;
+    Constants.mainDrive.arcadeDrive(forwardSpeed, rotateSpeed);
+    //Releases Hanging Arm
+    if(Controls.releaseArmButton){
+      Constants.armReleasing = !Constants.armReleasing;
+    }
+    if(Constants.armReleasing){
+      hangClass.releaseArm();
+    }
     //Collection code
-    if (joystick0.getRawButton(5)) {
+    if(Controls.moveCollectorButton){
+      if(Constants.targetRevsCollectorArm == 0){
+        Constants.targetRevsCollectorArm = .28;
+      }
+      else{
+        Constants.targetRevsCollectorArm = 0;
+      }
+    }
+    collectorClass.moveCollector(Constants.targetRevsCollectorArm);
+    if (Controls.collectButton) {
+      Constants.ballsCollecting = !Constants.ballsCollecting;
+    }
+    if(Constants.ballsCollecting){
       collectorClass.collectBalls();
+    }
+    else{
+      Constants.collectorMotor.set(0);
     }
     //All controls on joystick 1 (The controller)
     //Control panel controls (switches between on and off so pressing the button again stops the motor)
-    if(joystick1.getRawButtonPressed(1)){
+    if(Controls.blueButton){
       Constants.targetColor = Constants.blueTarget;
       Constants.isGoingToColor = !Constants.isGoingToColor;
     }
-    else if(joystick1.getRawButtonPressed(2)){
+    else if(Controls.greenButton){
       Constants.targetColor = Constants.greenTarget;
       Constants.isGoingToColor = !Constants.isGoingToColor;
     }
-    else if(joystick1.getRawButtonPressed(3)){
+    else if(Controls.redButton){
       Constants.targetColor = Constants.redTarget;
       Constants.isGoingToColor = !Constants.isGoingToColor;
     }
-    else if(joystick1.getRawButtonPressed(4)){
+    else if(Controls.yellowButton){
       Constants.targetColor = Constants.yellowTarget;
       Constants.isGoingToColor = !Constants.isGoingToColor;
     }
-    if(joystick1.getRawButtonPressed(6)){
+    if(Controls.spinButton){
       Constants.isSpinning=!Constants.isSpinning;
     }
     //Checks if either of the methods that use the control panel motor are active, and if not stops the motor
@@ -149,19 +295,35 @@ public class Robot extends TimedRobot {
       cp.spinWheel();
     }
     else{
-      Constants.spinnyMotor.set(0);
+      Constants.controlPanelMotor.set(0);
       cp.numChanges=0;
     }
     //Shooter Controls
-    if(joystick1.getRawButton(7)){
+    if(Controls.shootOnceButton){
+      Constants.shootingOnce = !Constants.shootingOnce;
+    }
+    else if(Controls.shootAllButton){
+      Constants.shootingAll = !Constants.shootingAll;
+    }
+    if(Constants.shootingOnce){
       shooterClass.shootOnce();
     }
-    else if(joystick1.getRawButton(8)){
+    else if(Constants.shootingAll){
       shooterClass.shootAll();
     }
-    //Hanging controls
-    double winchSpeed = joystick1.getRawAxis(3);
+    else{
+      shooterClass.stopMotors();
+    }
+    //hanging winch stuff
+    double winchSpeed = Constants.joystick1.getRawAxis(3)*Constants.winchSpeed;
     hangClass.moveWinch(winchSpeed);
+    //Hanging wheels
+    double hangWheelSpeed = Constants.joystick1.getRawAxis(0)*Constants.hangWheelSpeed;
+    hangClass.moveHangWheels(hangWheelSpeed);
+    //print the encoder values
+    telemetryClass.debugEncoders("Encoder Values",collectorClass);
+    //send the dashboard data
+    telemetryClass.sendDashboardData();
   }
   /**
    * This function is called periodically during test mode.
@@ -169,4 +331,4 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
   }
-}
+} 

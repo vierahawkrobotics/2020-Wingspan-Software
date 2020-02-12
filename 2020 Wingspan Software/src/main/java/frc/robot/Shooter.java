@@ -16,17 +16,25 @@ public class Shooter {
     private double motorSpeed;
     public void target(){
         
+        
     }
     public void shootOnce(){
-
+        if(Constants.shooterMotor.getEncoder().getVelocity()<=-4650){
+            Constants.towerMotor.set(.5);
+        }
+        else{
+            Constants.towerMotor.set(0);
+        }
+        startMotors();
     }
     public void shootAll(){
-
+        
     }
     public void stopMotors(){
-
+        Constants.shooterMotor.set(0);
+        Constants.towerMotor.set(0);
     }
     public void startMotors(){
-        
+        Constants.shooterMotor.set(Constants.shooterSpeed);
     }
 }
