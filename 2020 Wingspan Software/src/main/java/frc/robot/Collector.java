@@ -11,7 +11,24 @@ package frc.robot;
  * Add your docs here.
  */
 public class Collector {
-    public void collectBalls(){
-        
+  public int numBalls;
+  private int maxNumBalls = 5;
+  public void collectBalls() {
+    Constants.collectorMotor.set(Constants.collectorSpeed);
+  }
+  public void moveCollector(double target) {
+    //Constants.collectorLift.set(Constants.joystick1.getRawAxis(1)*-.7);
+    ///*
+    if (target - .025 < Constants.collectorEncoder.getDistance()
+        && Constants.collectorEncoder.getDistance() < target + .025) {
+      Constants.collectorLift.set(0);
+    } 
+    else if (target > Constants.collectorEncoder.getDistance()) {
+      Constants.collectorLift.set(.25);
+    } 
+    else {
+      Constants.collectorLift.set(-.6);
     }
+    //*/
+  }
 }
