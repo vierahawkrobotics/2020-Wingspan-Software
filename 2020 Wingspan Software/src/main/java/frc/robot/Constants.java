@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -30,10 +31,12 @@ public class Constants {
     public static Talon leftDriveMotor2 = new Talon(1);
     public static Talon rightDriveMotor1 = new Talon(2);
     public static Talon rightDriveMotor2 = new Talon(3);
-    public static Talon controlPanelMotor = new Talon(8);
     public static Talon collectorLift = new Talon(5);
     public static Talon collectorMotor= new Talon(4);
+    public static Victor towerMotor = new Victor(6);
+    public static Talon controlPanelMotor = new Talon(8);
     public static CANSparkMax shooterMotor = new CANSparkMax(1,MotorType.kBrushless);
+    //public static CANSparkMax winchMotor = new CANSparkMax(2, MotorType.kBrushless);
     //Drivetrain instantiation
     public static SpeedControllerGroup leftGroup = new SpeedControllerGroup(leftDriveMotor1, leftDriveMotor2);
     public static SpeedControllerGroup rightGroup = new SpeedControllerGroup(rightDriveMotor1, rightDriveMotor2);;
@@ -74,7 +77,7 @@ public class Constants {
     public static double driveSpeed = -.75;
     public static double turnSpeed = .5;
     public static double fastSpeed = 1/driveSpeed;
-    public static double shooterSpeed = .75;
+    public static double shooterSpeed = -1;
     public static double winchSpeed = .75;
     public static double hangWheelSpeed = .75;
     public static double spinnerSpeed = .75;
