@@ -131,15 +131,13 @@ public class Robot extends TimedRobot {
       hangClass.releaseArm();
     }
     //Collection code
+    //if the driver wants to move the collector arm, change the position
     if(Controls.moveCollectorButton){
-      if(Constants.targetRevsCollectorArm == 0){
-        Constants.targetRevsCollectorArm = .28;
-      }
-      else{
-        Constants.targetRevsCollectorArm = 0;
-      }
+      Constants.isCollectorArmDown = !Constants.isCollectorArmDown;
     }
-    collectorClass.moveCollector(Constants.targetRevsCollectorArm);
+    //apply the new position or maintain the current position
+    collectorClass.moveCollector();
+    //activate the ball colection motor if the driver wants to collect balls
     if (Controls.collectButton) {
       Constants.ballsCollecting = !Constants.ballsCollecting;
     }

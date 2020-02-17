@@ -21,10 +21,8 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.AnalogInput;
 
-/**
- * Add your docs here.
- */
 public class Constants {
     //Declares motor variables
     public static Talon leftDriveMotor1 = new Talon(0);
@@ -73,6 +71,7 @@ public class Constants {
     public static boolean stoppingShooter = false;
     public static Color targetColor;
     public static double targetRevsCollectorArm = 0;
+    public static boolean isCollectorArmDown = false;
     //Power Variables
     public static double driveSpeed = -.75;
     public static double turnSpeed = .5;
@@ -80,10 +79,16 @@ public class Constants {
     public static double shooterSpeed = -1;
     public static double winchSpeed = .75;
     public static double hangWheelSpeed = .75;
-    public static double spinnerSpeed = .75;
+    public static double controlPannelSpeed = .75;
     public static double deploySpeed = .75;
-    public static double spinnerArmSpeed = .75;
-    public static double collectorSpeed = .4;
+    public static double controlPannelArmSpeed = .75;
+    public static double collectorWheelSpeed = .5;
+    public static double collectorArmSpeedDown = -.25;
+    public static double collectorArmSpeedUp = -.5;
+    //pot voltages and declaration
+    public static AnalogInput potCollectorArm = new AnalogInput(0);
+    public static double collectorUpVolts = 2.5;
+    public static double collectorDownVolts = 4.2;
     public Constants() {
         
     }
