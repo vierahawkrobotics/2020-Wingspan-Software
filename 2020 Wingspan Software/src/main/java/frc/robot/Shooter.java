@@ -6,6 +6,9 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 public class Shooter {
     private double skew;
     private double distance;
@@ -57,5 +60,25 @@ public class Shooter {
     }
     public void startMotors(){
         Constants.shooterMotor.set(Constants.shooterSpeed);
+    }
+    //turret Control
+    public void rotateTurret() {
+        if (Constants.turretEncoder.getDistance() >= -180 && Constants.turretEncoder.getDistance() < 180) {
+            Constants.turretMotor.set(ControlMode.PercentOutput,Constants.turretSpeed * Constants.joystick1.getRawAxis(0));
+        }
+        else {
+            Constants.turretMotor.set(ControlMode.PercentOutput,0);
+        }
+    }
+    public void rotateTurret(int degrees) {
+        if (Constants.turretEncoder.getDistance() > degrees) {
+            Constants.turretMotor.set(ControlMode.PercentOutput,-1 * Constants.turretSpeed);
+        }
+        else if (Constants.turretEncoder.getDistance() < degrees) {
+            Constants.turretMotor.set(ControlMode.PercentOutput,Constants.turretSpeed);
+        }
+        else {
+            Constants.turretMotor.set(ControlMode.PercentOutput,0);
+        }
     }
 }

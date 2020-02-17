@@ -49,11 +49,13 @@ public class Robot extends TimedRobot {
     Constants.colorMatcher.addColorMatch(Constants.yellowTarget);
     //init encoders
     Constants.leftEncoder.reset();
-    Constants.leftEncoder.setDistancePerPulse(1.0/2048.0);
+    Constants.leftEncoder.setDistancePerPulse(1.0/2048.0);//1 rev of encoder
     Constants.rightEncoder.reset();
-    Constants.rightEncoder.setDistancePerPulse(1.0/2048.0);
+    Constants.rightEncoder.setDistancePerPulse(1.0/2048.0);//1 rev of encoder
     Constants.collectorEncoder.reset();
-    Constants.collectorEncoder.setDistancePerPulse(1.0/2048.0);
+    Constants.collectorEncoder.setDistancePerPulse(1.0/2048.0);//1 rev of encoder
+    Constants.turretEncoder.reset();
+    Constants.turretEncoder.setDistancePerPulse(1.0/103.6 * 360);//1 rev of motor in degrees, not adjusted for turret rotation
   }
 
   /**
@@ -197,6 +199,8 @@ public class Robot extends TimedRobot {
     else{
       shooterClass.stopMotors();
     }
+    //turret controls
+    shooterClass.rotateTurret();
     //hanging winch stuff
     double winchSpeed = Constants.joystick1.getRawAxis(3)*Constants.winchSpeed;
     hangClass.moveWinch(winchSpeed);
