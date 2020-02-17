@@ -23,9 +23,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.AnalogInput;
 
-/**
- * Add your docs here.
- */
 public class Constants {
     //Declares motor variables
     public static Talon leftDriveMotor1 = new Talon(0);
@@ -92,7 +89,6 @@ public class Constants {
     public static AnalogInput potCollectorArm = new AnalogInput(0);
     public static double collectorUpVolts = 2.5;
     public static double collectorDownVolts = 4.2;
-
     public Constants() {
         
     }
