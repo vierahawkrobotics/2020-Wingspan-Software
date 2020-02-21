@@ -14,7 +14,7 @@ public class Hang {
     private boolean armReleased=false;
     private boolean hooked=false;
     public void moveWinch(double moveSpeed){
-        
+        Constants.winchMotor.set(moveSpeed);
     }
     public void moveHangWheels(double moveSpeed){
         

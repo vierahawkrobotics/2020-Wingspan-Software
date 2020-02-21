@@ -6,12 +6,14 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Talon;
@@ -36,7 +38,12 @@ public class Constants {
     public static Victor towerMotor = new Victor(6);
     public static Talon controlPanelMotor = new Talon(8);
     public static CANSparkMax shooterMotor = new CANSparkMax(1,MotorType.kBrushless);
-    //public static CANSparkMax winchMotor = new CANSparkMax(2, MotorType.kBrushless);
+    public static CANSparkMax winchMotor = new CANSparkMax(2, MotorType.kBrushless);
+    public static VictorSPX colorWheelMotor = new VictorSPX(3);
+    public static VictorSPX hangArmMotor = new VictorSPX(4);
+    public static VictorSPX colorWheelArm = new VictorSPX(5);
+    public static VictorSPX armExtender = new VictorSPX(7);
+    public static VictorSPX feeder = new VictorSPX(8);
     //Drivetrain instantiation
     public static SpeedControllerGroup leftGroup = new SpeedControllerGroup(leftDriveMotor1, leftDriveMotor2);
     public static SpeedControllerGroup rightGroup = new SpeedControllerGroup(rightDriveMotor1, rightDriveMotor2);;
@@ -48,9 +55,10 @@ public class Constants {
     private static final I2C.Port i2cPort = I2C.Port.kOnboard;
     public static ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
     //Declares encoders
-    public static Encoder leftEncoder= new Encoder(0,1,true, EncodingType.k4X);
-    public static Encoder rightEncoder= new Encoder(2,3,false, EncodingType.k4X);
+    public static Encoder leftEncoder= new Encoder(0,1,false, EncodingType.k4X);
+    public static Encoder rightEncoder= new Encoder(2,3,true, EncodingType.k4X);
     public static Encoder collectorEncoder = new Encoder(4,5, false, EncodingType.k4X);
+    public static AnalogInput collectorPotentiometer = new AnalogInput(0);
     //Declares colormatch and target  colors
     public static ColorMatch colorMatcher = new ColorMatch();
     public static Color blueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
@@ -72,18 +80,18 @@ public class Constants {
     public static boolean startingShooter = false;
     public static boolean stoppingShooter = false;
     public static Color targetColor;
-    public static double targetRevsCollectorArm = 0;
+    public static double targetRevsCollectorArm = 2;
     //Power Variables
     public static double driveSpeed = -.75;
     public static double turnSpeed = .5;
     public static double fastSpeed = 1/driveSpeed;
-    public static double shooterSpeed = -.9;
+    public static double shooterSpeed = -1;
     public static double winchSpeed = .75;
     public static double hangWheelSpeed = .75;
     public static double spinnerSpeed = .75;
     public static double deploySpeed = .75;
     public static double spinnerArmSpeed = .75;
-    public static double collectorSpeed = .4;
+    public static double collectorSpeed = .7;
     public Constants() {
         
     }

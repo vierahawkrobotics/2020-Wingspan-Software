@@ -17,13 +17,13 @@ public class Collector {
     Constants.collectorMotor.set(Constants.collectorSpeed);
   }
   public void moveCollector(double target) {
-    //Constants.collectorLift.set(Constants.joystick1.getRawAxis(1)*-.7);
-    ///*
-    if (target - .025 < Constants.collectorEncoder.getDistance()
+    Constants.collectorLift.set(Constants.joystick1.getRawAxis(1)*-.5);
+    /*
+    if (target - .025 < Constants.collectorPotentiometer.getVoltage()
         && Constants.collectorEncoder.getDistance() < target + .025) {
       Constants.collectorLift.set(0);
     } 
-    else if (target > Constants.collectorEncoder.getDistance()) {
+    else if (target > Constants.collectorPotentiometer.getVoltage()) {
       Constants.collectorLift.set(.25);
     } 
     else {

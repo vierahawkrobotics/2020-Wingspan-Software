@@ -6,6 +6,8 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -45,7 +47,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("Middle Auto", middleAuto);
     m_chooser.addOption("Right Auto", rightAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    SmartDashboard.getNumber("Autonomous delay", 0);
+    SmartDashboard.putNumber("Autonomous delay", 0);
     //Initializes the collector motor
     Constants.collectorMotor.setInverted(true);
     //init colorsensor
@@ -90,10 +92,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    //Resets angle
+    Constants.ahrs.reset();
     //more wpi lib confusing stuff
     m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
+    autoStage=0;
   }
 
   /**
@@ -101,15 +105,17 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    //In the first iteration it gets the delay in seconds before starting auto
     if(autoStage == 0){
       secondsDelay = SmartDashboard.getNumber("Autonomous delay", 0);
       autoStage++;
     }
+    //Checks to see which auto mode is selected(default(nothing), left, middle, right)
     if(m_autoSelected.equals(kDefaultAuto)){
-      
     }
     else if (m_autoSelected.equals(leftAuto)){
       System.out.println(autoStage);
+      //If in autoStage 1 waits for secondsDelay seconds
       if (autoStage == 1) {
         if(secondsDelay>0){
           secondsDelay-=.02;
@@ -118,71 +124,56 @@ public class Robot extends TimedRobot {
           autoStage++;
         }
       }
+      //If in autoStage 2 sets turret target angle
       else if (autoStage==2) {
-        autoClass.setTurretTargetAngle(161.6);
+        autoClass.setTurretTargetAngle(66.77);
         autoStage++;
       }
+      //If in autoStage 3 moves turret to angle
       else if (autoStage==3) {
         if(autoClass.moveTurretToAngle()){
           autoStage++;
         }
       }
+      //If in autoStage 4 shoots all balls from robot
       else if (autoStage==4) {
+        collectorClass.moveCollector(.28);
         Constants.shootingAll=true;
         shooterClass.shootAll();
         if(Constants.shootingAll==false){
+          shooterClass.stopMotors();
           autoStage++;
         }
       }
+      //If in autoStage 5 sets target distance for robot to drive to
       else if (autoStage == 5) {
-        autoClass.setTargetAngle(-14.38);
-        autoStage++;
-      }
-      else if (autoStage == 6) {
-        if(autoClass.moveToTargetAngle()){
-          autoStage++;
-        }
-      }
-      else if (autoStage == 7) {
-        autoClass.setTargetDistance(84.85);
-        autoStage++;
-      }
-      else if (autoStage == 8) {
         collectorClass.moveCollector(.28);
-        if(autoClass.driveDistance()){
-          autoStage++;
-        }
-      }
-      else if (autoStage == 9) {
-        autoClass.setTargetAngle(0);
+        autoClass.setTargetDistance(220);
         autoStage++;
       }
-      else if (autoStage == 10) {
-        if(autoClass.moveToTargetAngle()){
-          autoStage++;
-        }
-      }
-      else if (autoStage == 11) {
-        autoClass.setTargetDistance(110.75);
-      }
-      else if (autoStage == 12) {
+      //If in autostage 6 moves collector down and drives distance
+      else if (autoStage == 6) {
+        collectorClass.moveCollector(.28);
         collectorClass.collectBalls();
         if(autoClass.driveDistance()){
           autoStage++;
         }
       }
+      //If in autoStage 7 turns off collector and sets target angle for turret
       else if (autoStage == 13) {
         Constants.collectorMotor.set(0);
-        autoClass.setTurretTargetAngle(165.86);
+        autoClass.setTurretTargetAngle(75.76);
         autoStage++;
       }
+      //If in autoStage 8 moves turret to target angle
       else if (autoStage == 14) {
         if(autoClass.moveTurretToAngle()){
           autoStage++;
-          Constants.shootingAll = true;
         }
       }
+      //If in autoStage 9 shoots all balls
       else if (autoStage == 15) {
+        Constants.shootingAll = true;
         shooterClass.shootAll();
         if(Constants.shootingAll == false){
           autoStage++;
@@ -191,6 +182,7 @@ public class Robot extends TimedRobot {
       }
     }
     else if (m_autoSelected.equals(middleAuto)){
+      //If in autoStage 1 waits for secondsDelay seconds
       if(autoStage == 1){
         if(secondsDelay>0){
           secondsDelay-=.02;
@@ -199,34 +191,65 @@ public class Robot extends TimedRobot {
           autoStage++;
         }
       }
+      //If in autoStage 2 sets turret target angle
       else if(autoStage == 2){
+        autoClass.setTurretTargetAngle(180);
+        autoStage++;
+      }
+      //If in autoStage 3 moves turret to target angle
+      else if(autoStage == 3){
+        if(autoClass.moveTurretToAngle()){
+          autoStage++;
+        }
+      }
+      //If in autoStage 4 shoots all balls
+      else if(autoStage == 4){
         Constants.shootingAll = true;
         shooterClass.shootAll();
         if(!Constants.shootingAll){
           autoStage++;
         }
       }
-      else if(autoStage == 3){
+      //If in autoStage 5 sets target distance for robot to drive
+      else if(autoStage == 5){
         autoClass.setTargetDistance(18);
         autoStage++;
       }
-      else if(autoStage == 4){
+      //If in autoStage 6 drives robot off line
+      else if(autoStage == 6){
         if(autoClass.driveDistance()){
           autoStage++;
         }
       }
     }
     else if (m_autoSelected.equals(rightAuto)){
-      autoClass.setTargetAngle(90);
-      autoClass.moveToTargetAngle();
+      if(autoStage == 1){
+        autoClass.setTargetAngle(-15);
+        autoStage++;
+      }
+      else if(autoStage == 2){
+        if(autoClass.moveToTargetAngle()){
+          autoStage++;
+        }
+      }
+      else if(autoStage == 3){
+        autoClass.setTargetDistance(84);
+        autoStage++;
+      }
+      else{
+        autoClass.driveDistance();
+      }
     }
     System.out.println(NavX.getTotalYaw());
+    System.out.println("Left"+Constants.leftEncoder.getDistance());
+    System.out.println("Right"+Constants.rightEncoder.getDistance());
   }
   /**
    * This function is called periodically during operator control.
    */
   @Override
   public void teleopPeriodic() {
+    System.out.println("Voltage "+Constants.collectorPotentiometer.getVoltage());
     Controls.getButtons();
     //All controls on joystick 0 (The joystick)
     //Drive code
@@ -249,11 +272,11 @@ public class Robot extends TimedRobot {
     }
     //Collection code
     if(Controls.moveCollectorButton){
-      if(Constants.targetRevsCollectorArm == 0){
-        Constants.targetRevsCollectorArm = .28;
+      if(Constants.targetRevsCollectorArm == 2){
+        Constants.targetRevsCollectorArm = 4;
       }
       else{
-        Constants.targetRevsCollectorArm = 0;
+        Constants.targetRevsCollectorArm = 2;
       }
     }
     collectorClass.moveCollector(Constants.targetRevsCollectorArm);
