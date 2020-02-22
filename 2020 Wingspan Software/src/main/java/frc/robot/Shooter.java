@@ -15,6 +15,8 @@ public class Shooter {
     private double motorSpeed;
     private boolean reachedSpeed=false;
     private double shootAllSeconds=2.5;
+    private boolean turretCanGoLeft = true;
+    private boolean turretCanGoRight = true;
     public void target(){
         
     }
@@ -52,6 +54,18 @@ public class Shooter {
             Constants.towerMotor.set(0);
         }
     }
+    public void updateRanges() {
+        if (Constants.turretEncoder.getDistance() < -90) {
+            turretCanGoLeft = false;
+        }
+        else if(Constants.turretEncoder.getDistance() > 270) {
+            turretCanGoRight = false;
+        }
+        else {
+            turretCanGoRight = true;
+            turretCanGoLeft = true;
+        }
+    }
     public void stopMotors(){
         Constants.shooterMotor.set(0);
         Constants.towerMotor.set(0);
@@ -63,22 +77,42 @@ public class Shooter {
     }
     //turret Control
     public void rotateTurret() {
-        if (Constants.turretEncoder.getDistance() >= -180 && Constants.turretEncoder.getDistance() < 180) {
+        if (turretCanGoLeft && turretCanGoRight) {
+            Constants.turretMotor.set(ControlMode.PercentOutput,Constants.turretSpeed * Constants.joystick1.getRawAxis(0));
+        }
+        else if (turretCanGoLeft && Constants.joystick1.getRawAxis(0) < 0) {
+            Constants.turretMotor.set(ControlMode.PercentOutput,Constants.turretSpeed * Constants.joystick1.getRawAxis(0));
+        }
+        else if (turretCanGoRight && Constants.joystick1.getRawAxis(0) > 0) {
             Constants.turretMotor.set(ControlMode.PercentOutput,Constants.turretSpeed * Constants.joystick1.getRawAxis(0));
         }
         else {
             Constants.turretMotor.set(ControlMode.PercentOutput,0);
         }
     }
-    public void rotateTurret(int degrees) {
-        if (Constants.turretEncoder.getDistance() > degrees) {
-            Constants.turretMotor.set(ControlMode.PercentOutput,-1 * Constants.turretSpeed);
-        }
-        else if (Constants.turretEncoder.getDistance() < degrees) {
-            Constants.turretMotor.set(ControlMode.PercentOutput,Constants.turretSpeed);
+    //used for auto
+    /*public void rotateTurret(int degrees) {
+        //if the abs of the pot voltage exeeds the maximum speed for going up, set the speed to the max speed (maintaining direction of motor) 
+        if (Math.abs(Constants.turretEncoder.getDistance() / degrees) >= Constants.turretSpeed) {
+            Constants.turretMotor.set(ControlMode.PercentOutput,Constants.turretSpeed * (Constants.turretEncoder.getDistance() - degrees / degrees / Math.abs(Constants.turretEncoder.getDistance() - degrees / degrees)));
         }
         else {
-            Constants.turretMotor.set(ControlMode.PercentOutput,0);
+            Constants.turretMotor.set(ControlMode.PercentOutput,Constants.turretSpeed / Math.abs(Constants.turretEncoder.getDistance() - degrees / degrees) * Constants.turretEncoder.getDistance() - degrees / degrees);
         }
-    }
+        
+            
+        
+        
+        //if (Constants.turretEncoder.getDistance() > degrees + 1) {
+        //    Constants.turretMotor.set(ControlMode.PercentOutput,-1 * Constants.turretSpeed);
+        //}
+        //else if (Constants.turretEncoder.getDistance() < degrees - 1) {
+        //    Constants.turretMotor.set(ControlMode.PercentOutput,Constants.turretSpeed);
+        //}
+        //else {
+        //    Constants.turretMotor.set(ControlMode.PercentOutput,0);
+        //}
+    } */
+
+    
 }

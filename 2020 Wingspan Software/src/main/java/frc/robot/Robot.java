@@ -55,7 +55,7 @@ public class Robot extends TimedRobot {
     Constants.collectorEncoder.reset();
     Constants.collectorEncoder.setDistancePerPulse(1.0/2048.0);//1 rev of encoder
     Constants.turretEncoder.reset();
-    Constants.turretEncoder.setDistancePerPulse(1.0/103.6 * 360);//1 rev of motor in degrees, not adjusted for turret rotation
+    Constants.turretEncoder.setDistancePerPulse(1/284.75 * 360);//1 rev of motor times 360 degrees for every rotation
   }
 
   /**
@@ -133,7 +133,7 @@ public class Robot extends TimedRobot {
       hangClass.releaseArm();
     }
     //Collection code
-    if(Controls.moveCollectorButton){
+    /*if(Controls.moveCollectorButton){
       if(Constants.targetRevsCollectorArm == 0){
         Constants.targetRevsCollectorArm = .28;
       }
@@ -150,7 +150,7 @@ public class Robot extends TimedRobot {
     }
     else{
       Constants.collectorMotor.set(0);
-    }
+    }*/
     //All controls on joystick 1 (The controller)
     //Control panel controls (switches between on and off so pressing the button again stops the motor)
     if(Controls.blueButton){
@@ -199,6 +199,8 @@ public class Robot extends TimedRobot {
     else{
       shooterClass.stopMotors();
     }
+    //update the status (location) of the turret
+    shooterClass.updateRanges();
     //turret controls
     shooterClass.rotateTurret();
     //hanging winch stuff
@@ -208,9 +210,12 @@ public class Robot extends TimedRobot {
     double hangWheelSpeed = Constants.joystick1.getRawAxis(0)*Constants.hangWheelSpeed;
     hangClass.moveHangWheels(hangWheelSpeed);
     //print the encoder values
-    telemetryClass.debugEncoders("Encoder Values",collectorClass);
+    //telemetryClass.debugEncoders("Encoder Values",collectorClass);
     //send the dashboard data
-    telemetryClass.sendDashboardData();
+    //telemetryClass.sendDashboardData();
+    System.out.println(Constants.turretEncoder.getDistance());
+    //test auto turret
+    //shooterClass.rotateTurret(45);
   }
   /**
    * This function is called periodically during test mode.
