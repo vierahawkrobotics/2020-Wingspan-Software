@@ -35,6 +35,7 @@ public class Robot extends TimedRobot {
   private Autonomous autoClass = new Autonomous();
   private int autoStage = 0;
   private double secondsDelay = 0;
+  /*
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
    */
@@ -138,7 +139,7 @@ public class Robot extends TimedRobot {
       }
       //If in autoStage 4 shoots all balls from robot
       else if (autoStage==4) {
-        collectorClass.moveCollector(.28);
+        collectorClass.moveCollector();
         Constants.shootingAll=true;
         shooterClass.shootAll();
         if(Constants.shootingAll==false){
@@ -148,13 +149,13 @@ public class Robot extends TimedRobot {
       }
       //If in autoStage 5 sets target distance for robot to drive to
       else if (autoStage == 5) {
-        collectorClass.moveCollector(.28);
+        collectorClass.moveCollector();
         autoClass.setTargetDistance(220);
         autoStage++;
       }
       //If in autostage 6 moves collector down and drives distance
       else if (autoStage == 6) {
-        collectorClass.moveCollector(.28);
+        collectorClass.moveCollector();
         collectorClass.collectBalls();
         if(autoClass.driveDistance()){
           autoStage++;
