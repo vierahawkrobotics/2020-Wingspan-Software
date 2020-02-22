@@ -6,9 +6,7 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
-
 public class Shooter {
     private double skew;
     private double distance;

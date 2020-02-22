@@ -11,7 +11,6 @@ package frc.robot;
  * Add your docs here.
  */
 public class Collector {
-
   //private int maxNumBalls = 5;
 
   private Pot potClass = new Pot(Constants.collectorUpVolts,Constants.collectorDownVolts);
@@ -46,7 +45,5 @@ public class Collector {
     //System.out.println(potClass.getRawVolts());
     //manual control of collector arm
     //Constants.collectorLift.set(Constants.joystick1.getRawAxis(1)*-.7);
-    
- 
   }
 }

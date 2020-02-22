@@ -4,17 +4,12 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
-
 package frc.robot;
-
 import com.revrobotics.ColorMatchResult;
-
 import edu.wpi.first.wpilibj.util.Color;
-
 /**
  * Add your docs here.
  */
-
 public class Control_Panel {
     //Declares number of changes and last color (initialized to blue b/c I like blue)
     public int numChanges = 0;

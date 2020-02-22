@@ -35,8 +35,13 @@ public class Constants {
     public static Victor towerMotor = new Victor(6);
     public static Talon controlPanelMotor = new Talon(8);
     public static CANSparkMax shooterMotor = new CANSparkMax(1,MotorType.kBrushless);
+    public static CANSparkMax winchMotor = new CANSparkMax(2, MotorType.kBrushless);
+    public static VictorSPX colorWheelMotor = new VictorSPX(3);
+    public static VictorSPX hangArmMotor = new VictorSPX(4);
+    public static VictorSPX colorWheelArm = new VictorSPX(5);
+    public static VictorSPX armExtender = new VictorSPX(7);
+    public static VictorSPX feeder = new VictorSPX(8);
     public static VictorSPX turretMotor = new VictorSPX(6);
-    //public static CANSparkMax winchMotor = new CANSparkMax(2, MotorType.kBrushless);
     //Drivetrain instantiation
     public static SpeedControllerGroup leftGroup = new SpeedControllerGroup(leftDriveMotor1, leftDriveMotor2);
     public static SpeedControllerGroup rightGroup = new SpeedControllerGroup(rightDriveMotor1, rightDriveMotor2);;
