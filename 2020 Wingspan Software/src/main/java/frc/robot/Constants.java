@@ -6,6 +6,7 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorMatch;
@@ -34,6 +35,7 @@ public class Constants {
     public static Victor towerMotor = new Victor(6);
     public static Talon controlPanelMotor = new Talon(8);
     public static CANSparkMax shooterMotor = new CANSparkMax(1,MotorType.kBrushless);
+    public static VictorSPX turretMotor = new VictorSPX(6);
     //public static CANSparkMax winchMotor = new CANSparkMax(2, MotorType.kBrushless);
     //Drivetrain instantiation
     public static SpeedControllerGroup leftGroup = new SpeedControllerGroup(leftDriveMotor1, leftDriveMotor2);
@@ -48,7 +50,8 @@ public class Constants {
     //Declares encoders
     public static Encoder leftEncoder= new Encoder(0,1,true, EncodingType.k4X);
     public static Encoder rightEncoder= new Encoder(2,3,false, EncodingType.k4X);
-    public static Encoder collectorEncoder = new Encoder(4,5, false, EncodingType.k4X);
+    public static Encoder turretEncoder = new Encoder(4,5, false, EncodingType.k4X);
+    public static Encoder collectorEncoder = new Encoder(6,7,false,EncodingType.k4X);
     //Declares colormatch and target  colors
     public static ColorMatch colorMatcher = new ColorMatch();
     public static Color blueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
@@ -70,7 +73,8 @@ public class Constants {
     public static boolean startingShooter = false;
     public static boolean stoppingShooter = false;
     public static Color targetColor;
-    public static double targetRevsCollectorArm = 0;
+    public static double targetRevsCollectorArm = 0.0;
+    public static double targetTurretDegrees = 0.0;
     public static boolean isCollectorArmDown = false;
     //Power Variables
     public static double driveSpeed = -.75;
@@ -81,6 +85,9 @@ public class Constants {
     public static double hangWheelSpeed = .75;
     public static double controlPannelSpeed = .75;
     public static double deploySpeed = .75;
+    public static double spinnerArmSpeed = .75;
+    public static double collectorSpeed = .4;
+    public static double turretSpeed = -.25;
     public static double controlPannelArmSpeed = .75;
     public static double collectorWheelSpeed = .5;
     public static double collectorArmSpeedDown = -.25;
