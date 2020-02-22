@@ -139,6 +139,7 @@ public class Robot extends TimedRobot {
       }
       //If in autoStage 4 shoots all balls from robot
       else if (autoStage==4) {
+        Constants.isCollectorArmDown = true;
         collectorClass.moveCollector();
         Constants.shootingAll=true;
         shooterClass.shootAll();
@@ -156,8 +157,9 @@ public class Robot extends TimedRobot {
       //If in autostage 6 moves collector down and drives distance
       else if (autoStage == 6) {
         collectorClass.moveCollector();
-        collectorClass.collectBalls();
         if(autoClass.driveDistance()){
+          Constants.isCollectorArmDown = false;
+          collectorClass.moveCollector();
           autoStage++;
         }
       }
@@ -255,39 +257,25 @@ public class Robot extends TimedRobot {
     //All controls on joystick 0 (The joystick)
     //Drive code
     double forwardSpeed=Constants.joystick0.getRawAxis(1);
-    if(!Controls.turboButton){
-      forwardSpeed*=Constants.driveSpeed;
+    if(Controls.turboButton){
+      forwardSpeed*=-1;
+    }
+    else if(Controls.slowButton){
+      forwardSpeed*=Constants.slowSpeed;
     }
     else{
-      forwardSpeed*=-1;
+      forwardSpeed*=Constants.driveSpeed;
     }
     double rotateSpeed=Constants.joystick0.getRawAxis(2);
     rotateSpeed*=Constants.turnSpeed;
-    Constants.mainDrive.arcadeDrive(forwardSpeed, rotateSpeed);
-    //Releases Hanging Arm
-    if(Controls.releaseArmButton){
-      Constants.armReleasing = !Constants.armReleasing;
-    }
-    if(Constants.armReleasing){
-      hangClass.releaseArm();
-    }
+    Constants.mainDrive.curvatureDrive(forwardSpeed, rotateSpeed, true);
     //Collection code
     //if the driver wants to move the collector arm, change the position
-    if(Controls.moveCollectorButton){
+    if(Controls.collectButton){
       Constants.isCollectorArmDown = !Constants.isCollectorArmDown;
     }
     //apply the new position or maintain the current position
     collectorClass.moveCollector();
-    //activate the ball colection motor if the driver wants to collect balls
-    if (Controls.collectButton) {
-      Constants.ballsCollecting = !Constants.ballsCollecting;
-    }
-    if(Constants.ballsCollecting){
-      collectorClass.collectBalls();
-    }
-    else{
-      Constants.collectorMotor.set(0);
-    }
     //All controls on joystick 1 (The controller)
     //Control panel controls (switches between on and off so pressing the button again stops the motor)
     if(Controls.blueButton){
@@ -336,6 +324,11 @@ public class Robot extends TimedRobot {
     else{
       shooterClass.stopMotors();
     }
+    //Feeder and tower controls
+    if(Controls.feedButton){
+      Constants.towerFeed=!Constants.towerFeed;
+    }
+    Collector.towerFeed();
     //update the status (location) of the turret
     shooterClass.updateRanges();
     //turret controls

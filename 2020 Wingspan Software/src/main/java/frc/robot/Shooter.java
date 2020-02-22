@@ -23,18 +23,19 @@ public class Shooter {
         //Checks if shooterMotor is at correct velocity
         if(Constants.shooterMotor.getEncoder().getVelocity()<=-4650){
             //If velocity is high enough, activates feeder motor and sets variable
-            Constants.towerMotor.set(.3);
+            Constants.towerFeed = true;
             reachedSpeed = true;
         }
         else{
             //If not at correct velocity turns off feeder motor
-            Constants.towerMotor.set(0);
+            Constants.towerFeed = false;
             //If the speed has already been reached and the speeds drops it will exit the method
             if(reachedSpeed){
                 Constants.shootingOnce = false;
                 stopMotors();
             }
         }
+        Collector.towerFeed();
         startMotors();
     }
     public void shootAll(){
@@ -46,11 +47,12 @@ public class Shooter {
         }
         startMotors();
         if(Constants.shooterMotor.getEncoder().getVelocity()<=-4000){
-            Constants.towerMotor.set(.7);
+            Constants.towerFeed = true;
         }
         else{
-            Constants.towerMotor.set(0);
+            Constants.towerFeed = false;
         }
+        Collector.towerFeed();
     }
     public void updateRanges() {
         if (Constants.turretEncoder.getDistance() < -90) {
@@ -66,7 +68,7 @@ public class Shooter {
     }
     public void stopMotors(){
         Constants.shooterMotor.set(0);
-        Constants.towerMotor.set(0);
+        //Constants.towerMotor.set(0);
         reachedSpeed = false;
         shootAllSeconds=2.5;
     }

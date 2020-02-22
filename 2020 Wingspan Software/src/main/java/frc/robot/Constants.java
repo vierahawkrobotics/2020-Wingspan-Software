@@ -81,22 +81,25 @@ public class Constants {
     public static double targetRevsCollectorArm = 0.0;
     public static double targetTurretDegrees = 0.0;
     public static boolean isCollectorArmDown = false;
+    public static boolean towerFeed = false;
     //Power Variables
     public static double driveSpeed = -.75;
+    public static double slowSpeed = -.35;
     public static double turnSpeed = .5;
     public static double fastSpeed = 1/driveSpeed;
     public static double shooterSpeed = -1;
     public static double winchSpeed = .75;
     public static double hangWheelSpeed = .75;
-    public static double controlPannelSpeed = .75;
+    public static double controlPanelSpeed = .75;
     public static double deploySpeed = .75;
     public static double spinnerArmSpeed = .75;
-    public static double collectorSpeed = .4;
+    public static double collectorSpeed = .85;
     public static double turretSpeed = -.25;
-    public static double controlPannelArmSpeed = .75;
+    public static double controlPanelArmSpeed = .75;
     public static double collectorWheelSpeed = .5;
     public static double collectorArmSpeedDown = -.25;
     public static double collectorArmSpeedUp = -.5;
+    public static double feederSpeed = -.25;
     //pot voltages and declaration
     public static AnalogInput potCollectorArm = new AnalogInput(0);
     public static double collectorUpVolts = 2.5;
