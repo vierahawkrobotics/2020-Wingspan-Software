@@ -14,8 +14,6 @@ public class Controls {
     //Button variables
     public static boolean turboButton;
     public static boolean collectButton;
-    public static boolean moveCollectorButton;
-    public static boolean releaseArmButton;
     public static boolean blueButton;
     public static boolean greenButton;
     public static boolean redButton;
@@ -23,17 +21,41 @@ public class Controls {
     public static boolean spinButton;
     public static boolean shootOnceButton;
     public static boolean shootAllButton;
+    public static boolean slowButton;
+    public static boolean extendHookButton;
+    public static boolean retractHookButton;
+    public static boolean feedButton;
+    public static boolean startLinePreset;
+    public static boolean startLineOffset;
+    public static boolean trenchPreset;
+    public static boolean towerResetButton;
     public static void getButtons(){
+        System.out.println("POV"+Constants.joystick1.getPOV());
         turboButton = Constants.joystick0.getRawButton(1);
-        collectButton = Constants.joystick0.getRawButtonPressed(5);
-        moveCollectorButton = Constants.joystick0.getRawButtonPressed(6);
-        releaseArmButton = Constants.joystick0.getRawButtonPressed(11);
+        slowButton = Constants.joystick0.getRawButton(2);
+        extendHookButton = Constants.joystick0.getRawButtonPressed(9);
+        retractHookButton = Constants.joystick0.getRawButtonPressed(7);
+        collectButton = Constants.joystick0.getRawButtonPressed(11);
         blueButton = Constants.joystick1.getRawButtonPressed(1);
         greenButton = Constants.joystick1.getRawButtonPressed(2);
         redButton = Constants.joystick1.getRawButtonPressed(3);
         yellowButton = Constants.joystick1.getRawButtonPressed(4);
-        spinButton = Constants.joystick1.getRawButtonPressed(6);
-        shootOnceButton = Constants.joystick1.getRawButtonPressed(7);
+        shootOnceButton = Constants.joystick1.getRawButtonPressed(6);
+        feedButton = Constants.joystick1.getRawButtonPressed(7);
         shootAllButton = Constants.joystick1.getRawButtonPressed(8);
+        spinButton = Constants.joystick1.getRawButtonPressed(10);
+        towerResetButton = Constants.joystick1.getRawButtonPressed(9);
+        startLinePreset = false;
+        startLineOffset = false;
+        trenchPreset = false;
+        if(Constants.joystick1.getPOV()==90){
+            startLinePreset = true;
+        }
+        else if(Constants.joystick1.getPOV() == 0){
+            startLineOffset = true;
+        }
+        else if(Constants.joystick0.getPOV() == 270){
+            trenchPreset = true;
+        }
     }
 }
