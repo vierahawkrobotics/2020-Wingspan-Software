@@ -11,24 +11,42 @@ package frc.robot;
  * Add your docs here.
  */
 public class Collector {
-  public int numBalls;
-  private int maxNumBalls = 5;
+
+  //private int maxNumBalls = 5;
+
+  private Pot potClass = new Pot(Constants.collectorUpVolts,Constants.collectorDownVolts);
+  
   public void collectBalls() {
-    Constants.collectorMotor.set(Constants.collectorSpeed);
+    Constants.collectorMotor.set(Constants.collectorWheelSpeed);
   }
-  public void moveCollector(double target) {
-    //Constants.collectorLift.set(Constants.joystick1.getRawAxis(1)*-.7);
-    ///*
-    if (target - .025 < Constants.collectorEncoder.getDistance()
-        && Constants.collectorEncoder.getDistance() < target + .025) {
-      Constants.collectorLift.set(0);
-    } 
-    else if (target > Constants.collectorEncoder.getDistance()) {
-      Constants.collectorLift.set(.25);
-    } 
-    else {
-      Constants.collectorLift.set(-.6);
+  public void moveCollector() {
+    //move the collector arm to the requested position
+    //if going down, use a PID-like system that slows down as it approces the bottom
+    //if going up, move motor untill you reach the position, speed is static
+    if (Constants.isCollectorArmDown) {
+      //if the abs of the pot voltage exeeds the maximum speed for going up, set the speed to the max speed (maintaining direction of motor) 
+      if (Math.abs(potClass.getPercentage()) >= Constants.collectorArmSpeedDown) {
+        Constants.collectorLift.set(Constants.collectorArmSpeedDown * (potClass.getPercentage() / Math.abs(potClass.getPercentage())));
+      }
+      else {
+        Constants.collectorLift.set(Constants.collectorArmSpeedDown / Math.abs(Constants.collectorArmSpeedDown) * potClass.getPercentage());
+      }
+        
     }
-    //*/
+    else {
+      //if going up, do not use PID and instead just run motor until at desired position
+      if (potClass.getRawVolts() >= Constants.collectorUpVolts) {
+        Constants.collectorLift.set(Constants.collectorArmSpeedUp);
+      }
+      else {
+        Constants.collectorLift.set(0);
+      }
+    }
+
+    //System.out.println(potClass.getRawVolts());
+    //manual control of collector arm
+    //Constants.collectorLift.set(Constants.joystick1.getRawAxis(1)*-.7);
+    
+ 
   }
 }
