@@ -6,11 +6,9 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
-
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
@@ -21,39 +19,52 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends TimedRobot {
+  //wpi lib stuff idk what it does
   private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
+  private static final String leftAuto = "Left Auto";
+  private static final String middleAuto = "Middle Auto";
+  private static final String rightAuto = "Right Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  //Drivetrain instantiation
-  private DifferentialDrive mainDrive;
-  private SpeedControllerGroup leftGroup;
-  private SpeedControllerGroup rightGroup;
-  //Joystick instantiation (Joystick 0 is joystick, joystick 1 is controller)
-  private Joystick joystick0 = new Joystick(0);
-  private Joystick joystick1 = new Joystick(1);
   //Class instantiation
   private Hang hangClass = new Hang();
   private Collector collectorClass = new Collector();
   private Control_Panel cp = new Control_Panel();
   private Shooter shooterClass = new Shooter();
-  /**
+  private Telemetry telemetryClass = new Telemetry();
+  private Autonomous autoClass = new Autonomous();
+  private int autoStage = 0;
+  private double secondsDelay = 0;
+  /*
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
    */
   @Override
   public void robotInit() {
+    //wpi lib stuff idk what it does
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
+    m_chooser.addOption("Left Auto", leftAuto);
+    m_chooser.addOption("Middle Auto", middleAuto);
+    m_chooser.addOption("Right Auto", rightAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    //Initializes the drivetrain
-    leftGroup = new SpeedControllerGroup(Constants.left1, Constants.left2);
-    rightGroup = new SpeedControllerGroup(Constants.right1, Constants.right2);
-    mainDrive = new DifferentialDrive(leftGroup, rightGroup);
+    SmartDashboard.putNumber("Autonomous delay", 0);
+    //Initializes the collector motor
+    Constants.collectorMotor.setInverted(true);
+    //init colorsensor
     Constants.colorMatcher.addColorMatch(Constants.blueTarget);
     Constants.colorMatcher.addColorMatch(Constants.redTarget);
     Constants.colorMatcher.addColorMatch(Constants.greenTarget);
     Constants.colorMatcher.addColorMatch(Constants.yellowTarget);
+    //init encoders
+    Constants.leftEncoder.reset();
+    Constants.ahrs.reset();
+    Constants.leftEncoder.setDistancePerPulse(1.0/2048.0);//1 rev of encoder
+    Constants.rightEncoder.reset();
+    Constants.rightEncoder.setDistancePerPulse(1.0/2048.0);//1 rev of encoder
+    Constants.collectorEncoder.reset();
+    Constants.collectorEncoder.setDistancePerPulse(1.0/2048.0);//1 rev of encoder
+    Constants.turretEncoder.reset();
+    Constants.turretEncoder.setDistancePerPulse(1/284.75 * 360);//1 rev of motor times 360 degrees for every rotation
   }
 
   /**
@@ -83,9 +94,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    //Resets angle
+    Constants.ahrs.reset();
+    //more wpi lib confusing stuff
     m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
+    autoStage=0;
   }
 
   /**
@@ -93,52 +107,186 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-    case kCustomAuto:
-      // Put custom auto code here
-      break;
-    case kDefaultAuto:
-    default:
-      // Put default auto code here
-      break;
+    //In the first iteration it gets the delay in seconds before starting auto
+    if(autoStage == 0){
+      secondsDelay = SmartDashboard.getNumber("Autonomous delay", 0);
+      autoStage++;
     }
-  }
+    //Checks to see which auto mode is selected(default(nothing), left, middle, right)
+    if(m_autoSelected.equals(kDefaultAuto)){
+    }
+    else if (m_autoSelected.equals(leftAuto)){
+      System.out.println(autoStage);
+      //If in autoStage 1 waits for secondsDelay seconds
+      if (autoStage == 1) {
+        if(secondsDelay>0){
+          secondsDelay-=.02;
+        }
+        else{
+          autoStage++;
+        }
+      }
+      //If in autoStage 2 sets turret target angle
+      else if (autoStage==2) {
+        autoClass.setTurretTargetAngle(119);
+        autoStage++;
+      }
+      //If in autoStage 3 moves turret to angle
+      else if (autoStage==3) {
+        if(autoClass.moveTurretToAngle()){
+          autoStage++;
+        }
+      }
+      //If in autoStage 4 shoots all balls from robot
+      else if (autoStage==4) {
+        Constants.isCollectorArmDown = true;
+        collectorClass.moveCollector();
+        Constants.shootingAll=true;
+        shooterClass.shootAll();
+        if(Constants.shootingAll==false){
+          shooterClass.stopMotors();
+          autoStage++;
+        }
+      }
+      //If in autoStage 5 sets target distance for robot to drive to
+      else if (autoStage == 5) {
+        collectorClass.moveCollector();
+        autoClass.setTargetDistance(214);
+        autoStage++;
+      }
+      //If in autostage 6 moves collector down and drives distance
+      else if (autoStage == 6) {
+        collectorClass.moveCollector();
+        if(autoClass.driveDistance()){
+          Constants.isCollectorArmDown = false;
+          collectorClass.moveCollector();
+          autoStage++;
+        }
+      }
 
+      //If in autoStage 7 turns off collector and sets target angle for turret
+      else if (autoStage == 7) {
+        Constants.collectorMotor.set(0);
+        autoClass.setTurretTargetAngle(108);
+        autoStage++;
+      }
+      //If in autoStage 8 moves turret to target angle
+      else if (autoStage == 8) {
+        if(autoClass.moveTurretToAngle()){
+          autoStage++;
+        }
+      }
+      //If in autoStage 9 shoots all balls
+      else if (autoStage == 9) {
+        Constants.shootingAll = true;
+        shooterClass.shootAll();
+        if(Constants.shootingAll == false){
+          autoStage++;
+          shooterClass.stopMotors();
+        }
+      }
+    }
+    else if (m_autoSelected.equals(middleAuto)){
+      //If in autoStage 1 waits for secondsDelay seconds
+      if(autoStage == 1){
+        if(secondsDelay>0){
+          secondsDelay-=.02;
+        }
+        else{
+          autoStage++;
+        }
+      }
+      //If in autoStage 2 sets turret target angle
+      else if(autoStage == 2){
+        autoClass.setTurretTargetAngle(270);
+        autoStage++;
+      }
+      //If in autoStage 3 moves turret to target angle
+      else if(autoStage == 3){
+        if(autoClass.moveTurretToAngle()){
+          autoStage++;
+        }
+      }
+      //If in autoStage 4 shoots all balls
+      else if(autoStage == 4){
+        Constants.shootingAll = true;
+        shooterClass.shootAll();
+        if(!Constants.shootingAll){
+          autoStage++;
+        }
+      }
+      //If in autoStage 5 sets target distance for robot to drive
+      else if(autoStage == 5){
+        autoClass.setTargetDistance(18);
+        autoStage++;
+      }
+      //If in autoStage 6 drives robot off line
+      else if(autoStage == 6){
+        if(autoClass.driveDistance()){
+          autoStage++;
+        }
+      }
+    }
+    else if (m_autoSelected.equals(rightAuto)){
+      if(autoStage == 1){
+        autoClass.setTurretTargetAngle(90);
+        if(autoClass.moveTurretToAngle()){
+          autoStage++;
+        }
+      }
+      
+    }
+    System.out.println(NavX.getTotalYaw());
+    System.out.println("Left"+Constants.leftEncoder.getDistance());
+    System.out.println("Right"+Constants.rightEncoder.getDistance());
+  }
   /**
    * This function is called periodically during operator control.
    */
   @Override
   public void teleopPeriodic() {
+    Controls.getButtons();
     //All controls on joystick 0 (The joystick)
     //Drive code
-    double forwardSpeed=joystick0.getRawAxis(1);
-    forwardSpeed*=.75;
-    double rotateSpeed=joystick0.getRawAxis(2);
-    rotateSpeed*=.75;
-    mainDrive.arcadeDrive(forwardSpeed, rotateSpeed);
-    //Collection code
-    if (joystick0.getRawButton(5)) {
-      collectorClass.collectBalls();
+    double forwardSpeed=Constants.joystick0.getRawAxis(1);
+    if(Controls.turboButton){
+      forwardSpeed*=-1;
     }
+    else if(Controls.slowButton){
+      forwardSpeed*=Constants.slowSpeed;
+    }
+    else{
+      forwardSpeed*=Constants.driveSpeed;
+    }
+    double rotateSpeed=Constants.joystick0.getRawAxis(2);
+    rotateSpeed*=Constants.turnSpeed;
+    Constants.mainDrive.curvatureDrive(forwardSpeed, rotateSpeed, true);
+    //Collection code
+    //if the driver wants to move the collector arm, change the position
+    if(Controls.collectButton){
+      Constants.isCollectorArmDown = !Constants.isCollectorArmDown;
+    }
+    //apply the new position or maintain the current position
+    collectorClass.moveCollector();
     //All controls on joystick 1 (The controller)
     //Control panel controls (switches between on and off so pressing the button again stops the motor)
-    if(joystick1.getRawButtonPressed(1)){
+    if(Controls.blueButton){
       Constants.targetColor = Constants.blueTarget;
       Constants.isGoingToColor = !Constants.isGoingToColor;
     }
-    else if(joystick1.getRawButtonPressed(2)){
+    else if(Controls.greenButton){
       Constants.targetColor = Constants.greenTarget;
       Constants.isGoingToColor = !Constants.isGoingToColor;
     }
-    else if(joystick1.getRawButtonPressed(3)){
+    else if(Controls.redButton){
       Constants.targetColor = Constants.redTarget;
       Constants.isGoingToColor = !Constants.isGoingToColor;
     }
-    else if(joystick1.getRawButtonPressed(4)){
+    else if(Controls.yellowButton){
       Constants.targetColor = Constants.yellowTarget;
       Constants.isGoingToColor = !Constants.isGoingToColor;
     }
-    if(joystick1.getRawButtonPressed(6)){
+    if(Controls.spinButton){
       Constants.isSpinning=!Constants.isSpinning;
     }
     //Checks if either of the methods that use the control panel motor are active, and if not stops the motor
@@ -149,19 +297,63 @@ public class Robot extends TimedRobot {
       cp.spinWheel();
     }
     else{
-      Constants.spinnyMotor.set(0);
+      Constants.controlPanelMotor.set(0);
       cp.numChanges=0;
     }
     //Shooter Controls
-    if(joystick1.getRawButton(7)){
+    if(Controls.shootOnceButton){
+      Constants.shootingOnce = !Constants.shootingOnce;
+      Constants.towerFeed = false;
+    }
+    else if(Controls.shootAllButton){
+      Constants.shootingAll = !Constants.shootingAll;
+      Constants.towerFeed = false;
+    }
+    if(Constants.shootingOnce){
       shooterClass.shootOnce();
     }
-    else if(joystick1.getRawButton(8)){
+    else if(Constants.shootingAll){
       shooterClass.shootAll();
     }
-    //Hanging controls
-    double winchSpeed = joystick1.getRawAxis(3);
-    hangClass.moveWinch(winchSpeed);
+    else{
+      shooterClass.stopMotors();
+    }
+    //Feeder and tower controls
+    if(Controls.feedButton){
+      Constants.towerFeed=!Constants.towerFeed;
+    }
+    if(Controls.towerResetButton){
+      Constants.isReversingTower = !Constants.isReversingTower;
+    }
+    if(!Constants.isReversingTower){
+      Collector.towerFeed();
+    }
+    else{
+      Collector.reverseTower();
+    }
+    //update the status (location) of the turret
+    shooterClass.updateRanges();
+    //turret controls
+    shooterClass.rotateTurret();
+    //hanging winch stuff
+    if(Controls.winchButton){
+      Constants.isWinching = !Constants.isWinching;
+    }
+    if(Constants.isWinching){                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+      hangClass.moveWinch();
+    }
+    else{
+      Constants.winchMotor.set(0);
+    }
+    hangClass.moveArm();
+    hangClass.extendArm();
+    //print the encoder values
+    //telemetryClass.debugEncoders("Encoder Values",collectorClass);
+    //send the dashboard data
+    //telemetryClass.sendDashboardData();
+    //System.out.println(Constants.turretEncoder.getDistance());
+    //test auto turret
+    //shooterClass.rotateTurret(45);
   }
   /**
    * This function is called periodically during test mode.
@@ -169,4 +361,4 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
   }
-}
+} 
