@@ -63,7 +63,7 @@ public class Robot extends TimedRobot {
     Constants.rightEncoder.reset();
     Constants.rightEncoder.setDistancePerPulse(1.0/2048.0);//1 rev of encoder
     Constants.turretEncoder.reset();
-    Constants.turretEncoder.setDistancePerPulse(1/284.75 * 360);//1 rev of motor times 360 degrees for every rotation
+    Constants.turretEncoder.setDistancePerPulse(1.0/1472.0*360);//1 rev of motor times 360 degrees for every rotation
   }
 
   /**
@@ -328,8 +328,6 @@ public class Robot extends TimedRobot {
     else{
       Collector.reverseTower();
     }
-    //update the status (location) of the turret
-    shooterClass.updateRanges();
     //turret controls
     shooterClass.rotateTurret();
     //hanging winch stuff
@@ -351,6 +349,7 @@ public class Robot extends TimedRobot {
     //System.out.println(Constants.turretEncoder.getDistance());
     //test auto turret
     //shooterClass.rotateTurret(45);
+    
   }
   /**
    * This function is called periodically during test mode.

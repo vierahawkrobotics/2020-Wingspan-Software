@@ -57,7 +57,7 @@ public class Constants {
     //Declares encoders
     public static Encoder leftEncoder= new Encoder(0,1,true, EncodingType.k4X);
     public static Encoder rightEncoder= new Encoder(2,3,false, EncodingType.k4X);
-    public static Encoder turretEncoder = new Encoder(4,5, false, EncodingType.k4X);
+    public static Encoder turretEncoder = new Encoder(4,5, true, EncodingType.k4X);
     //Declares colormatch and target  colors
     public static ColorMatch colorMatcher = new ColorMatch();
     public static Color blueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
@@ -96,7 +96,7 @@ public class Constants {
     public static double controlPanelSpeed = .75;
     public static double spinnerArmSpeed = .75;
     public static double collectorSpeed = .85;
-    public static double turretSpeed = -.25;
+    public static double turretSpeed = -.6;
     public static double controlPanelArmSpeed = .75;
     public static double collectorWheelSpeed = .5;
     public static double collectorArmSpeedDown = -.25;

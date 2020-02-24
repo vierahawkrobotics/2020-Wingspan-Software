@@ -55,21 +55,8 @@ public class Shooter {
         }
         Collector.towerFeed();
     }
-    public void updateRanges() {
-        if (Constants.turretEncoder.getDistance() < -90) {
-            turretCanGoLeft = false;
-        }
-        else if(Constants.turretEncoder.getDistance() > 270) {
-            turretCanGoRight = false;
-        }
-        else {
-            turretCanGoRight = true;
-            turretCanGoLeft = true;
-        }
-    }
     public void stopMotors(){
         Constants.shooterMotor.set(0);
-        //Constants.towerMotor.set(0);
         reachedSpeed = false;
         shootAllSeconds=2.5;
     }
@@ -103,10 +90,10 @@ public class Shooter {
         }
         */
         if (Constants.turretEncoder.getDistance() > degrees + 1) {
-            Constants.turretMotor.set(ControlMode.PercentOutput,-1 * Constants.turretSpeed/-1.5);
+            Constants.turretMotor.set(ControlMode.PercentOutput,Constants.turretSpeed);
         }
         else if (Constants.turretEncoder.getDistance() < degrees - 1) {
-            Constants.turretMotor.set(ControlMode.PercentOutput,Constants.turretSpeed/-1.5);
+            Constants.turretMotor.set(ControlMode.PercentOutput,-Constants.turretSpeed);
         }
         else {
             Constants.turretMotor.set(ControlMode.PercentOutput,0);
