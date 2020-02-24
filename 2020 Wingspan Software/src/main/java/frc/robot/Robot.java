@@ -346,7 +346,7 @@ public class Robot extends TimedRobot {
     //telemetryClass.debugEncoders("Encoder Values",collectorClass);
     //send the dashboard data
     //telemetryClass.sendDashboardData();
-    System.out.println(Constants.turretEncoder.getDistance());
+    //System.out.println(Constants.turretEncoder.getDistance());
     //test auto turret
     //shooterClass.rotateTurret(45);
     
