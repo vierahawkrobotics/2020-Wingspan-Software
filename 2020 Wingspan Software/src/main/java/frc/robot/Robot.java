@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends TimedRobot {
-  //wpi lib stuff idk what it does
+  //Autonomous selection options
   private static final String kDefaultAuto = "Default";
   private static final String leftAuto = "Left Auto";
   private static final String middleAuto = "Middle Auto";
@@ -33,6 +33,7 @@ public class Robot extends TimedRobot {
   private Shooter shooterClass = new Shooter();
   private Telemetry telemetryClass = new Telemetry();
   private Autonomous autoClass = new Autonomous();
+  //Autonomous data
   private int autoStage = 0;
   private double secondsDelay = 0;
   /*
@@ -61,8 +62,6 @@ public class Robot extends TimedRobot {
     Constants.leftEncoder.setDistancePerPulse(1.0/2048.0);//1 rev of encoder
     Constants.rightEncoder.reset();
     Constants.rightEncoder.setDistancePerPulse(1.0/2048.0);//1 rev of encoder
-    Constants.collectorEncoder.reset();
-    Constants.collectorEncoder.setDistancePerPulse(1.0/2048.0);//1 rev of encoder
     Constants.turretEncoder.reset();
     Constants.turretEncoder.setDistancePerPulse(1/284.75 * 360);//1 rev of motor times 360 degrees for every rotation
   }
@@ -166,7 +165,6 @@ public class Robot extends TimedRobot {
 
       //If in autoStage 7 turns off collector and sets target angle for turret
       else if (autoStage == 7) {
-        Constants.collectorMotor.set(0);
         autoClass.setTurretTargetAngle(108);
         autoStage++;
       }
@@ -198,7 +196,7 @@ public class Robot extends TimedRobot {
       }
       //If in autoStage 2 sets turret target angle
       else if(autoStage == 2){
-        autoClass.setTurretTargetAngle(270);
+        autoClass.setTurretTargetAngle(90);
         autoStage++;
       }
       //If in autoStage 3 moves turret to target angle
@@ -234,7 +232,6 @@ public class Robot extends TimedRobot {
           autoStage++;
         }
       }
-      
     }
     System.out.println(NavX.getTotalYaw());
     System.out.println("Left"+Constants.leftEncoder.getDistance());
