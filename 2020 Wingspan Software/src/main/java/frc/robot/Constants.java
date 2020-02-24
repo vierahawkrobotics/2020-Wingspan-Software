@@ -22,9 +22,11 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.hal.PDPJNI;
 import edu.wpi.first.wpilibj.AnalogInput;
 
 public class Constants {
+    public static PDPJNI pdp = new PDPJNI();
     //Declares motor variables
     public static Talon leftDriveMotor1 = new Talon(0);
     public static Talon leftDriveMotor2 = new Talon(1);
@@ -53,10 +55,9 @@ public class Constants {
     private static final I2C.Port i2cPort = I2C.Port.kOnboard;
     public static ColorSensorV3 colorSensor = new ColorSensorV3(i2cPort);
     //Declares encoders
-    public static Encoder leftEncoder= new Encoder(0,1,true, EncodingType.k4X);
-    public static Encoder rightEncoder= new Encoder(2,3,false, EncodingType.k4X);
-    public static Encoder turretEncoder = new Encoder(4,5, false, EncodingType.k4X);
-    public static Encoder collectorEncoder = new Encoder(6,7,false,EncodingType.k4X);
+    public static Encoder leftEncoder= new Encoder(0,1,false, EncodingType.k4X);
+    public static Encoder rightEncoder= new Encoder(2,3,true, EncodingType.k4X);
+    public static Encoder turretEncoder = new Encoder(4,5, true, EncodingType.k4X);
     //Declares colormatch and target  colors
     public static ColorMatch colorMatcher = new ColorMatch();
     public static Color blueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
@@ -81,22 +82,28 @@ public class Constants {
     public static double targetRevsCollectorArm = 0.0;
     public static double targetTurretDegrees = 0.0;
     public static boolean isCollectorArmDown = false;
+    public static boolean towerFeed = false;
+    public static boolean isWinching = false;
+    public static boolean isReversingTower = false;
     //Power Variables
     public static double driveSpeed = -.75;
-    public static double turnSpeed = .5;
+    public static double slowSpeed = -.35;
+    public static double turnSpeed = .7;
     public static double fastSpeed = 1/driveSpeed;
     public static double shooterSpeed = -1;
-    public static double winchSpeed = .75;
+    public static double winchSpeed = -.25;
     public static double hangWheelSpeed = .75;
-    public static double controlPannelSpeed = .75;
-    public static double deploySpeed = .75;
+    public static double controlPanelSpeed = .75;
     public static double spinnerArmSpeed = .75;
-    public static double collectorSpeed = .4;
-    public static double turretSpeed = -.25;
-    public static double controlPannelArmSpeed = .75;
+    public static double collectorSpeed = .85;
+    public static double turretSpeed = -.6;
+    public static double controlPanelArmSpeed = .75;
     public static double collectorWheelSpeed = .5;
     public static double collectorArmSpeedDown = -.25;
     public static double collectorArmSpeedUp = -.5;
+    public static double feederSpeed = -.25;
+    public static double hangArmSpeed=-.5;
+    public static double armDeploySpeed = .7;
     //pot voltages and declaration
     public static AnalogInput potCollectorArm = new AnalogInput(0);
     public static double collectorUpVolts = 2.5;

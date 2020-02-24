@@ -23,50 +23,40 @@ public class Shooter {
         //Checks if shooterMotor is at correct velocity
         if(Constants.shooterMotor.getEncoder().getVelocity()<=-4650){
             //If velocity is high enough, activates feeder motor and sets variable
-            Constants.towerMotor.set(.3);
+            Constants.towerFeed = true;
             reachedSpeed = true;
         }
         else{
             //If not at correct velocity turns off feeder motor
-            Constants.towerMotor.set(0);
+            Constants.towerFeed = false;
             //If the speed has already been reached and the speeds drops it will exit the method
             if(reachedSpeed){
                 Constants.shootingOnce = false;
                 stopMotors();
             }
         }
+        Collector.towerFeed();
         startMotors();
     }
     public void shootAll(){
+        startMotors();
         if(shootAllSeconds>=0){
             shootAllSeconds-=.02;
+            if(Constants.shooterMotor.getEncoder().getVelocity()<=-4000){
+                Constants.towerFeed = true;
+            }
+            else{
+                Constants.towerFeed = false;
+            }
         }
         else{
-            Constants.shootingAll=false;
+            Constants.shootingAll = false;
+            Constants.towerFeed = false;
         }
-        startMotors();
-        if(Constants.shooterMotor.getEncoder().getVelocity()<=-4000){
-            Constants.towerMotor.set(.7);
-        }
-        else{
-            Constants.towerMotor.set(0);
-        }
-    }
-    public void updateRanges() {
-        if (Constants.turretEncoder.getDistance() < -90) {
-            turretCanGoLeft = false;
-        }
-        else if(Constants.turretEncoder.getDistance() > 270) {
-            turretCanGoRight = false;
-        }
-        else {
-            turretCanGoRight = true;
-            turretCanGoLeft = true;
-        }
+        Collector.towerFeed();
     }
     public void stopMotors(){
         Constants.shooterMotor.set(0);
-        Constants.towerMotor.set(0);
         reachedSpeed = false;
         shootAllSeconds=2.5;
     }
@@ -89,28 +79,28 @@ public class Shooter {
         }
     }
     //used for auto
-    /*public void rotateTurret(int degrees) {
+    public static boolean rotateTurret(int degrees) {
         //if the abs of the pot voltage exeeds the maximum speed for going up, set the speed to the max speed (maintaining direction of motor) 
+        /*
         if (Math.abs(Constants.turretEncoder.getDistance() / degrees) >= Constants.turretSpeed) {
             Constants.turretMotor.set(ControlMode.PercentOutput,Constants.turretSpeed * (Constants.turretEncoder.getDistance() - degrees / degrees / Math.abs(Constants.turretEncoder.getDistance() - degrees / degrees)));
         }
         else {
             Constants.turretMotor.set(ControlMode.PercentOutput,Constants.turretSpeed / Math.abs(Constants.turretEncoder.getDistance() - degrees / degrees) * Constants.turretEncoder.getDistance() - degrees / degrees);
         }
-        
-            
-        
-        
-        //if (Constants.turretEncoder.getDistance() > degrees + 1) {
-        //    Constants.turretMotor.set(ControlMode.PercentOutput,-1 * Constants.turretSpeed);
-        //}
-        //else if (Constants.turretEncoder.getDistance() < degrees - 1) {
-        //    Constants.turretMotor.set(ControlMode.PercentOutput,Constants.turretSpeed);
-        //}
-        //else {
-        //    Constants.turretMotor.set(ControlMode.PercentOutput,0);
-        //}
-    } */
+        */
+        if (Constants.turretEncoder.getDistance() > degrees + 1) {
+            Constants.turretMotor.set(ControlMode.PercentOutput,Constants.turretSpeed);
+        }
+        else if (Constants.turretEncoder.getDistance() < degrees - 1) {
+            Constants.turretMotor.set(ControlMode.PercentOutput,-Constants.turretSpeed);
+        }
+        else {
+            Constants.turretMotor.set(ControlMode.PercentOutput,0);
+            return true;
+        }
+        return false;
+    } 
 
     
 }
