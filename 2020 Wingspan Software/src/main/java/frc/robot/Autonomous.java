@@ -10,11 +10,12 @@ public class Autonomous {
     private double curDistance;
     private double prevLeftEncoder;
     private double prevRightEncoder;
-    private double turretTargetAngle;
+    private int turretTargetAngle;
     private PIDController pidControlTurn = new PIDController(.03, 0.01, 0);
     private PIDController pidControlDrive = new PIDController(.03, 0, 0);
+    int cyclesOnTarget = 0;
     //Sets angle for robot to go to
-    public void setTargetAngle (double inputTargetAngle) {
+    public void setTargetAngle (int inputTargetAngle) {
         pidControlTurn.setTolerance(2);
         pidControlTurn.setSetpoint(inputTargetAngle);
     }
@@ -43,12 +44,23 @@ public class Autonomous {
         return pidControlTurn.atSetpoint();
     }
     //Sets angle for turret to go to
-    public void setTurretTargetAngle (double inputTargetAngle) {
+    public void setTurretTargetAngle (int inputTargetAngle) {
         turretTargetAngle = inputTargetAngle;
     }
     //Moves turret to target angle
     public boolean moveTurretToAngle () {
-        return true;
+        if(cyclesOnTarget<3){
+            if(Shooter.rotateTurret(turretTargetAngle)){
+                cyclesOnTarget++;
+            }
+            else{
+                cyclesOnTarget=0;
+            }
+        }
+        else{
+            return true;
+        }
+        return false;
     }
     public Autonomous(){
     }
