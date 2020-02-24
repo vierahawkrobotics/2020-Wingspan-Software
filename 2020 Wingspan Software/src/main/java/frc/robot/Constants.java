@@ -58,7 +58,6 @@ public class Constants {
     public static Encoder leftEncoder= new Encoder(0,1,true, EncodingType.k4X);
     public static Encoder rightEncoder= new Encoder(2,3,false, EncodingType.k4X);
     public static Encoder turretEncoder = new Encoder(4,5, false, EncodingType.k4X);
-    public static Encoder collectorEncoder = new Encoder(6,7,false,EncodingType.k4X);
     //Declares colormatch and target  colors
     public static ColorMatch colorMatcher = new ColorMatch();
     public static Color blueTarget = ColorMatch.makeColor(0.143, 0.427, 0.429);
