@@ -34,7 +34,6 @@ public class Telemetry {
         System.out.println("Velocity"+Constants.shooterMotor.getEncoder().getVelocity());
         System.out.println("leftDist"+Constants.leftEncoder.getDistance());
         System.out.println("rightDist"+Constants.rightEncoder.getDistance());
-        System.out.println("collectorDist"+Constants.collectorEncoder.getDistance());
         //print an ending line
         System.out.println("=======================================");
     }

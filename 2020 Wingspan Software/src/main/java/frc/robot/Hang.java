@@ -7,19 +7,21 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 /**
  * Add your docs here.
  */
 public class Hang {
     private boolean armReleased=false;
     private boolean hooked=false;
-    public void moveWinch(double moveSpeed){
-        
+    public void moveWinch(){
+        Constants.winchMotor.set(Constants.winchSpeed);
     }
-    public void moveHangWheels(double moveSpeed){
-        
+    public void extendArm(){
+        Constants.armExtender.set(ControlMode.PercentOutput,Constants.joystick1.getRawAxis(2)*Constants.armDeploySpeed);
     }
-    public void releaseArm(){
-        
+    public void moveArm(){
+        Constants.hangArmMotor.set(ControlMode.PercentOutput,Constants.joystick1.getRawAxis(3)*Constants.hangArmSpeed);
     }
 }
