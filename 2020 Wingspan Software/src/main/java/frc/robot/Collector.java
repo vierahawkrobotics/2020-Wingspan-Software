@@ -47,11 +47,14 @@ public class Collector {
   public static void towerFeed(){
     if(Constants.towerFeed){
       Constants.feeder.set(ControlMode.PercentOutput,Constants.feederSpeed);
-      Constants.towerMotor.set(.6);
+      Constants.towerMotor.set(.7);
     }
     else{
       Constants.feeder.set(ControlMode.PercentOutput,0);
       Constants.towerMotor.set(0);
     }
+  }
+  public static void reverseTower(){
+    Constants.towerMotor.set(-.3);
   }
 }

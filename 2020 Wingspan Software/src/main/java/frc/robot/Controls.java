@@ -12,6 +12,7 @@ package frc.robot;
  */
 public class Controls {
     //Button variables
+    private static boolean povPressed = false;
     public static boolean turboButton;
     public static boolean collectButton;
     public static boolean blueButton;
@@ -25,10 +26,11 @@ public class Controls {
     public static boolean extendHookButton;
     public static boolean retractHookButton;
     public static boolean feedButton;
-    public static boolean startLinePreset;
-    public static boolean startLineOffset;
-    public static boolean trenchPreset;
+    public static boolean startLinePresetButton;
+    public static boolean startLineOffsetButton;
+    public static boolean trenchPresetButton;
     public static boolean towerResetButton;
+    public static boolean winchButton;
     public static void getButtons(){
         System.out.println("POV"+Constants.joystick1.getPOV());
         turboButton = Constants.joystick0.getRawButton(1);
@@ -45,17 +47,28 @@ public class Controls {
         shootAllButton = Constants.joystick1.getRawButtonPressed(8);
         spinButton = Constants.joystick1.getRawButtonPressed(10);
         towerResetButton = Constants.joystick1.getRawButtonPressed(9);
-        startLinePreset = false;
-        startLineOffset = false;
-        trenchPreset = false;
-        if(Constants.joystick1.getPOV()==90){
-            startLinePreset = true;
+        startLinePresetButton = false;
+        startLineOffsetButton = false;
+        trenchPresetButton = false;
+        winchButton = false;
+        if(Constants.joystick1.getPOV()==0 && !povPressed){
+            startLinePresetButton = true;
+            povPressed = true;
         }
-        else if(Constants.joystick1.getPOV() == 0){
-            startLineOffset = true;
+        else if(Constants.joystick1.getPOV() == 90 && !povPressed){
+            startLineOffsetButton = true;
+            povPressed = true;
         }
-        else if(Constants.joystick0.getPOV() == 270){
-            trenchPreset = true;
+        else if(Constants.joystick1.getPOV() == 180 && !povPressed){
+            trenchPresetButton = true;
+            povPressed = true;
+        }
+        else if(Constants.joystick1.getPOV() == 270 && !povPressed){
+            winchButton = true;
+            povPressed = true;
+        }
+        else{
+            povPressed = false;
         }
     }
 }
