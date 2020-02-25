@@ -64,6 +64,7 @@ public class Robot extends TimedRobot {
     Constants.rightEncoder.setDistancePerPulse(1.0/2048.0);//1 rev of encoder
     Constants.turretEncoder.reset();
     Constants.turretEncoder.setDistancePerPulse(1.0/1472.0*360);//1 rev of motor times 360 degrees for every rotation
+    CameraServer.getInstance().startAutomaticCapture();
   }
 
   /**
@@ -139,7 +140,6 @@ public class Robot extends TimedRobot {
       //If in autoStage 4 shoots all balls from robot
       else if (autoStage==4) {
         Constants.isCollectorArmDown = true;
-        collectorClass.moveCollector();
         Constants.shootingAll=true;
         shooterClass.shootAll();
         if(Constants.shootingAll==false){
@@ -149,16 +149,13 @@ public class Robot extends TimedRobot {
       }
       //If in autoStage 5 sets target distance for robot to drive to
       else if (autoStage == 5) {
-        collectorClass.moveCollector();
         autoClass.setTargetDistance(214);
         autoStage++;
       }
       //If in autostage 6 moves collector down and drives distance
       else if (autoStage == 6) {
-        collectorClass.moveCollector();
         if(autoClass.driveDistance()){
           Constants.isCollectorArmDown = false;
-          collectorClass.moveCollector();
           autoStage++;
         }
       }
@@ -210,6 +207,7 @@ public class Robot extends TimedRobot {
         Constants.shootingAll = true;
         shooterClass.shootAll();
         if(!Constants.shootingAll){
+          shooterClass.stopMotors();
           autoStage++;
         }
       }
@@ -226,13 +224,35 @@ public class Robot extends TimedRobot {
       }
     }
     else if (m_autoSelected.equals(rightAuto)){
-      if(autoStage == 1){
-        autoClass.setTurretTargetAngle(90);
+      if (autoStage == 1) {
+        if(secondsDelay>0){
+          secondsDelay-=.02;
+        }
+        else{
+          autoStage++;
+        }
+      }
+      //If in autoStage 2 sets turret target angle
+      else if (autoStage==2) {
+        autoClass.setTurretTargetAngle(119);
+        autoStage++;
+      }
+      //If in autoStage 3 moves turret to angle
+      else if (autoStage==3) {
         if(autoClass.moveTurretToAngle()){
           autoStage++;
         }
       }
+      else if(autoStage == 4) {
+        Constants.shootingAll=true;
+        shooterClass.shootAll();
+        if(Constants.shootingAll==false){
+          shooterClass.stopMotors();
+          autoStage++;
+        }
+      }
     }
+    collectorClass.moveCollector();
     System.out.println(NavX.getTotalYaw());
     System.out.println("Left"+Constants.leftEncoder.getDistance());
     System.out.println("Right"+Constants.rightEncoder.getDistance());
@@ -294,7 +314,7 @@ public class Robot extends TimedRobot {
       cp.spinWheel();
     }
     else{
-      Constants.controlPanelMotor.set(0);
+      //Constants.controlPanelMotor.set(0);
       cp.numChanges=0;
     }
     //Shooter Controls
@@ -342,11 +362,20 @@ public class Robot extends TimedRobot {
     }
     hangClass.moveArm();
     hangClass.extendArm();
+    //Turret servos
+    if(Controls.startLinePresetButton){
+      Constants.servoPosition--;
+    }
+    else if(Controls.trenchPresetButton){
+      Constants.servoPosition++;
+    }
+    shooterClass.moveServos();
+    System.out.println(Constants.towerSensor.get());
     //print the encoder values
     //telemetryClass.debugEncoders("Encoder Values",collectorClass);
     //send the dashboard data
     //telemetryClass.sendDashboardData();
-    //System.out.println(Constants.turretEncoder.getDistance());
+    //1 and 0 is low
     //test auto turret
     //shooterClass.rotateTurret(45);
     

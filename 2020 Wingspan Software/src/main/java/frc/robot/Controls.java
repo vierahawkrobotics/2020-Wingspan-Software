@@ -51,21 +51,29 @@ public class Controls {
         startLineOffsetButton = false;
         trenchPresetButton = false;
         winchButton = false;
-        if(Constants.joystick1.getPOV()==0 && !povPressed){
-            startLinePresetButton = true;
-            povPressed = true;
+        if(Constants.joystick1.getPOV()==0){
+            if(!povPressed){
+                startLinePresetButton = true;
+                povPressed = true;
+            }
         }
-        else if(Constants.joystick1.getPOV() == 90 && !povPressed){
-            startLineOffsetButton = true;
-            povPressed = true;
+        else if(Constants.joystick1.getPOV() == 90){
+            if(!povPressed){
+                startLineOffsetButton = true;
+                povPressed = true;
+            }
         }
-        else if(Constants.joystick1.getPOV() == 180 && !povPressed){
-            trenchPresetButton = true;
-            povPressed = true;
+        else if(Constants.joystick1.getPOV() == 180){
+            if(!povPressed){
+                trenchPresetButton = true;
+                povPressed = true;
+            }
         }
-        else if(Constants.joystick1.getPOV() == 270 && !povPressed){
-            winchButton = true;
-            povPressed = true;
+        else if(Constants.joystick1.getPOV() == 270){
+            if(!povPressed){
+                winchButton = true;
+                povPressed = true;
+            }
         }
         else{
             povPressed = false;

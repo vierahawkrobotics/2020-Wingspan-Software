@@ -45,16 +45,23 @@ public class Collector {
     //Constants.collectorLift.set(Constants.joystick1.getRawAxis(1)*-.7);
   }
   public static void towerFeed(){
-    if(Constants.towerFeed){
+    if(Constants.towerFeed && (Constants.towerSensor.get()||Constants.shootingAll||Constants.shootingOnce)){
       Constants.feeder.set(ControlMode.PercentOutput,Constants.feederSpeed);
       Constants.towerMotor.set(.7);
+      if(!Constants.isCollectorArmDown){
+        Constants.collectorMotor.set(Constants.collectorSpeed/8);
+      }
     }
     else{
       Constants.feeder.set(ControlMode.PercentOutput,0);
       Constants.towerMotor.set(0);
+      if(!Constants.towerSensor.get()){
+        Constants.towerFeed = false;
+        reverseTower();
+      }
     }
   }
   public static void reverseTower(){
-    Constants.towerMotor.set(-.3);
+    Constants.towerMotor.set(-.15);
   }
 }

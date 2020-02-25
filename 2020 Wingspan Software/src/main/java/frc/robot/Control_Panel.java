@@ -24,7 +24,7 @@ public class Control_Panel {
     //Spins the wheel for 3-5 full revolutions
     public void spinWheel() {
         //Sets the motor to full speed
-        Constants.controlPanelMotor.set(Constants.controlPanelSpeed);
+        //Constants.controlPanelMotor.set(Constants.controlPanelSpeed);
         //Sets the colorMatchResult to the closest target color
         ColorMatchResult match = Constants.colorMatcher.matchClosestColor(Constants.colorSensor.getColor());
         //Checks if number of changes is greater than 25 (8 per cycle, 24 is three cycles +1 for safety)
@@ -49,7 +49,7 @@ public class Control_Panel {
         } 
         else {
             //Turns off motor, resets numchanges, disables method
-            Constants.controlPanelMotor.set(0);
+            //Constants.controlPanelMotor.set(0);
             Constants.isSpinning = false;
             numChanges = 0;
         }
@@ -57,13 +57,13 @@ public class Control_Panel {
     //Moves motor until the sensor detects the target color
     public void spinToColor() {
         //Sets the color wheel motor to spin
-        Constants.controlPanelMotor.set(Constants.controlPanelSpeed);
+        //Constants.controlPanelMotor.set(Constants.controlPanelSpeed);
         //Sets the colorMatchResult to the closest target color
         ColorMatchResult match = Constants.colorMatcher.matchClosestColor(Constants.colorSensor.getColor());
         //Checks if the color detected is the correct color
         if (match.color == Constants.targetColor) {
             //Stops motor and disables method
-            Constants.controlPanelMotor.set(0);
+            //Constants.controlPanelMotor.set(0);
             Constants.isGoingToColor = false;
         }
     }
