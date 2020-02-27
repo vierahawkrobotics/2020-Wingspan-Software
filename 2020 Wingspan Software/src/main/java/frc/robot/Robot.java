@@ -32,6 +32,7 @@ public class Robot extends TimedRobot {
   private Shooter shooterClass = new Shooter();
   private Telemetry telemetryClass = new Telemetry();
   private Autonomous autoClass = new Autonomous();
+  private Vision visionClass = new Vision();
   //Autonomous data
   private int autoStage = 0;
   private double secondsDelay = 0;
@@ -63,7 +64,10 @@ public class Robot extends TimedRobot {
     Constants.rightEncoder.setDistancePerPulse(1.0/2048.0);//1 rev of encoder
     Constants.turretEncoder.reset();
     Constants.turretEncoder.setDistancePerPulse(1.0/1472.0*360);//1 rev of motor times 360 degrees for every rotation
+    //init regular camera capture
     CameraServer.getInstance().startAutomaticCapture();
+    //init modified camera capture with target overlay
+    visionClass.initTargetOverlay();
   }
 
   /**
