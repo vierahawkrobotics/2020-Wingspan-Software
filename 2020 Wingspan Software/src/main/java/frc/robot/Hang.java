@@ -19,7 +19,10 @@ public class Hang {
         Constants.winchMotor.set(Constants.winchSpeed);
     }
     public void extendArm(){
-        Constants.armExtender.set(ControlMode.PercentOutput,Constants.joystick1.getRawAxis(2)*Constants.armDeploySpeed);
+        Constants.armExtender.set(ControlMode.PercentOutput,-Constants.armDeploySpeed);
+    }
+    public void retractArm(){
+        Constants.armExtender.set(ControlMode.PercentOutput,Constants.armDeploySpeed);
     }
     public void moveArm(){
         Constants.hangArmMotor.set(ControlMode.PercentOutput,Constants.joystick1.getRawAxis(3)*Constants.hangArmSpeed);

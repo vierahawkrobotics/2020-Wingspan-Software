@@ -6,6 +6,8 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -63,7 +65,6 @@ public class Robot extends TimedRobot {
     Constants.rightEncoder.setDistancePerPulse(1.0/2048.0);//1 rev of encoder
     Constants.turretEncoder.reset();
     Constants.turretEncoder.setDistancePerPulse(1.0/1472.0*360);//1 rev of motor times 360 degrees for every rotation
-    CameraServer.getInstance().startAutomaticCapture();
   }
 
   /**
@@ -210,6 +211,7 @@ public class Robot extends TimedRobot {
         if(!Constants.shootingAll){
           shooterClass.stopMotors();
           autoStage++;
+
           Constants.servoPosition = 0;
         }
       }
@@ -226,7 +228,6 @@ public class Robot extends TimedRobot {
       }
     }
     else if (m_autoSelected.equals(rightAuto)){
-      
       if (autoStage == 1) {
         if(secondsDelay>0){
           secondsDelay-=.02;
@@ -345,7 +346,7 @@ public class Robot extends TimedRobot {
       cp.spinWheel();
     }
     else{
-      //Constants.controlPanelMotor.set(0);
+      Constants.colorWheelMotor.set(ControlMode.PercentOutput,0);
       cp.numChanges=0;
     }
     //Shooter Controls
@@ -383,9 +384,6 @@ public class Robot extends TimedRobot {
     shooterClass.rotateTurret();
     //hanging winch stuff
     if(Controls.winchButton){
-      Constants.isWinching = !Constants.isWinching;
-    }
-    if(Constants.isWinching){                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
       hangClass.moveWinch();
     }
     else{
@@ -408,10 +406,22 @@ public class Robot extends TimedRobot {
     if(Constants.movingColorArm){
       cp.moveColorArm();
     }
+    if(Controls.armOutButton){
+      hangClass.extendArm();
+    }
+    else if(Controls.armInButton){
+      hangClass.retractArm();
+    }
+    else{
+      Constants.armExtender.set(ControlMode.PercentOutput,0);
+    }
   }
   /**
    * This function is called periodically during test mode.
    */
   public void testPeriodic() {
+    Constants.servoPosition=0;
+    shooterClass.moveServos();
+    Constants.winchMotor.set(Constants.joystick1.getRawAxis(1));
   }
 } 
