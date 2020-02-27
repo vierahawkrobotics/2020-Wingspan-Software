@@ -12,7 +12,7 @@ public class Shooter {
     private double distance;
     private double motorSpeed;
     private boolean reachedSpeed=false;
-    private double shootAllSeconds=2.5;
+    private double shootAllSeconds=4;
     private boolean turretCanGoLeft = true;
     private boolean turretCanGoRight = true;
     public void target(){
@@ -58,7 +58,7 @@ public class Shooter {
     public void stopMotors(){
         Constants.shooterMotor.set(0);
         reachedSpeed = false;
-        shootAllSeconds=2.5;
+        shootAllSeconds=4;
     }
     public void startMotors(){
         Constants.shooterMotor.set(Constants.shooterSpeed);
@@ -80,15 +80,6 @@ public class Shooter {
     }
     //used for auto
     public static boolean rotateTurret(int degrees) {
-        //if the abs of the pot voltage exeeds the maximum speed for going up, set the speed to the max speed (maintaining direction of motor) 
-        /*
-        if (Math.abs(Constants.turretEncoder.getDistance() / degrees) >= Constants.turretSpeed) {
-            Constants.turretMotor.set(ControlMode.PercentOutput,Constants.turretSpeed * (Constants.turretEncoder.getDistance() - degrees / degrees / Math.abs(Constants.turretEncoder.getDistance() - degrees / degrees)));
-        }
-        else {
-            Constants.turretMotor.set(ControlMode.PercentOutput,Constants.turretSpeed / Math.abs(Constants.turretEncoder.getDistance() - degrees / degrees) * Constants.turretEncoder.getDistance() - degrees / degrees);
-        }
-        */
         if (Constants.turretEncoder.getDistance() > degrees + 1) {
             Constants.turretMotor.set(ControlMode.PercentOutput,Constants.turretSpeed);
         }
@@ -101,6 +92,18 @@ public class Shooter {
         }
         return false;
     } 
-
-    
+    public void moveServos(){
+        if(Constants.servoPosition == 0){
+            Constants.turret1.set(1);
+            Constants.turret2.set(0);
+        }
+        else if(Constants.servoPosition == 1){
+            Constants.turret1.set(.5);
+            Constants.turret2.set(.5);
+        }
+        else if(Constants.servoPosition == 2){
+            Constants.turret1.set(0);
+            Constants.turret2.set(1);
+        }
+    }    
 }

@@ -11,8 +11,10 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorSensorV3;
+import com.revrobotics.CANDigitalInput.LimitSwitch;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Talon;
@@ -24,9 +26,11 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.hal.PDPJNI;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 public class Constants {
     public static PDPJNI pdp = new PDPJNI();
+    public static DigitalInput towerSensor = new DigitalInput(6);
     //Declares motor variables
     public static Talon leftDriveMotor1 = new Talon(0);
     public static Talon leftDriveMotor2 = new Talon(1);
@@ -35,7 +39,6 @@ public class Constants {
     public static Talon collectorLift = new Talon(5);
     public static Talon collectorMotor= new Talon(4);
     public static Victor towerMotor = new Victor(6);
-    public static Talon controlPanelMotor = new Talon(8);
     public static CANSparkMax shooterMotor = new CANSparkMax(1,MotorType.kBrushless);
     public static CANSparkMax winchMotor = new CANSparkMax(2, MotorType.kBrushless);
     public static VictorSPX colorWheelMotor = new VictorSPX(3);
@@ -44,6 +47,8 @@ public class Constants {
     public static VictorSPX armExtender = new VictorSPX(7);
     public static VictorSPX feeder = new VictorSPX(8);
     public static VictorSPX turretMotor = new VictorSPX(6);
+    public static Servo turret1 = new Servo(7);
+    public static Servo turret2 = new Servo(8);
     //Drivetrain instantiation
     public static SpeedControllerGroup leftGroup = new SpeedControllerGroup(leftDriveMotor1, leftDriveMotor2);
     public static SpeedControllerGroup rightGroup = new SpeedControllerGroup(rightDriveMotor1, rightDriveMotor2);;
@@ -65,7 +70,7 @@ public class Constants {
     public static Color redTarget = ColorMatch.makeColor(0.561, 0.232, 0.114);
     public static Color yellowTarget = ColorMatch.makeColor(0.361, 0.524, 0.113);
     //init navx
-    public static AHRS ahrs = new AHRS(SPI.Port.kMXP); ;
+    public static AHRS ahrs = new AHRS(SPI.Port.kMXP);
     //State variables
     public static boolean isSpinning = false;
     public static boolean isGoingToColor = false;
@@ -85,13 +90,17 @@ public class Constants {
     public static boolean towerFeed = false;
     public static boolean isWinching = false;
     public static boolean isReversingTower = false;
+    public static int servoPosition = 0;
+    public static boolean colorArmPosition = false;
+    public static boolean movingColorArm = false;
+    public static boolean kiddoIsShort = true;
     //Power Variables
     public static double driveSpeed = -.75;
     public static double slowSpeed = -.35;
     public static double turnSpeed = .7;
     public static double fastSpeed = 1/driveSpeed;
     public static double shooterSpeed = -1;
-    public static double winchSpeed = -.25;
+    public static double winchSpeed = 1;
     public static double hangWheelSpeed = .75;
     public static double controlPanelSpeed = .75;
     public static double spinnerArmSpeed = .75;
@@ -99,14 +108,15 @@ public class Constants {
     public static double turretSpeed = -.6;
     public static double controlPanelArmSpeed = .75;
     public static double collectorWheelSpeed = .5;
-    public static double collectorArmSpeedDown = -.25;
-    public static double collectorArmSpeedUp = -.5;
+    public static double collectorArmSpeedDown = -.3;
+    public static double collectorArmSpeedUp = -.65;
     public static double feederSpeed = -.25;
     public static double hangArmSpeed=-.5;
     public static double armDeploySpeed = .7;
+    public static double colorWheelArmSpeed = .25;
     //pot voltages and declaration
     public static AnalogInput potCollectorArm = new AnalogInput(0);
-    public static double collectorUpVolts = 2.5;
+    public static double collectorUpVolts = 2.65;
     public static double collectorDownVolts = 4.2;
     public Constants() {
         
