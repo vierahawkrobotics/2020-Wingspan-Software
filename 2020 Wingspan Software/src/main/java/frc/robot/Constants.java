@@ -91,6 +91,9 @@ public class Constants {
     public static boolean isWinching = false;
     public static boolean isReversingTower = false;
     public static int servoPosition = 0;
+    public static boolean colorArmPosition = false;
+    public static boolean movingColorArm = false;
+    public static boolean kiddoIsShort = true;
     //Power Variables
     public static double driveSpeed = -.75;
     public static double slowSpeed = -.35;
@@ -110,6 +113,7 @@ public class Constants {
     public static double feederSpeed = -.25;
     public static double hangArmSpeed=-.5;
     public static double armDeploySpeed = .7;
+    public static double colorWheelArmSpeed = .25;
     //pot voltages and declaration
     public static AnalogInput potCollectorArm = new AnalogInput(0);
     public static double collectorUpVolts = 2.65;

@@ -23,25 +23,23 @@ public class Controls {
     public static boolean shootOnceButton;
     public static boolean shootAllButton;
     public static boolean slowButton;
-    public static boolean extendHookButton;
-    public static boolean retractHookButton;
     public static boolean feedButton;
     public static boolean startLinePresetButton;
     public static boolean startLineOffsetButton;
     public static boolean trenchPresetButton;
     public static boolean towerResetButton;
     public static boolean winchButton;
+    public static boolean colorArmButton;
     public static void getButtons(){
         System.out.println("POV"+Constants.joystick1.getPOV());
         turboButton = Constants.joystick0.getRawButton(1);
         slowButton = Constants.joystick0.getRawButton(2);
-        extendHookButton = Constants.joystick0.getRawButtonPressed(9);
-        retractHookButton = Constants.joystick0.getRawButtonPressed(7);
         collectButton = Constants.joystick0.getRawButtonPressed(11);
         blueButton = Constants.joystick1.getRawButtonPressed(1);
         greenButton = Constants.joystick1.getRawButtonPressed(2);
         redButton = Constants.joystick1.getRawButtonPressed(3);
         yellowButton = Constants.joystick1.getRawButtonPressed(4);
+        colorArmButton = Constants.joystick1.getRawButtonPressed(5);
         shootOnceButton = Constants.joystick1.getRawButtonPressed(6);
         feedButton = Constants.joystick1.getRawButtonPressed(7);
         shootAllButton = Constants.joystick1.getRawButtonPressed(8);

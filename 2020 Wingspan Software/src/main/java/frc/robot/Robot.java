@@ -6,7 +6,6 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot;
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -100,12 +99,12 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     System.out.println("Auto selected: " + m_autoSelected);
     autoStage=0;
+    Constants.servoPosition = 2;
   }
 
   /**
    * This function is called periodically during autonomous.
    */
-  @Override
   public void autonomousPeriodic() {
     //In the first iteration it gets the delay in seconds before starting auto
     if(autoStage == 0){
@@ -144,12 +143,13 @@ public class Robot extends TimedRobot {
         shooterClass.shootAll();
         if(Constants.shootingAll==false){
           shooterClass.stopMotors();
+          Constants.servoPosition = 0;
           autoStage++;
         }
       }
       //If in autoStage 5 sets target distance for robot to drive to
       else if (autoStage == 5) {
-        autoClass.setTargetDistance(214);
+        autoClass.setTargetDistance(196);
         autoStage++;
       }
       //If in autostage 6 moves collector down and drives distance
@@ -163,6 +163,7 @@ public class Robot extends TimedRobot {
       //If in autoStage 7 turns off collector and sets target angle for turret
       else if (autoStage == 7) {
         autoClass.setTurretTargetAngle(108);
+        Constants.servoPosition = 2;
         autoStage++;
       }
       //If in autoStage 8 moves turret to target angle
@@ -209,6 +210,7 @@ public class Robot extends TimedRobot {
         if(!Constants.shootingAll){
           shooterClass.stopMotors();
           autoStage++;
+          Constants.servoPosition = 0;
         }
       }
       //If in autoStage 5 sets target distance for robot to drive
@@ -234,7 +236,7 @@ public class Robot extends TimedRobot {
       }
       //If in autoStage 2 sets turret target angle
       else if (autoStage==2) {
-        autoClass.setTurretTargetAngle(119);
+        autoClass.setTurretTargetAngle(62);
         autoStage++;
       }
       //If in autoStage 3 moves turret to angle
@@ -251,11 +253,39 @@ public class Robot extends TimedRobot {
           autoStage++;
         }
       }
+      else if(autoStage == 5){
+        autoClass.setTargetDistance(100);
+        autoStage++;
+      }
+      else if(autoStage == 6){
+        if(autoClass.driveDistance()){
+          autoStage++;
+        }
+      }
+      else if(autoStage == 7){
+        autoClass.setTurretTargetAngle(72);
+        autoStage++;
+      }
+      else if(autoStage == 8){
+        if(autoClass.moveTurretToAngle()){
+          autoStage++;
+        }
+      }
+      else if(autoStage == 9){
+        Constants.shootingAll = true;
+        shooterClass.shootAll();
+        if(!Constants.shootingAll){
+          shooterClass.stopMotors();
+          autoStage++;
+          Constants.servoPosition = 0;
+        }
+      }
     }
     collectorClass.moveCollector();
-    System.out.println(NavX.getTotalYaw());
-    System.out.println("Left"+Constants.leftEncoder.getDistance());
-    System.out.println("Right"+Constants.rightEncoder.getDistance());
+    shooterClass.moveServos();
+    System.out.println("Stage "+autoStage);
+    System.out.println("Left "+Constants.leftEncoder.getDistance());
+    System.out.println("Right "+Constants.rightEncoder.getDistance());
   }
   /**
    * This function is called periodically during operator control.
@@ -364,26 +394,23 @@ public class Robot extends TimedRobot {
     hangClass.extendArm();
     //Turret servos
     if(Controls.startLinePresetButton){
-      Constants.servoPosition--;
-    }
-    else if(Controls.trenchPresetButton){
       Constants.servoPosition++;
     }
+    else if(Controls.trenchPresetButton){
+      Constants.servoPosition--;
+    }
     shooterClass.moveServos();
-    System.out.println(Constants.towerSensor.get());
-    //print the encoder values
-    //telemetryClass.debugEncoders("Encoder Values",collectorClass);
-    //send the dashboard data
-    //telemetryClass.sendDashboardData();
-    //1 and 0 is low
-    //test auto turret
-    //shooterClass.rotateTurret(45);
-    
+    if(Controls.colorArmButton){
+      Constants.movingColorArm = !Constants.movingColorArm;
+      Constants.colorArmPosition = !Constants.colorArmPosition;
+    }
+    if(Constants.movingColorArm){
+      cp.moveColorArm();
+    }
   }
   /**
    * This function is called periodically during test mode.
    */
-  @Override
   public void testPeriodic() {
   }
 } 

@@ -94,12 +94,16 @@ public class Shooter {
     } 
     public void moveServos(){
         if(Constants.servoPosition == 0){
-            Constants.turret1.set(0);
-            Constants.turret2.set(1);
-        }
-        else if(Constants.servoPosition == 1){
             Constants.turret1.set(1);
             Constants.turret2.set(0);
+        }
+        else if(Constants.servoPosition == 1){
+            Constants.turret1.set(.5);
+            Constants.turret2.set(.5);
+        }
+        else if(Constants.servoPosition == 2){
+            Constants.turret1.set(0);
+            Constants.turret2.set(1);
         }
     }    
 }
