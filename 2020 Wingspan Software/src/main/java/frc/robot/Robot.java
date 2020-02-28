@@ -100,7 +100,6 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     System.out.println("Auto selected: " + m_autoSelected);
     autoStage=0;
-    Constants.servoPosition = 1;
     Constants.mainDrive.setMaxOutput(.5);
   }
 
@@ -144,8 +143,6 @@ public class Robot extends TimedRobot {
         if(!Constants.shootingAll){
           shooterClass.stopMotors();
           autoStage++;
-
-          Constants.servoPosition = 0;
         }
       }
       //If in autoStage 5 sets target distance for robot to drive
@@ -188,7 +185,6 @@ public class Robot extends TimedRobot {
         if(!Constants.shootingAll){
           shooterClass.stopMotors();
           autoStage++;
-          Constants.servoPosition = 0;
         }
       }
       //If in autoStage 5 sets target distance for robot to drive
@@ -231,7 +227,6 @@ public class Robot extends TimedRobot {
         if(!Constants.shootingAll){
           shooterClass.stopMotors();
           autoStage++;
-          Constants.servoPosition = 0;
         }
       }
       //If in autoStage 5 sets target distance for robot to drive
@@ -355,13 +350,6 @@ public class Robot extends TimedRobot {
     }
     hangClass.moveArm();
     hangClass.extendArm();
-    //Turret servos
-    if(Controls.startLinePresetButton){
-      Constants.servoPosition++;
-    }
-    else if(Controls.trenchPresetButton){
-      Constants.servoPosition--;
-    }
     shooterClass.moveServos();
     if(Controls.colorArmButton){
       cp.stopColorArm();
@@ -383,12 +371,13 @@ public class Robot extends TimedRobot {
     else{
       Constants.armExtender.set(ControlMode.PercentOutput,0);
     }
+    //System.out.println("FI"+Constants.joystick0.getRawAxis(1));
+    //System.out.println("TI"+Constants.joystick0.getRawAxis(2));
   }
   /**
    * This function is called periodically during test mode.
    */
-  public void testPeriodic() {
-    //GO DOWM
+  public void testPeriodic() {	 
     Constants.servoPosition=0;
     shooterClass.moveServos();
     Constants.winchMotor.set(Constants.joystick1.getRawAxis(1));

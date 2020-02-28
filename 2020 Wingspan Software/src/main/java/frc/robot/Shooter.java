@@ -59,9 +59,13 @@ public class Shooter {
         Constants.shooterMotor.set(0);
         reachedSpeed = false;
         shootAllSeconds=4;
+        //set the turret hood to stay down
+        Constants.servoPosition = 0;
     }
     public void startMotors(){
         Constants.shooterMotor.set(Constants.shooterSpeed);
+        //set the turret hood to be up (should be up by the time the shooter spins up) will be reset in stopMotors()
+        Constants.servoPosition = 1;
     }
     //turret Control
     public void rotateTurret() {
