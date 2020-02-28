@@ -15,15 +15,11 @@ public class Shooter {
     private double shootAllSeconds=4;
     private boolean turretCanGoLeft = true;
     private boolean turretCanGoRight = true;
-    private boolean turretHoodTimerHasStarted = false;
-    private long turretTimer;
     public void target(){
         
     }
     //Shoots one ball
     public void shootOnce(){
-        //set the turret hood to be up (should be up by the time the shooter spins up)
-        Constants.servoPosition = 2;
         //Checks if shooterMotor is at correct velocity
         if(Constants.shooterMotor.getEncoder().getVelocity()<=-4650){
             //If velocity is high enough, activates feeder motor and sets variable
@@ -41,15 +37,6 @@ public class Shooter {
         }
         Collector.towerFeed();
         startMotors();
-        //if the timer for the turret hoos hasn't started yet and the tower has started feeding 
-        //(meaning the ball is getting ready to be shot), set the start time and say the time has started
-        if (!turretHoodTimerHasStarted && Constants.towerFeed) {
-            turretTimer = System.currentTimeMillis();
-            turretHoodTimerHasStarted = true;
-        }
-        else if (System.currentTimeMillis() >= turretTimer + 2000) {
-            Constants.servoPosition = 0;
-        }
     }
     public void shootAll(){
         startMotors();
@@ -72,9 +59,13 @@ public class Shooter {
         Constants.shooterMotor.set(0);
         reachedSpeed = false;
         shootAllSeconds=4;
+        //set the turret hood to stay down
+        Constants.servoPosition = 0;
     }
     public void startMotors(){
         Constants.shooterMotor.set(Constants.shooterSpeed);
+        //set the turret hood to be up (should be up by the time the shooter spins up) will be reset in stopMotors()
+        Constants.servoPosition = 2;
     }
     //turret Control
     public void rotateTurret() {
