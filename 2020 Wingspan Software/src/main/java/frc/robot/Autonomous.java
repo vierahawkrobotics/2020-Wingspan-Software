@@ -34,14 +34,38 @@ public class Autonomous {
         curDistance+=(curLeftEncoder-prevLeftEncoder+curRightEncoder-prevRightEncoder)/2*18.75;
         prevLeftEncoder=curLeftEncoder;
         prevRightEncoder=curRightEncoder;
-        Constants.mainDrive.curvatureDrive(pidControlDrive.calculate(curDistance),0,true);
+        Constants.mainDrive.curvatureDrive(pidControlDrive.calculate(curDistance),0,false);
         System.out.println("Distance"+curDistance);
-        return pidControlDrive.atSetpoint();
+        if(cyclesOnTarget<3){
+            if(pidControlDrive.atSetpoint()){
+                cyclesOnTarget++;
+            }
+            else{
+                cyclesOnTarget = 0;
+            }
+        }
+        else{
+            cyclesOnTarget = 0;
+            return true;
+        }
+        return false;
     }
     //Moves robot to set angle
     public boolean moveToTargetAngle () {
         Constants.mainDrive.curvatureDrive(0, pidControlTurn.calculate(NavX.getTotalYaw()), true);
-        return pidControlTurn.atSetpoint();
+        if(cyclesOnTarget<3){
+            if(pidControlTurn.atSetpoint()){
+                cyclesOnTarget++;
+            }
+            else{
+                cyclesOnTarget = 0;
+            }
+        }
+        else{
+            cyclesOnTarget = 0;
+            return true;
+        }
+        return false;
     }
     //Sets angle for turret to go to
     public void setTurretTargetAngle (int inputTargetAngle) {
@@ -54,10 +78,11 @@ public class Autonomous {
                 cyclesOnTarget++;
             }
             else{
-                cyclesOnTarget=0;
+                cyclesOnTarget = 0;
             }
         }
         else{
+            cyclesOnTarget = 0;
             return true;
         }
         return false;
