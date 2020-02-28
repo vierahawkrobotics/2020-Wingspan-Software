@@ -30,6 +30,8 @@ public class Controls {
     public static boolean towerResetButton;
     public static boolean winchButton;
     public static boolean colorArmButton;
+    public static boolean armInButton;
+    public static boolean armOutButton;
     public static void getButtons(){
         System.out.println("POV"+Constants.joystick1.getPOV());
         turboButton = Constants.joystick0.getRawButton(1);
@@ -44,11 +46,11 @@ public class Controls {
         feedButton = Constants.joystick1.getRawButtonPressed(7);
         shootAllButton = Constants.joystick1.getRawButtonPressed(8);
         spinButton = Constants.joystick1.getRawButtonPressed(10);
-        towerResetButton = Constants.joystick1.getRawButtonPressed(9);
+        winchButton = Constants.joystick1.getRawButton(9); 
         startLinePresetButton = false;
-        startLineOffsetButton = false;
+        armOutButton = false;
+        armInButton = false;
         trenchPresetButton = false;
-        winchButton = false;
         if(Constants.joystick1.getPOV()==0){
             if(!povPressed){
                 startLinePresetButton = true;
@@ -56,10 +58,8 @@ public class Controls {
             }
         }
         else if(Constants.joystick1.getPOV() == 90){
-            if(!povPressed){
-                startLineOffsetButton = true;
-                povPressed = true;
-            }
+            armOutButton = true;
+            povPressed = true;
         }
         else if(Constants.joystick1.getPOV() == 180){
             if(!povPressed){
@@ -68,10 +68,8 @@ public class Controls {
             }
         }
         else if(Constants.joystick1.getPOV() == 270){
-            if(!povPressed){
-                winchButton = true;
-                povPressed = true;
-            }
+            armInButton = true;
+            povPressed = true;
         }
         else{
             povPressed = false;

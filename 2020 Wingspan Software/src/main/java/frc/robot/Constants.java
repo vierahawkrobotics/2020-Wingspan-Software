@@ -88,7 +88,6 @@ public class Constants {
     public static double targetTurretDegrees = 0.0;
     public static boolean isCollectorArmDown = false;
     public static boolean towerFeed = false;
-    public static boolean isWinching = false;
     public static boolean isReversingTower = false;
     public static int servoPosition = 0;
     public static boolean colorArmPosition = false;
@@ -102,17 +101,16 @@ public class Constants {
     public static double shooterSpeed = -1;
     public static double winchSpeed = 1;
     public static double hangWheelSpeed = .75;
-    public static double controlPanelSpeed = .75;
+    public static double controlPanelSpeed = 1;
     public static double spinnerArmSpeed = .75;
     public static double collectorSpeed = .85;
     public static double turretSpeed = -.6;
-    public static double controlPanelArmSpeed = .75;
     public static double collectorWheelSpeed = .5;
     public static double collectorArmSpeedDown = -.3;
     public static double collectorArmSpeedUp = -.65;
     public static double feederSpeed = -.25;
-    public static double hangArmSpeed=-.5;
-    public static double armDeploySpeed = .7;
+    public static double hangArmSpeed=-.3;
+    public static double armDeploySpeed = .6;
     public static double colorWheelArmSpeed = .25;
     //pot voltages and declaration
     public static AnalogInput potCollectorArm = new AnalogInput(0);

@@ -29,6 +29,7 @@ public class Control_Panel {
         //Sets the colorMatchResult to the closest target color
         ColorMatchResult match = Constants.colorMatcher.matchClosestColor(Constants.colorSensor.getColor());
         //Checks if number of changes is greater than 25 (8 per cycle, 24 is three cycles +1 for safety)
+        System.out.println("NC"+numChanges);
         if (numChanges <= 25) {
             //Checks if color has changed to the next color in the sequence (reduces false positives)
             if (lastColor == Constants.blueTarget && match.color == Constants.yellowTarget) {
@@ -75,8 +76,7 @@ public class Control_Panel {
                 Constants.colorWheelArm.set(ControlMode.PercentOutput,Constants.colorWheelArmSpeed);
             }
             else{
-                timer = 4;
-                Constants.movingColorArm = false;
+                stopColorArm();
             }
         }
         else{
@@ -85,9 +85,13 @@ public class Control_Panel {
                 Constants.colorWheelArm.set(ControlMode.PercentOutput,-Constants.colorWheelArmSpeed);
             }
             else{
-                timer = 4;
-                Constants.movingColorArm = false;
+                stopColorArm();
             }
         }
+    }
+    public void stopColorArm(){
+        timer = 4;
+        Constants.colorWheelArm.set(ControlMode.PercentOutput,0);
+        Constants.movingColorArm = false;
     }
 }
