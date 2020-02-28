@@ -13,7 +13,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
  * Add your docs here.
  */
 public class Collector {
-  //private int maxNumBalls = 5;
 
   private Pot potClass = new Pot(Constants.collectorUpVolts,Constants.collectorDownVolts);
   public void moveCollector() {
@@ -45,9 +44,12 @@ public class Collector {
     //Constants.collectorLift.set(Constants.joystick1.getRawAxis(1)*-.7);
   }
   public static void towerFeed(){
+    //if the tower is supposed to be feeding balls and if the robot is either shooting all or one, or doesn't 
+    //have a ball ready for te shooter, activate the tower and tower feeder motors.
+    //also run the collector motor at reduced speed it it's up to avoid jams
     if(Constants.towerFeed && (Constants.towerSensor.get()||Constants.shootingAll||Constants.shootingOnce)){
       Constants.feeder.set(ControlMode.PercentOutput,Constants.feederSpeed);
-      Constants.towerMotor.set(.7);
+      Constants.towerMotor.set(Constants.towerMotorSpeed);
       if(!Constants.isCollectorArmDown){
         Constants.collectorMotor.set(Constants.collectorSpeed/8);
       }
@@ -55,6 +57,7 @@ public class Collector {
     else{
       Constants.feeder.set(ControlMode.PercentOutput,0);
       Constants.towerMotor.set(0);
+      //reverse the tower if it is full of balls
       if(!Constants.towerSensor.get()){
         Constants.towerFeed = false;
         reverseTower();
@@ -62,6 +65,6 @@ public class Collector {
     }
   }
   public static void reverseTower(){
-    Constants.towerMotor.set(-.15);
+    Constants.towerMotor.set(Constants.reverseTowerMotorSpeed);
   }
 }

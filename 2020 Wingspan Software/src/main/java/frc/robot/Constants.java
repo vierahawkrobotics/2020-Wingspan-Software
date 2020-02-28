@@ -113,6 +113,8 @@ public class Constants {
     public static double hangArmSpeed=-.3;
     public static double armDeploySpeed = .6;
     public static double colorWheelArmSpeed = .25;
+    public static double reverseTowerMotorSpeed = -.15;
+    public static double towerMotorSpeed = .7;
     //pot voltages and declaration
     public static AnalogInput potCollectorArm = new AnalogInput(0);
     public static double collectorUpVolts = 2.65;
