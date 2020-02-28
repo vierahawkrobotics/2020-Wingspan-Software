@@ -100,7 +100,7 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     System.out.println("Auto selected: " + m_autoSelected);
     autoStage=0;
-    Constants.mainDrive.setMaxOutput(.3);
+    Constants.mainDrive.setMaxOutput(.5);
   }
 
   /**
@@ -147,7 +147,7 @@ public class Robot extends TimedRobot {
       }
       //If in autoStage 5 sets target distance for robot to drive
       else if(autoStage == 5){
-        autoClass.setTargetDistance(18);
+        autoClass.setTargetDistance(72);
         autoStage++;
       }
       //If in autoStage 6 drives robot off line
@@ -189,7 +189,7 @@ public class Robot extends TimedRobot {
       }
       //If in autoStage 5 sets target distance for robot to drive
       else if(autoStage == 5){
-        autoClass.setTargetDistance(18);
+        autoClass.setTargetDistance(72);
         autoStage++;
       }
       //If in autoStage 6 drives robot off line
@@ -231,7 +231,7 @@ public class Robot extends TimedRobot {
       }
       //If in autoStage 5 sets target distance for robot to drive
       else if(autoStage == 5){
-        autoClass.setTargetDistance(18);
+        autoClass.setTargetDistance(72);
         autoStage++;
       }
       //If in autoStage 6 drives robot off line
@@ -371,13 +371,13 @@ public class Robot extends TimedRobot {
     else{
       Constants.armExtender.set(ControlMode.PercentOutput,0);
     }
-    System.out.println("FI"+Constants.joystick0.getRawAxis(1));
-    System.out.println("TI"+Constants.joystick0.getRawAxis(2));
+    //System.out.println("FI"+Constants.joystick0.getRawAxis(1));
+    //System.out.println("TI"+Constants.joystick0.getRawAxis(2));
   }
   /**
    * This function is called periodically during test mode.
    */
-  public void testPeriodic() {
+  public void testPeriodic() {	 
     Constants.servoPosition=0;
     shooterClass.moveServos();
     Constants.winchMotor.set(Constants.joystick1.getRawAxis(1));
