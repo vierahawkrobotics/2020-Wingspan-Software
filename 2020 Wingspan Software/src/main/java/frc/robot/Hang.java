@@ -13,8 +13,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
  * Add your docs here.
  */
 public class Hang {
-    private boolean armReleased=false;
-    private boolean hooked=false;
     public void moveWinch(){
         Constants.winchMotor.set(Constants.winchSpeed);
     }
