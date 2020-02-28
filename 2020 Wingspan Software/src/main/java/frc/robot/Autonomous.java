@@ -48,7 +48,7 @@ public class Autonomous {
         System.out.println("Auto selected: " + m_autoSelected);
         autoStage = 0;
         Constants.servoPosition = 1;
-        Constants.mainDrive.setMaxOutput(.5);
+        Constants.mainDrive.setMaxOutput(Constants.autoMaxDriveSpeed);
     }
 
     public void autoRoutine(Shooter shooterClass, Collector collectorClass) {
@@ -60,18 +60,19 @@ public class Autonomous {
         // Checks to see which auto mode is selected(default(nothing), left, middle,
         // right)
         if (m_autoSelected.equals(kDefaultAuto)) {
+            //do nothing
         } else if (m_autoSelected.equals(leftAuto)) {
             // If in autoStage 1 waits for secondsDelay seconds
             if (autoStage == 1) {
                 if (secondsDelay > 0) {
-                    secondsDelay -= .02;
+                    secondsDelay -= Constants.autoTimerDecrement;
                 } else {
                     autoStage++;
                 }
             }
             // If in autoStage 2 sets turret target angle
             else if (autoStage == 2) {
-                setTurretTargetAngle(121);
+                setTurretTargetAngle(Constants.autoLeftStage2Angle);
                 autoStage++;
             }
             // If in autoStage 3 moves turret to target angle
@@ -93,7 +94,7 @@ public class Autonomous {
             }
             // If in autoStage 5 sets target distance for robot to drive
             else if (autoStage == 5) {
-                setTargetDistance(72);
+                setTargetDistance(Constants.autoLeftStage5Angle);
                 autoStage++;
             }
             // If in autoStage 6 drives robot off line
@@ -106,14 +107,14 @@ public class Autonomous {
             // If in autoStage 1 waits for secondsDelay seconds
             if (autoStage == 1) {
                 if (secondsDelay > 0) {
-                    secondsDelay -= .02;
+                    secondsDelay -= Constants.autoTimerDecrement;
                 } else {
                     autoStage++;
                 }
             }
             // If in autoStage 2 sets turret target angle
             else if (autoStage == 2) {
-                setTurretTargetAngle(90);
+                setTurretTargetAngle(Constants.autoMiddleStage2Angle);
                 autoStage++;
             }
             // If in autoStage 3 moves turret to target angle
@@ -134,7 +135,7 @@ public class Autonomous {
             }
             // If in autoStage 5 sets target distance for robot to drive
             else if (autoStage == 5) {
-                setTargetDistance(72);
+                setTargetDistance(Constants.autoMiddleStage5Angle);
                 autoStage++;
             }
             // If in autoStage 6 drives robot off line
@@ -147,14 +148,14 @@ public class Autonomous {
             // If in autoStage 1 waits for secondsDelay seconds
             if (autoStage == 1) {
                 if (secondsDelay > 0) {
-                    secondsDelay -= .02;
+                    secondsDelay -= Constants.autoTimerDecrement;
                 } else {
                     autoStage++;
                 }
             }
             // If in autoStage 2 sets turret target angle
             else if (autoStage == 2) {
-                setTurretTargetAngle(62);
+                setTurretTargetAngle(Constants.autoRightStage2Angle);
                 autoStage++;
             }
             // If in autoStage 3 moves turret to target angle
@@ -175,7 +176,7 @@ public class Autonomous {
             }
             // If in autoStage 5 sets target distance for robot to drive
             else if (autoStage == 5) {
-                setTargetDistance(72);
+                setTargetDistance(Constants.autoRightStage5Angle);
                 autoStage++;
             }
             // If in autoStage 6 drives robot off line
@@ -194,7 +195,7 @@ public class Autonomous {
 
     // Sets angle for robot to go to
     public void setTargetAngle(int inputTargetAngle) {
-        pidControlTurn.setTolerance(2);
+        pidControlTurn.setTolerance(Constants.autoTurnPIDTolerance);
         pidControlTurn.setSetpoint(inputTargetAngle);
     }
 
