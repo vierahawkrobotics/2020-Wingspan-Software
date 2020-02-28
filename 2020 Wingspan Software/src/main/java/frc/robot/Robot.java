@@ -100,7 +100,6 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     System.out.println("Auto selected: " + m_autoSelected);
     autoStage=0;
-    Constants.servoPosition = 2;
     Constants.mainDrive.setMaxOutput(.3);
   }
 
@@ -144,8 +143,6 @@ public class Robot extends TimedRobot {
         if(!Constants.shootingAll){
           shooterClass.stopMotors();
           autoStage++;
-
-          Constants.servoPosition = 0;
         }
       }
       //If in autoStage 5 sets target distance for robot to drive
@@ -188,7 +185,6 @@ public class Robot extends TimedRobot {
         if(!Constants.shootingAll){
           shooterClass.stopMotors();
           autoStage++;
-          Constants.servoPosition = 0;
         }
       }
       //If in autoStage 5 sets target distance for robot to drive
@@ -231,7 +227,6 @@ public class Robot extends TimedRobot {
         if(!Constants.shootingAll){
           shooterClass.stopMotors();
           autoStage++;
-          Constants.servoPosition = 0;
         }
       }
       //If in autoStage 5 sets target distance for robot to drive
