@@ -7,11 +7,7 @@
 
 package frc.robot;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -20,13 +16,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends TimedRobot {
-  //Autonomous selection options
-  private static final String kDefaultAuto = "Default";
-  private static final String leftAuto = "Left Auto";
-  private static final String middleAuto = "Middle Auto";
-  private static final String rightAuto = "Right Auto";
-  private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+  
+  
   //Class instantiation
   private Hang hangClass = new Hang();
   private Collector collectorClass = new Collector();
@@ -34,22 +25,15 @@ public class Robot extends TimedRobot {
   private Shooter shooterClass = new Shooter();
   private Telemetry telemetryClass = new Telemetry();
   private Autonomous autoClass = new Autonomous();
-  //Autonomous data
-  private int autoStage = 0;
-  private double secondsDelay = 0;
+  
   /*
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
    */
   @Override
   public void robotInit() {
-    //wpi lib stuff idk what it does
-    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("Left Auto", leftAuto);
-    m_chooser.addOption("Middle Auto", middleAuto);
-    m_chooser.addOption("Right Auto", rightAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
-    SmartDashboard.putNumber("Autonomous delay", 0);
+    //add auto options to dashboard
+    autoClass.autoOptions();
     //Initializes the collector motor
     Constants.collectorMotor.setInverted(true);
     //init colorsensor
@@ -94,163 +78,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    //Resets angle
-    Constants.ahrs.reset();
-    //more wpi lib confusing stuff
-    m_autoSelected = m_chooser.getSelected();
-    System.out.println("Auto selected: " + m_autoSelected);
-    autoStage=0;
-    Constants.servoPosition = 1;
-    Constants.mainDrive.setMaxOutput(.5);
+    autoClass.autoInit();
   }
 
   /**
    * This function is called periodically during autonomous.
    */
   public void autonomousPeriodic() {
-    //In the first iteration it gets the delay in seconds before starting auto
-    if(autoStage == 0){
-      secondsDelay = SmartDashboard.getNumber("Autonomous delay", 0);
-      autoStage++;
-    }
-    //Checks to see which auto mode is selected(default(nothing), left, middle, right)
-    if(m_autoSelected.equals(kDefaultAuto)){
-    }
-    else if (m_autoSelected.equals(leftAuto)){
-      //If in autoStage 1 waits for secondsDelay seconds
-      if(autoStage == 1){
-        if(secondsDelay>0){
-          secondsDelay-=.02;
-        }
-        else{
-          autoStage++;
-        }
-      }
-      //If in autoStage 2 sets turret target angle
-      else if(autoStage == 2){
-        autoClass.setTurretTargetAngle(121);
-        autoStage++;
-      }
-      //If in autoStage 3 moves turret to target angle
-      else if(autoStage == 3){
-        if(autoClass.moveTurretToAngle()){
-          autoStage++;
-        }
-      }
-      //If in autoStage 4 shoots all balls
-      else if(autoStage == 4){
-        Constants.shootingAll = true;
-        shooterClass.shootAll();
-        if(!Constants.shootingAll){
-          shooterClass.stopMotors();
-          autoStage++;
-
-          Constants.servoPosition = 0;
-        }
-      }
-      //If in autoStage 5 sets target distance for robot to drive
-      else if(autoStage == 5){
-        autoClass.setTargetDistance(72);
-        autoStage++;
-      }
-      //If in autoStage 6 drives robot off line
-      else if(autoStage == 6){
-        if(autoClass.driveDistance()){
-          autoStage++;
-        }
-      }
-    }
-    else if (m_autoSelected.equals(middleAuto)){
-      //If in autoStage 1 waits for secondsDelay seconds
-      if(autoStage == 1){
-        if(secondsDelay>0){
-          secondsDelay-=.02;
-        }
-        else{
-          autoStage++;
-        }
-      }
-      //If in autoStage 2 sets turret target angle
-      else if(autoStage == 2){
-        autoClass.setTurretTargetAngle(90);
-        autoStage++;
-      }
-      //If in autoStage 3 moves turret to target angle
-      else if(autoStage == 3){
-        if(autoClass.moveTurretToAngle()){
-          autoStage++;
-        }
-      }
-      //If in autoStage 4 shoots all balls
-      else if(autoStage == 4){
-        Constants.shootingAll = true;
-        shooterClass.shootAll();
-        if(!Constants.shootingAll){
-          shooterClass.stopMotors();
-          autoStage++;
-          Constants.servoPosition = 0;
-        }
-      }
-      //If in autoStage 5 sets target distance for robot to drive
-      else if(autoStage == 5){
-        autoClass.setTargetDistance(72);
-        autoStage++;
-      }
-      //If in autoStage 6 drives robot off line
-      else if(autoStage == 6){
-        if(autoClass.driveDistance()){
-          autoStage++;
-        }
-      }
-    }
-    else if (m_autoSelected.equals(rightAuto)){
-      //If in autoStage 1 waits for secondsDelay seconds
-      if(autoStage == 1){
-        if(secondsDelay>0){
-          secondsDelay-=.02;
-        }
-        else{
-          autoStage++;
-        }
-      }
-      //If in autoStage 2 sets turret target angle
-      else if(autoStage == 2){
-        autoClass.setTurretTargetAngle(62);
-        autoStage++;
-      }
-      //If in autoStage 3 moves turret to target angle
-      else if(autoStage == 3){
-        if(autoClass.moveTurretToAngle()){
-          autoStage++;
-        }
-      }
-      //If in autoStage 4 shoots all balls
-      else if(autoStage == 4){
-        Constants.shootingAll = true;
-        shooterClass.shootAll();
-        if(!Constants.shootingAll){
-          shooterClass.stopMotors();
-          autoStage++;
-          Constants.servoPosition = 0;
-        }
-      }
-      //If in autoStage 5 sets target distance for robot to drive
-      else if(autoStage == 5){
-        autoClass.setTargetDistance(72);
-        autoStage++;
-      }
-      //If in autoStage 6 drives robot off line
-      else if(autoStage == 6){
-        if(autoClass.driveDistance()){
-          autoStage++;
-        }
-      }
-    }
-    collectorClass.moveCollector();
-    shooterClass.moveServos();
-    System.out.println("Stage "+autoStage);
-    System.out.println("Left "+Constants.leftEncoder.getDistance());
-    System.out.println("Right "+Constants.rightEncoder.getDistance());
+    autoClass.autoRoutine(shooterClass, collectorClass);
   }
   /**
    * This function is called periodically during operator control.
