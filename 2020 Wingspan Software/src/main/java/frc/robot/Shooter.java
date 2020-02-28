@@ -21,7 +21,7 @@ public class Shooter {
     //Shoots one ball
     public void shootOnce(){
         //Checks if shooterMotor is at correct velocity
-        if(Constants.shooterMotor.getEncoder().getVelocity()<=-4650){
+        if(Constants.shooterMotor.getEncoder().getVelocity()<=-3650){
             //If velocity is high enough, activates feeder motor and sets variable
             Constants.towerFeed = true;
             reachedSpeed = true;
@@ -42,7 +42,7 @@ public class Shooter {
         startMotors();
         if(shootAllSeconds>=0){
             shootAllSeconds-=.02;
-            if(Constants.shooterMotor.getEncoder().getVelocity()<=-4000){
+            if(Constants.shooterMotor.getEncoder().getVelocity()<=-3000){
                 Constants.towerFeed = true;
             }
             else{
@@ -81,10 +81,10 @@ public class Shooter {
     //used for auto
     public static boolean rotateTurret(int degrees) {
         if (Constants.turretEncoder.getDistance() > degrees + 1) {
-            Constants.turretMotor.set(ControlMode.PercentOutput,Constants.turretSpeed);
+            Constants.turretMotor.set(ControlMode.PercentOutput,Constants.turretSpeed*.9);
         }
         else if (Constants.turretEncoder.getDistance() < degrees - 1) {
-            Constants.turretMotor.set(ControlMode.PercentOutput,-Constants.turretSpeed);
+            Constants.turretMotor.set(ControlMode.PercentOutput,-Constants.turretSpeed*.9);
         }
         else {
             Constants.turretMotor.set(ControlMode.PercentOutput,0);
@@ -98,10 +98,6 @@ public class Shooter {
             Constants.turret2.set(0);
         }
         else if(Constants.servoPosition == 1){
-            Constants.turret1.set(.5);
-            Constants.turret2.set(.5);
-        }
-        else if(Constants.servoPosition == 2){
             Constants.turret1.set(0);
             Constants.turret2.set(1);
         }

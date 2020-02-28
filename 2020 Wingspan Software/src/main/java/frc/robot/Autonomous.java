@@ -34,7 +34,7 @@ public class Autonomous {
         curDistance+=(curLeftEncoder-prevLeftEncoder+curRightEncoder-prevRightEncoder)/2*18.75;
         prevLeftEncoder=curLeftEncoder;
         prevRightEncoder=curRightEncoder;
-        Constants.mainDrive.curvatureDrive(pidControlDrive.calculate(curDistance),0,true);
+        Constants.mainDrive.curvatureDrive(pidControlDrive.calculate(curDistance),0,false);
         System.out.println("Distance"+curDistance);
         if(cyclesOnTarget<3){
             if(pidControlDrive.atSetpoint()){

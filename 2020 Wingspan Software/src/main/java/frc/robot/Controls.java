@@ -47,6 +47,7 @@ public class Controls {
         shootAllButton = Constants.joystick1.getRawButtonPressed(8);
         spinButton = Constants.joystick1.getRawButtonPressed(10);
         winchButton = Constants.joystick1.getRawButton(9); 
+        startLinePresetButton = false;
         armOutButton = false;
         armInButton = false;
         trenchPresetButton = false;

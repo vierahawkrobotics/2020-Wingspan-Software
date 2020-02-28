@@ -76,9 +76,7 @@ public class Control_Panel {
                 Constants.colorWheelArm.set(ControlMode.PercentOutput,Constants.colorWheelArmSpeed);
             }
             else{
-                timer = 4;
-                Constants.colorWheelArm.set(ControlMode.PercentOutput,0);
-                Constants.movingColorArm = false;
+                stopColorArm();
             }
         }
         else{
@@ -87,10 +85,13 @@ public class Control_Panel {
                 Constants.colorWheelArm.set(ControlMode.PercentOutput,-Constants.colorWheelArmSpeed);
             }
             else{
-                timer = 4;
-                Constants.colorWheelArm.set(ControlMode.PercentOutput,0);
-                Constants.movingColorArm = false;
+                stopColorArm();
             }
         }
+    }
+    public void stopColorArm(){
+        timer = 4;
+        Constants.colorWheelArm.set(ControlMode.PercentOutput,0);
+        Constants.movingColorArm = false;
     }
 }
