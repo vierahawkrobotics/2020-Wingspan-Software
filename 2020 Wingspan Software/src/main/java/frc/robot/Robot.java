@@ -350,15 +350,6 @@ public class Robot extends TimedRobot {
     }
     hangClass.moveArm();
     hangClass.extendArm();
-    //Turret servos
-    /*
-    if(Controls.startLinePresetButton){
-      Constants.servoPosition++;
-    }
-    else if(Controls.trenchPresetButton){
-      Constants.servoPosition--;
-    } 
-    */
     shooterClass.moveServos();
     if(Controls.colorArmButton){
       cp.stopColorArm();

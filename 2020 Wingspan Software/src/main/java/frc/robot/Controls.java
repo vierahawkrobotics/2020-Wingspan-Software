@@ -24,9 +24,6 @@ public class Controls {
     public static boolean shootAllButton;
     public static boolean slowButton;
     public static boolean feedButton;
-    public static boolean startLinePresetButton;
-    public static boolean startLineOffsetButton;
-    public static boolean trenchPresetButton;
     public static boolean towerResetButton;
     public static boolean winchButton;
     public static boolean colorArmButton;
@@ -47,25 +44,11 @@ public class Controls {
         shootAllButton = Constants.joystick1.getRawButtonPressed(8);
         spinButton = Constants.joystick1.getRawButtonPressed(10);
         winchButton = Constants.joystick1.getRawButton(9); 
-        startLinePresetButton = false;
         armOutButton = false;
         armInButton = false;
-        trenchPresetButton = false;
-        if(Constants.joystick1.getPOV()==0){
-            if(!povPressed){
-                startLinePresetButton = true;
-                povPressed = true;
-            }
-        }
-        else if(Constants.joystick1.getPOV() == 90){
+        if(Constants.joystick1.getPOV() == 90){
             armOutButton = true;
             povPressed = true;
-        }
-        else if(Constants.joystick1.getPOV() == 180){
-            if(!povPressed){
-                trenchPresetButton = true;
-                povPressed = true;
-            }
         }
         else if(Constants.joystick1.getPOV() == 270){
             armInButton = true;
