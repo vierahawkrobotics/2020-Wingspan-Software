@@ -36,6 +36,7 @@ public class Controls {
         System.out.println("POV"+Constants.joystick1.getPOV());
         turboButton = Constants.joystick0.getRawButton(1);
         slowButton = Constants.joystick0.getRawButton(2);
+        towerResetButton = Constants.joystick0.getRawButton(7);
         collectButton = Constants.joystick0.getRawButtonPressed(11);
         blueButton = Constants.joystick1.getRawButtonPressed(1);
         greenButton = Constants.joystick1.getRawButtonPressed(2);
