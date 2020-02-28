@@ -37,6 +37,12 @@ public class Shooter {
         }
         Collector.towerFeed();
         startMotors();
+        shootAllSeconds -= .2;
+        if(shootAllSeconds == 0){
+            Constants.towerFeed = false;
+            Constants.shootingOnce = false;
+            stopMotors();
+        }
     }
     public void shootAll(){
         startMotors();
