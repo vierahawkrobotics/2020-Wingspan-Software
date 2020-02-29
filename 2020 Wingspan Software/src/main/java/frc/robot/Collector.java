@@ -28,7 +28,7 @@ public class Collector {
       else {
         Constants.collectorLift.set(Constants.collectorArmSpeedDown / Math.abs(Constants.collectorArmSpeedDown) * potClass.getPercentage());
       }
-      Constants.collectorMotor.set(Constants.collectorWheelSpeed);
+      Constants.collectorMotor.set(Constants.collectorSpeed);
     }
     else {
       //if going up, do not use PID and instead just run motor until at desired position

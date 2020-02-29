@@ -350,7 +350,6 @@ public class Robot extends TimedRobot {
       Constants.winchMotor.set(0);
     }
     hangClass.moveArm();
-    hangClass.extendArm();
     shooterClass.moveServos();
     if(Controls.colorArmButton){
       cp.stopColorArm();

@@ -98,21 +98,20 @@ public class Constants {
     //Power Variables
     public static double driveSpeed = -.75;
     public static double slowSpeed = -.35;
-    public static double turnSpeed = .7;
+    public static double turnSpeed = .6;
     public static double fastSpeed = 1/driveSpeed;
     public static double shooterSpeed = -1;
     public static double winchSpeed = 1;
     public static double hangWheelSpeed = .75;
     public static double controlPanelSpeed = 1;
     public static double spinnerArmSpeed = .75;
-    public static double collectorSpeed = .85;
+    public static double collectorSpeed = .8;
     public static double turretSpeed = -.6;
-    public static double collectorWheelSpeed = .5;
     public static double collectorArmSpeedDown = -.3;
     public static double collectorArmSpeedUp = -.65;
     public static double feederSpeed = -.25;
     public static double hangArmSpeed=-.3;
-    public static double armDeploySpeed = .6;
+    public static double armDeploySpeed = 1;
     public static double colorWheelArmSpeed = .25;
     //pot voltages and declaration
     public static AnalogInput potCollectorArm = new AnalogInput(0);
