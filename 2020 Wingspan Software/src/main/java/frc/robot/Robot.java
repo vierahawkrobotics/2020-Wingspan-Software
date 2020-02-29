@@ -172,12 +172,14 @@ public class Robot extends TimedRobot {
     }
     if(Controls.towerResetButton){
       Constants.isReversingTower = !Constants.isReversingTower;
+      Constants.isReversingTower = true;
+      Collector.reverseTower();
+    }
+    else{
+      Constants.isReversingTower = false;
     }
     if(!Constants.isReversingTower){
       Collector.towerFeed();
-    }
-    else{
-      Collector.reverseTower();
     }
     //turret controls
     shooterClass.rotateTurret();
@@ -189,14 +191,6 @@ public class Robot extends TimedRobot {
       Constants.winchMotor.set(0);
     }
     hangClass.moveArm();
-    hangClass.extendArm();
-    //Turret servos
-    if(Controls.startLinePresetButton){
-      Constants.servoPosition++;
-    }
-    else if(Controls.trenchPresetButton){
-      Constants.servoPosition--;
-    }
     shooterClass.moveServos();
     if(Controls.colorArmButton){
       cp.stopColorArm();
