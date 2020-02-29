@@ -55,6 +55,12 @@ public class Controls {
             armInButton = true;
             povPressed = true;
         }
+        else if(Constants.joystick1.getPOV() == 0){
+            if(!povPressed){
+                towerResetButton = true;
+                povPressed = true;
+            }
+        }
         else{
             povPressed = false;
         }
