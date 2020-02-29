@@ -47,7 +47,7 @@ public class Collector {
   public static void towerFeed(){
     if(Constants.towerFeed && (Constants.towerSensor.get()||Constants.shootingAll||Constants.shootingOnce)){
       Constants.feeder.set(ControlMode.PercentOutput,Constants.feederSpeed);
-      Constants.towerMotor.set(.7);
+      Constants.towerMotor.set(.85);
       if(!Constants.isCollectorArmDown){
         Constants.collectorMotor.set(Constants.collectorSpeed/8);
       }

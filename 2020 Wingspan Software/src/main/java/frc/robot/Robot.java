@@ -331,13 +331,14 @@ public class Robot extends TimedRobot {
       Constants.towerFeed=!Constants.towerFeed;
     }
     if(Controls.towerResetButton){
-      Constants.isReversingTower = !Constants.isReversingTower;
+      Constants.isReversingTower = true;
+      Collector.reverseTower();
+    }
+    else{
+      Constants.isReversingTower = false;
     }
     if(!Constants.isReversingTower){
       Collector.towerFeed();
-    }
-    else{
-      Collector.reverseTower();
     }
     //turret controls
     shooterClass.rotateTurret();
