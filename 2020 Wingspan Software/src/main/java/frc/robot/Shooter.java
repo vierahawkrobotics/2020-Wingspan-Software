@@ -40,7 +40,7 @@ public class Shooter {
         }
         Collector.towerFeed();
         startMotors();
-        shootAllSeconds -= .2;
+        shootAllSeconds -= Constants.timerDecrement;
         if(shootAllSeconds == 0){
             Constants.towerFeed = false;
             Constants.shootingOnce = false;
@@ -50,7 +50,7 @@ public class Shooter {
     public void shootAll(){
         startMotors();
         if(shootAllSeconds>=0){
-            shootAllSeconds-=.02;
+            shootAllSeconds-=Constants.timerDecrement;
             if(shooterPid.atSetpoint()){
                 Constants.towerFeed = true;
             }
@@ -72,8 +72,8 @@ public class Shooter {
         Constants.servoPosition = 0;
     }
     public void startMotors(){
-        shooterPid.setSetpoint(3000);
-        shooterPid.setTolerance(50);
+        shooterPid.setSetpoint(Constants.shooterPIDTarget);
+        shooterPid.setTolerance(Constants.shooterPIDTolerance);
         Constants.shooterMotor.set(shooterPid.calculate(Constants.shooterMotor.getEncoder().getVelocity()));
         //set the turret hood to be up (should be up by the time the shooter spins up) will be reset in stopMotors()
         Constants.servoPosition = 1;

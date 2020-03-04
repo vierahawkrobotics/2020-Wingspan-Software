@@ -72,7 +72,7 @@ public class Control_Panel {
     public void moveColorArm(){
         if(Constants.colorArmPosition){
             if(timer>0){
-                timer-=.02;
+                timer-=Constants.timerDecrement;
                 Constants.colorWheelArm.set(ControlMode.PercentOutput,Constants.colorWheelArmSpeed);
             }
             else{
@@ -81,7 +81,7 @@ public class Control_Panel {
         }
         else{
             if(timer>0){
-                timer-=.02;
+                timer-=Constants.timerDecrement;
                 Constants.colorWheelArm.set(ControlMode.PercentOutput,-Constants.colorWheelArmSpeed);
             }
             else{

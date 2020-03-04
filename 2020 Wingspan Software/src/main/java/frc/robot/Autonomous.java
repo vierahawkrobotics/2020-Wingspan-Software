@@ -14,21 +14,17 @@ public class Autonomous {
     private int turretTargetAngle;
     private PIDController pidControlTurn = new PIDController(.03, 0.01, 0);
     private PIDController pidControlDrive = new PIDController(.03, 0, 0);
-
     private String m_autoSelected;
     private final SendableChooser<String> m_chooser = new SendableChooser<>();
-
     // Autonomous data
     private int autoStage = 0;
     private double secondsDelay = 0;
     int cyclesOnTarget = 0;
-
     // Autonomous selection options
     private static final String kDefaultAuto = "Default";
     private static final String leftAuto = "Left Auto";
     private static final String middleAuto = "Middle Auto";
     private static final String rightAuto = "Right Auto";
-
     public void autoOptions() {
         // get auto mode from smartdashboard
         m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
@@ -49,7 +45,6 @@ public class Autonomous {
         Constants.servoPosition = 1;
         Constants.mainDrive.setMaxOutput(Constants.autoMaxDriveSpeed);
     }
-
     public void autoRoutine(Shooter shooterClass, Collector collectorClass) {
         // In the first iteration it gets the delay in seconds before starting auto
         if (autoStage == 0) {
@@ -64,7 +59,7 @@ public class Autonomous {
             // If in autoStage 1 waits for secondsDelay seconds
             if (autoStage == 1) {
                 if (secondsDelay > 0) {
-                    secondsDelay -= Constants.autoTimerDecrement;
+                    secondsDelay -= Constants.timerDecrement;
                 } else {
                     autoStage++;
                 }
@@ -106,7 +101,7 @@ public class Autonomous {
             // If in autoStage 1 waits for secondsDelay seconds
             if (autoStage == 1) {
                 if (secondsDelay > 0) {
-                    secondsDelay -= Constants.autoTimerDecrement;
+                    secondsDelay -= Constants.timerDecrement;
                 } else {
                     autoStage++;
                 }
@@ -147,7 +142,7 @@ public class Autonomous {
             // If in autoStage 1 waits for secondsDelay seconds
             if (autoStage == 1) {
                 if (secondsDelay > 0) {
-                    secondsDelay -= Constants.autoTimerDecrement;
+                    secondsDelay -= Constants.timerDecrement;
                 } else {
                     autoStage++;
                 }
@@ -264,7 +259,6 @@ public class Autonomous {
         }
         return false;
     }
-
     public Autonomous() {
     }
 }

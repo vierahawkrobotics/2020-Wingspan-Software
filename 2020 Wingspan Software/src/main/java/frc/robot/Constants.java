@@ -11,8 +11,6 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorSensorV3;
-import com.revrobotics.SparkMax;
-import com.revrobotics.CANDigitalInput.LimitSwitch;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Servo;
@@ -20,7 +18,6 @@ import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -100,16 +97,10 @@ public class Constants {
     public static double autoMaxDriveSpeed = .5;
     public static double slowSpeed = -.35;
     public static double turnSpeed = .6;
-    public static double fastSpeed = 1/driveSpeed;
-    public static double shooterSpeed = -1;
     public static double winchSpeed = 1;
-    public static double hangWheelSpeed = .75;
     public static double controlPanelSpeed = 1;
-    public static double spinnerArmSpeed = .75;
     public static double collectorSpeed = .8;
     public static double turretSpeed = -.6;
-    public static double collectorArmSpeedDown = -.3;
-    public static double collectorArmSpeedUp = -.65;
     public static double feederSpeed = -.25;
     public static double hangArmSpeed=-.3;
     public static double armDeploySpeed = 1;
@@ -121,7 +112,7 @@ public class Constants {
     public static double collectorUpVolts = 2.65;
     public static double collectorDownVolts = 4.2;
     //auto timing
-    public static double autoTimerDecrement = 0.02;
+    public static double timerDecrement = 0.02;
     //auto angles
     public static int autoLeftStage2Angle = 121;
     public static int autoLeftStage5Angle = 72;
@@ -130,7 +121,8 @@ public class Constants {
     public static int autoRightStage2Angle = 62;
     public static int autoRightStage5Angle = 72;
     public static double autoTurnPIDTolerance = 2;
-    public Constants() {
-        
-    }
+    //PID variables
+    public static int shooterPIDTarget = 3000;
+    public static int shooterPIDTolerance = 50;
+    public static double collectorPIDTolerance = .05;
 }

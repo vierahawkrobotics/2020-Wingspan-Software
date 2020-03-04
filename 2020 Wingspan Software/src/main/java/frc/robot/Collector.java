@@ -15,14 +15,14 @@ import edu.wpi.first.wpilibj.controller.PIDController;
  * Add your docs here.
  */
 public class Collector {
-  private PIDController pidUp = new PIDController(0,0,0);
-  private PIDController pidDown = new PIDController(0,0,0);
+  private PIDController pidUp = new PIDController(.155,0,0);
+  private PIDController pidDown = new PIDController(.155,0,0);
   private Pot potClass = new Pot(Constants.collectorUpVolts,Constants.collectorDownVolts);
   public Collector(){
     pidUp.setSetpoint(Constants.collectorUpVolts);
-    pidUp.setTolerance(.05);
+    pidUp.setTolerance(Constants.collectorPIDTolerance);
     pidDown.setSetpoint(Constants.collectorDownVolts);
-    pidDown.setTolerance(.05);
+    pidDown.setTolerance(Constants.collectorPIDTolerance);
   }
   public void moveCollector() {
     //move the collector arm to the requested position
