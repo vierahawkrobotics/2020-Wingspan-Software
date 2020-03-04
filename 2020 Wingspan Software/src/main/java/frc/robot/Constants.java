@@ -95,6 +95,7 @@ public class Constants {
     public static boolean kiddoIsShort = true;
     //Power Variables
     public static double driveSpeed = -.75;
+    public static double autoMaxDriveSpeed = .5;
     public static double slowSpeed = -.35;
     public static double turnSpeed = .7;
     public static double fastSpeed = 1/driveSpeed;
@@ -116,6 +117,16 @@ public class Constants {
     public static AnalogInput potCollectorArm = new AnalogInput(0);
     public static double collectorUpVolts = 2.65;
     public static double collectorDownVolts = 4.2;
+    //auto timing
+    public static double autoTimerDecrement = 0.02;
+    //auto angles
+    public static int autoLeftStage2Angle = 121;
+    public static int autoLeftStage5Angle = 72;
+    public static int autoMiddleStage2Angle = 90;
+    public static int autoMiddleStage5Angle = 72;
+    public static int autoRightStage2Angle = 62;
+    public static int autoRightStage5Angle = 72;
+    public static double autoTurnPIDTolerance = 2;
     public Constants() {
         
     }
