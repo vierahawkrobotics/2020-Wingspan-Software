@@ -217,7 +217,7 @@ public class Robot extends TimedRobot {
    * This function is called periodically during test mode.
    */
   public void testPeriodic() {
-    //GO DOWM
+    //GO DOWN
     Constants.servoPosition=0;
     shooterClass.moveServos();
     Constants.winchMotor.set(Constants.joystick1.getRawAxis(1));
