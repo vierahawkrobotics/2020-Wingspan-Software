@@ -7,6 +7,8 @@
 
 package frc.robot;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+
+import edu.wpi.first.wpilibj.controller.PIDController;
 public class Shooter {
     private double skew;
     private double distance;
@@ -15,6 +17,7 @@ public class Shooter {
     private double shootAllSeconds=4;
     private boolean turretCanGoLeft = true;
     private boolean turretCanGoRight = true;
+    private PIDController shooterPid = new PIDController(0,0,0);
     public void target(){
         
     }
@@ -48,7 +51,7 @@ public class Shooter {
         startMotors();
         if(shootAllSeconds>=0){
             shootAllSeconds-=.02;
-            if(Constants.shooterMotor.getEncoder().getVelocity()<=-3000){
+            if(shooterPid.atSetpoint()){
                 Constants.towerFeed = true;
             }
             else{
@@ -69,7 +72,9 @@ public class Shooter {
         Constants.servoPosition = 0;
     }
     public void startMotors(){
-        Constants.shooterMotor.set(Constants.shooterSpeed);
+        shooterPid.setSetpoint(3000);
+        shooterPid.setTolerance(50);
+        Constants.shooterMotor.set(shooterPid.calculate(Constants.shooterMotor.getEncoder().getVelocity()));
         //set the turret hood to be up (should be up by the time the shooter spins up) will be reset in stopMotors()
         Constants.servoPosition = 1;
     }
