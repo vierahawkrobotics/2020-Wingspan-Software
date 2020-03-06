@@ -125,4 +125,5 @@ public class Constants {
     public static int shooterPIDTarget = 3000;
     public static int shooterPIDTolerance = 50;
     public static double collectorPIDTolerance = .05;
+    public static int hangPIDBaseTarget = 2;
 }

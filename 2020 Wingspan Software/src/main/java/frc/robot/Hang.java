@@ -9,10 +9,13 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+import edu.wpi.first.wpilibj.controller.PIDController;
+
 /**
  * Add your docs here.
  */
 public class Hang {
+    PIDController armPid = new PIDController(0,0,0);
     public void moveWinch(){
         Constants.winchMotor.set(Constants.winchSpeed);
     }
@@ -23,6 +26,10 @@ public class Hang {
         Constants.armExtender.set(ControlMode.PercentOutput,Constants.armDeploySpeed);
     }
     public void moveArm(){
+        armPid.setSetpoint(armPid.getSetpoint()+Constants.joystick1.getRawAxis(3)*Constants.hangArmSpeed);
         Constants.hangArmMotor.set(ControlMode.PercentOutput,Constants.joystick1.getRawAxis(3)*Constants.hangArmSpeed);
+    }
+    public Hang(){
+        armPid.setSetpoint(Constants.hangPIDBaseTarget);
     }
 }
