@@ -26,6 +26,9 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.hal.PDPJNI;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Constants {
     public static PDPJNI pdp = new PDPJNI();
@@ -126,4 +129,9 @@ public class Constants {
     public static int shooterPIDTolerance = 50;
     public static double collectorPIDTolerance = .05;
     public static int hangPIDBaseTarget = 2;
+    //limelight
+    public static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight-hwkrb");
+    public static NetworkTableEntry limelighttx = table.getEntry("tx");
+    public static NetworkTableEntry limelightty = table.getEntry("ty");
+    public static NetworkTableEntry limelightta = table.getEntry("ta");
 }
