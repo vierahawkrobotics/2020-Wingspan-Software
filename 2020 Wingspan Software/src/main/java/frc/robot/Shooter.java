@@ -22,7 +22,7 @@ public class Shooter {
         
     }
     //Shoots one ball
-    public void shootOnce(){
+    public void shootOnce(double targetSpeed){
         //Checks if shooterMotor is at correct velocity
         if(Constants.shooterMotor.getEncoder().getVelocity()<=-3650){
             //If velocity is high enough, activates feeder motor and sets variable
@@ -39,7 +39,7 @@ public class Shooter {
             }
         }
         Collector.towerFeed();
-        startMotors();
+        startMotors(targetSpeed);
         shootAllSeconds -= Constants.timerDecrement;
         if(shootAllSeconds == 0){
             Constants.towerFeed = false;
@@ -47,8 +47,8 @@ public class Shooter {
             stopMotors();
         }
     }
-    public void shootAll(){
-        startMotors();
+    public void shootAll(double targetSpeed){
+        startMotors(targetSpeed);
         if(shootAllSeconds>=0){
             shootAllSeconds-=Constants.timerDecrement;
             if(shooterPid.atSetpoint()){
@@ -71,8 +71,8 @@ public class Shooter {
         //set the turret hood to stay down
         Constants.servoPosition = 0;
     }
-    public void startMotors(){
-        shooterPid.setSetpoint(Constants.shooterPIDTarget);
+    public void startMotors(double targetSpeed){
+        shooterPid.setSetpoint(targetSpeed);
         shooterPid.setTolerance(Constants.shooterPIDTolerance);
         Constants.shooterMotor.set(shooterPid.calculate(Constants.shooterMotor.getEncoder().getVelocity()));
         //set the turret hood to be up (should be up by the time the shooter spins up) will be reset in stopMotors()
@@ -116,5 +116,18 @@ public class Shooter {
             Constants.turret1.set(0);
             Constants.turret2.set(1);
         }
-    }    
+    }
+
+    public void shootWithVision(Vision visionClass) {
+        double distanceMultiplierForSpeed = 10;
+        //adjust turret to line up with target
+
+        //adjust shooting speed and send it to shoot all
+        if (visionClass.getDistanceFromTarget() * 10 > Constants.maxShootingSpeed) {
+            shootAll(Constants.maxShootingSpeed);
+        }
+        else {
+            shootAll(distanceMultiplierForSpeed * visionClass.getDistanceFromTarget());
+        }
+    }
 }

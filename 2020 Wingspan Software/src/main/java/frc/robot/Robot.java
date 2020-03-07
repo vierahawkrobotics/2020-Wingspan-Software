@@ -25,6 +25,7 @@ public class Robot extends TimedRobot {
   private Shooter shooterClass = new Shooter();
   private Telemetry telemetryClass = new Telemetry();
   private Autonomous autoClass = new Autonomous();
+  private Vision visionClass = new Vision();
   
   /*
    * This function is run when the robot is first started up and should be used
@@ -62,6 +63,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    visionClass.limelightPeriodic();
   }
 
   /**
@@ -149,19 +151,21 @@ public class Robot extends TimedRobot {
       cp.numChanges=0;
     }
     //Shooter Controls
-    if(Controls.shootOnceButton){
-      Constants.shootingOnce = !Constants.shootingOnce;
+    if(Controls.shootOnceButton){ //converted to the vision shoot button
+      //Constants.shootingOnce = !Constants.shootingOnce;
+      Constants.shootingWithVision = !Constants.shootingWithVision;
       Constants.towerFeed = false;
     }
     else if(Controls.shootAllButton){
       Constants.shootingAll = !Constants.shootingAll;
       Constants.towerFeed = false;
     }
-    if(Constants.shootingOnce){
-      shooterClass.shootOnce();
+    if(Constants.shootingOnce){ //converted to the vision shoot routine
+      //shooterClass.shootOnce(Constants.shooterPIDTarget);
+      shooterClass.shootWithVision(visionClass);
     }
     else if(Constants.shootingAll){
-      shooterClass.shootAll();
+      shooterClass.shootAll(Constants.shooterPIDTarget);
     }
     else{
       shooterClass.stopMotors();

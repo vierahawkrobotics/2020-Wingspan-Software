@@ -11,12 +11,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Vision {
 
-    double x;
-    double y;
-    double area;
-    double distance;
+    private double x;
+    private double y;
+    private double area;
+    private double distance;
 
-    public void limelightRoutine() {
+    public void limelightPeriodic() {
         //read values periodically
         x = Constants.limelighttx.getDouble(0.0);
         y = Constants.limelightty.getDouble(0.0);
@@ -28,5 +28,17 @@ public class Vision {
         SmartDashboard.putNumber("LimelightY", y);
         SmartDashboard.putNumber("LimelightArea", area);
         SmartDashboard.putNumber("LimelightDistance", distance);
+    }
+
+    public double getDistanceFromTarget() {
+        return distance;
+    }
+
+    public double getAngleXFromTarget() {
+        return x;
+    }
+
+    public double getAngleYFromTarget() {
+        return y;
     }
 }

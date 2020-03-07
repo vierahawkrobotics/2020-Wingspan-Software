@@ -78,7 +78,7 @@ public class Autonomous {
             // If in autoStage 4 shoots all balls
             else if (autoStage == 4) {
                 Constants.shootingAll = true;
-                shooterClass.shootAll();
+                shooterClass.shootAll(Constants.shooterPIDTarget);
                 if (!Constants.shootingAll) {
                     shooterClass.stopMotors();
                     autoStage++;
@@ -120,7 +120,7 @@ public class Autonomous {
             // If in autoStage 4 shoots all balls
             else if (autoStage == 4) {
                 Constants.shootingAll = true;
-                shooterClass.shootAll();
+                shooterClass.shootAll(Constants.shooterPIDTarget);
                 if (!Constants.shootingAll) {
                     shooterClass.stopMotors();
                     autoStage++;
@@ -161,7 +161,7 @@ public class Autonomous {
             // If in autoStage 4 shoots all balls
             else if (autoStage == 4) {
                 Constants.shootingAll = true;
-                shooterClass.shootAll();
+                shooterClass.shootAll(Constants.shooterPIDTarget);
                 if (!Constants.shootingAll) {
                     shooterClass.stopMotors();
                     autoStage++;

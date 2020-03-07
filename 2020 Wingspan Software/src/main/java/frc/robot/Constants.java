@@ -83,6 +83,7 @@ public class Constants {
     public static boolean isTargeting = false;
     public static boolean shootingOnce = false;
     public static boolean shootingAll = false;
+    public static boolean shootingWithVision = false;
     public static boolean startingShooter = false;
     public static boolean stoppingShooter = false;
     public static Color targetColor;
@@ -96,6 +97,7 @@ public class Constants {
     public static boolean movingColorArm = false;
     public static boolean kiddoIsShort = true;
     //Power Variables
+    public static double maxShootingSpeed = 4000; //dummy value
     public static double driveSpeed = -.75;
     public static double autoMaxDriveSpeed = .5;
     public static double slowSpeed = -.35;
