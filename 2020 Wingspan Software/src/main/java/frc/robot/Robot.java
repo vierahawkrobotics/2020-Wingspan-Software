@@ -212,6 +212,7 @@ public class Robot extends TimedRobot {
     else{
       Constants.armExtender.set(ControlMode.PercentOutput,0);
     }
+    Constants.towerMotor.getRaw();
   }
   /**
    * This function is called periodically during test mode.
