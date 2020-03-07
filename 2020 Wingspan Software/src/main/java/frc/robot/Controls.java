@@ -30,7 +30,6 @@ public class Controls {
     public static boolean armInButton;
     public static boolean armOutButton;
     public static void getButtons(){
-        System.out.println("POV"+Constants.joystick1.getPOV());
         turboButton = Constants.joystick0.getRawButton(1);
         slowButton = Constants.joystick0.getRawButton(2);
         towerResetButton = Constants.joystick0.getRawButton(7);

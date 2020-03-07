@@ -17,7 +17,9 @@ public class Shooter {
     private double shootAllSeconds=4;
     private boolean turretCanGoLeft = true;
     private boolean turretCanGoRight = true;
-    private PIDController shooterPid = new PIDController(0,0,0);
+    private PIDController shooterPid = new PIDController(.0012,.00036,0);
+    //private PIDController shooterPid = new PIDController(.00002,.00000481,0);
+    private int cyclesOnTarget = 0;
     public void target(){
         
     }
@@ -48,14 +50,19 @@ public class Shooter {
         }
     }
     public void shootAll(){
+        System.out.println("V"+Constants.shooterMotor.getEncoder().getVelocity());
         startMotors();
         if(shootAllSeconds>=0){
             shootAllSeconds-=Constants.timerDecrement;
             if(shooterPid.atSetpoint()){
-                Constants.towerFeed = true;
+                cyclesOnTarget++;
+                if(cyclesOnTarget >= 3){
+                    Constants.towerFeed = true;
+                }
             }
             else{
                 Constants.towerFeed = false;
+                cyclesOnTarget = 0;
             }
         }
         else{
