@@ -15,8 +15,8 @@ import edu.wpi.first.wpilibj.controller.PIDController;
  * Add your docs here.
  */
 public class Collector {
-  private PIDController pidUp = new PIDController(.155,0,0);
-  private PIDController pidDown = new PIDController(.155,0,0);
+  private PIDController pidUp = new PIDController(.75,0,0);
+  private PIDController pidDown = new PIDController(.75,0,0);
   private Pot potClass = new Pot(Constants.collectorUpVolts,Constants.collectorDownVolts);
   public Collector(){
     pidUp.setSetpoint(Constants.collectorUpVolts);
@@ -30,9 +30,14 @@ public class Collector {
     //if going up, move motor untill you reach the position, speed is static
     if (Constants.isCollectorArmDown) {
       //if the abs of the pot voltage exeeds the maximum speed for going up, set the speed to the max speed (maintaining direction of motor) 
-      if (!pidDown.atSetpoint()) {
-        Constants.collectorLift.set(pidDown.calculate(potClass.getRawVolts()));
+      System.out.println(potClass.getRawVolts());
+      System.out.println(pidDown.atSetpoint());
+      if (Math.abs(potClass.getPercentage()) >= Constants.collectorArmSpeedDown) {
+        Constants.collectorLift.set(Constants.collectorArmSpeedDown * (potClass.getPercentage() / Math.abs(potClass.getPercentage())));
       }
+      //if (!pidDown.atSetpoint()) {
+        //Constants.collectorLift.set(pidDown.calculate(potClass.getRawVolts()));
+      //}
       else {
         Constants.collectorLift.set(0);
       }
@@ -40,8 +45,11 @@ public class Collector {
     }
     else {
       //if going up, do not use PID and instead just run motor until at desired position
-      if (!pidUp.atSetpoint()) {
-        Constants.collectorLift.set(pidUp.calculate(potClass.getRawVolts()));
+      //if (!pidUp.atSetpoint()) {
+        //Constants.collectorLift.set(pidUp.calculate(potClass.getRawVolts()));
+      //}
+      if (potClass.getRawVolts() >= Constants.collectorUpVolts) {
+        Constants.collectorLift.set(Constants.collectorArmSpeedUp);
       }
       else {
         Constants.collectorLift.set(0);

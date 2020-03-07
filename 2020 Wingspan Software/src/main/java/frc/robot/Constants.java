@@ -123,7 +123,9 @@ public class Constants {
     public static double autoTurnPIDTolerance = 2;
     //PID variables
     public static int shooterPIDTarget = -3000;
-    public static int shooterPIDTolerance = 200;
-    public static double collectorPIDTolerance = .05;
+    public static int shooterPIDTolerance = 150;
+    public static double collectorPIDTolerance = .025;
     public static int hangPIDBaseTarget = 2;
+    public static double collectorArmSpeedUp = -.65;
+    public static double collectorArmSpeedDown = -.3;
 }
