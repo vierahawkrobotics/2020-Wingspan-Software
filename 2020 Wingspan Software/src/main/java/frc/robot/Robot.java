@@ -23,7 +23,6 @@ public class Robot extends TimedRobot {
   private Collector collectorClass = new Collector();
   private Control_Panel cp = new Control_Panel();
   private Shooter shooterClass = new Shooter();
-  private Telemetry telemetryClass = new Telemetry();
   private Autonomous autoClass = new Autonomous();
   
   /*
