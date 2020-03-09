@@ -115,11 +115,11 @@ public class Constants {
     public static double timerDecrement = 0.02;
     //auto angles
     public static int autoLeftStage2Angle = 121;
-    public static int autoLeftStage5Angle = 72;
+    public static int autoLeftStage5Distance = 72;
     public static int autoMiddleStage2Angle = 90;
-    public static int autoMiddleStage5Angle = 72;
+    public static int autoMiddleStage5Distance = 72;
     public static int autoRightStage2Angle = 62;
-    public static int autoRightStage5Angle = 72;
+    public static int autoRightStage5Distance = 72;
     public static double autoTurnPIDTolerance = 2;
     //PID variables
     public static int shooterPIDTarget = -3000;

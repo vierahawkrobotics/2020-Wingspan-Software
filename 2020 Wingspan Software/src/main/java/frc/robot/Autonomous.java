@@ -78,7 +78,7 @@ public class Autonomous {
             // If in autoStage 4 shoots all balls
             else if (autoStage == 4) {
                 Constants.shootingAll = true;
-                shooterClass.shootAll();
+                shooterClass.shootOnce();
                 if (!Constants.shootingAll) {
                     shooterClass.stopMotors();
                     autoStage++;
@@ -88,7 +88,7 @@ public class Autonomous {
             }
             // If in autoStage 5 sets target distance for robot to drive
             else if (autoStage == 5) {
-                setTargetDistance(Constants.autoLeftStage5Angle);
+                setTargetDistance(Constants.autoLeftStage5Distance);
                 autoStage++;
             }
             // If in autoStage 6 drives robot off line
@@ -120,7 +120,7 @@ public class Autonomous {
             // If in autoStage 4 shoots all balls
             else if (autoStage == 4) {
                 Constants.shootingAll = true;
-                shooterClass.shootAll();
+                shooterClass.shootOnce();
                 if (!Constants.shootingAll) {
                     shooterClass.stopMotors();
                     autoStage++;
@@ -129,7 +129,7 @@ public class Autonomous {
             }
             // If in autoStage 5 sets target distance for robot to drive
             else if (autoStage == 5) {
-                setTargetDistance(Constants.autoMiddleStage5Angle);
+                setTargetDistance(Constants.autoMiddleStage5Distance);
                 autoStage++;
             }
             // If in autoStage 6 drives robot off line
@@ -161,7 +161,7 @@ public class Autonomous {
             // If in autoStage 4 shoots all balls
             else if (autoStage == 4) {
                 Constants.shootingAll = true;
-                shooterClass.shootAll();
+                shooterClass.shootOnce();
                 if (!Constants.shootingAll) {
                     shooterClass.stopMotors();
                     autoStage++;
@@ -170,7 +170,7 @@ public class Autonomous {
             }
             // If in autoStage 5 sets target distance for robot to drive
             else if (autoStage == 5) {
-                setTargetDistance(Constants.autoRightStage5Angle);
+                setTargetDistance(Constants.autoRightStage5Distance);
                 autoStage++;
             }
             // If in autoStage 6 drives robot off line
